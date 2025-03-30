@@ -4,7 +4,7 @@
 #include <iostream>
 
 int main() {
-  StdRGB stdRGB(255, 30, 45);
+  StdRGB stdRGB(256, 30, 45);
   CieLab labColor(stdRGB);
 
   std::cout << "L*: " << labColor.lStar << std::endl;
