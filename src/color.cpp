@@ -19,6 +19,16 @@ StdRGB::StdRGB(int r, int g, int b) : r(r), g(g), b(b) {
   validate(b);
 };
 
+StdRGB::StdRGB(const CieLab &cieLab) {
+  CieXYZ cieXYZ = labToXYZ(cieLab);
+  LinRGB linRgb = xyzToRGB(cieXYZ);
+  auto [r, b, g] = applyGamma(linRgb);
+
+  this->r = r;
+  this->b = g;
+  this->g = b;
+};
+
 
 LinRGB::LinRGB(double r, double g, double b) : r(r), g(g), b(b) {
   auto validate = [](double c) {
@@ -33,40 +43,14 @@ LinRGB::LinRGB(double r, double g, double b) : r(r), g(g), b(b) {
 };
 
 
-CieXYZ::CieXYZ(double x, double y, double z) : x(x), y(y), z(z) {
-  if (std::min(100.0, std::max(0.0, x)) != x) {
-    throw std::domain_error("L* initalized outside of range [0, 100].");
-  }
-
-  if (std::min(128.0, std::max(-128.0, y)) != y) {
-    throw std::domain_error("a* initalized outside of range [-128, 128].");
-  }
-
-  if (std::min(128.0, std::max(-128.0, z)) != z) {
-    throw std::domain_error("b* initalized outside of range [-128, 128].");
-  }
-};
+CieXYZ::CieXYZ(double x, double y, double z) : x(x), y(y), z(z) {};
 
 
 CieLab::CieLab(double lStar, double aStar, double bStar)
-    : lStar(lStar), aStar(aStar), bStar(bStar) {
-        //   if (std::min(100.0, std::max(0.0, lStar)) != lStar) {
-        //     throw std::domain_error("L* initalized outside of range [0,
-        //     100].");
-        //   }
+    : lStar(lStar), aStar(aStar), bStar(bStar) {};
 
-        //   if (std::min(128.0, std::max(-128.0, aStar)) != aStar) {
-        //     throw std::domain_error("a* initalized outside of range [-128,
-        //     128].");
-        //   }
 
-        //   if (std::min(128.0, std::max(-128.0, bStar)) != bStar) {
-        //     throw std::domain_error("b* initalized outside of range [-128,
-        //     128].");
-        //   }
-      };
-
-CieLab::CieLab(StdRGB stdRgb) {
+CieLab::CieLab(const StdRGB &stdRgb) {
   LinRGB linRgb = linearize(stdRgb);
   CieXYZ cieXYZ = rgbToXYZ(linRgb);
   auto [lStar, aStar, bStar] = xyzToLab(cieXYZ);
@@ -133,12 +117,7 @@ LinRGB xyzToRGB(const CieXYZ &ceiLab) {
   return LinRGB(linRgb[0], linRgb[1], linRgb[2]);
 }
 
-
 CieLab xyzToLab(const CieXYZ &cieXYZ) {
-
-  const static CieXYZ referenceWhiteD60 = {0.950470, 1.0, 1.088830};
-  const static double epsilon = 216.0 / 24389.0;
-  const static double kappa = 24389.0 / 27.0;
 
   auto [x, y, z] = cieXYZ;
 
@@ -156,3 +135,23 @@ CieLab xyzToLab(const CieXYZ &cieXYZ) {
 
   return CieLab(lStar, aStar, bStar);
 };
+
+CieXYZ labToXYZ(const CieLab &cieLab) {
+
+  const double fY = (cieLab.lStar + 16) / 116.0;
+  const double fX = fY + (cieLab.aStar / 500.0);
+  const double fZ = fY - (cieLab.bStar / 200.0);
+
+  const double xR =
+      (std::pow(fX, 3) > epsilon) ? std::pow(fX, 3) : (116 * fX - 16) / kappa;
+  const double yR = (cieLab.lStar > (kappa * epsilon)) ? std::pow(fY, 3)
+                                                       : cieLab.lStar / kappa;
+  const double zR =
+      (std::pow(fZ, 3) > epsilon) ? std::pow(fZ, 3) : (116 * fZ - 16) / kappa;
+
+  const double x = xR * referenceWhiteD60.x;
+  const double y = yR * referenceWhiteD60.y;
+  const double z = zR * referenceWhiteD60.z;
+
+  return CieXYZ(x, y, z);
+}
