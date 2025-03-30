@@ -82,8 +82,8 @@ StdRGB Color::applyGamma(const LinRGB &linRGB) {
     return std::clamp(static_cast<int>(corrected * 255.0), 0, 255);
   };
 
-  return {applyGammaToChannel(linRGB.r), applyGammaToChannel(linRGB.g),
-          applyGammaToChannel(linRGB.b)};
+  return StdRGB(applyGammaToChannel(linRGB.r), applyGammaToChannel(linRGB.g),
+                applyGammaToChannel(linRGB.b));
 }
 
 
@@ -97,7 +97,7 @@ CieXYZ Color::rgbToXYZ(const LinRGB &linRGB) {
   std::array<double, 3> cieRGB =
       multiplyMatrix(rgbToXYZMatrix, {linRGB.r, linRGB.g, linRGB.b});
 
-  return {cieRGB[0], cieRGB[1], cieRGB[2]};
+  return CieXYZ(cieRGB[0], cieRGB[1], cieRGB[2]);
 }
 
 
@@ -112,8 +112,32 @@ LinRGB Color::xyzToRGB(const CieXYZ &ceiLab) {
   std::array<double, 3> linRgb =
       multiplyMatrix(xyzToRGBMatrix, {ceiLab.x, ceiLab.y, ceiLab.z});
 
-  return {linRgb[0], linRgb[1], linRgb[2]};
+  return LinRGB(linRgb[0], linRgb[1], linRgb[2]);
 }
+
+
+CieLab Color::xyzToLab(const CieXYZ &cieXYZ) {
+
+  const static CieXYZ referenceWhiteD60 = {0.950470, 1.0, 1.088830};
+  const static double epsilon = 216.0 / 24389.0;
+  const static double kappa = 24389.0 / 27.0;
+
+  auto [x, y, z] = cieXYZ;
+
+  const double xR = x / referenceWhiteD60.x;
+  const double yR = y / referenceWhiteD60.y;
+  const double zR = z / referenceWhiteD60.z;
+
+  const double fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0;
+  const double fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0;
+  const double fZ = (zR > epsilon) ? std::cbrt(zR) : (kappa * zR + 16) / 116.0;
+
+  const double lStar = 116 * fY - 16;
+  const double aStar = 500 * (fX - fY);
+  const double bStar = 200 * (fY - fZ);
+
+  return CieLab(lStar, aStar, bStar);
+};
 
 
 StdRGB Color::sRGB() {
@@ -174,3 +198,24 @@ CieXYZ Color::cieXYZ() {
 
   throw std::runtime_error("Color state error");
 }
+
+
+CieLab Color::cieLab() {
+  if (_cieLab.lStar >= 0) {
+    return {_cieLab.lStar, _cieLab.aStar, _cieLab.bStar};
+  }
+
+  if (_cieXYZ.x >= 0) {
+    _cieLab = xyzToLab(_cieXYZ);
+    return _cieLab;
+  }
+
+  if (_sRGB.r >= 0) {
+    _linRGB = linearize(_sRGB);
+    _cieXYZ = rgbToXYZ(_linRGB);
+    _cieLab = xyzToLab(_cieXYZ);
+    return _cieLab;
+  }
+
+  throw std::runtime_error("Color state error");
+};

@@ -4,10 +4,10 @@
 #include <iostream>
 
 int main() {
-  Color color(StdRGB(30, 30, 30));
-  CieXYZ labColor = color.cieXYZ();
+  Color color(StdRGB(255, 30, 45));
+  CieLab labColor = color.cieLab();
 
-  std::cout << "X: " << labColor.x << std::endl;
-  std::cout << "Y: " << labColor.y << std::endl;
-  std::cout << "Z: " << labColor.z << std::endl;
+  std::cout << "L*: " << labColor.lStar << std::endl;
+  std::cout << "a*: " << labColor.aStar << std::endl;
+  std::cout << "b*: " << labColor.bStar << std::endl;
 }
