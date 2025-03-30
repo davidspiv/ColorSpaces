@@ -2,6 +2,7 @@
 #include "../include/color.h"
 
 #include <array>
+#include <limits>
 
 
 std::array<double, 3>

@@ -5,6 +5,7 @@
 #include <array>
 #include <cmath>
 
+
 StdRGB::StdRGB(int r, int g, int b) {
   auto validate = [](int c) {
     if (std::min(255, std::max(0, c)) == c) {
@@ -34,6 +35,7 @@ LinRGB::LinRGB(double r, double g, double b) {
   this->b = b;
 }
 
+
 CIELab::CIELab(double lStar, double aStar, double bStar) {
 
   if (std::min(100.0, std::max(0.0, lStar)) == lStar) {
@@ -58,6 +60,7 @@ CIELab::CIELab(double lStar, double aStar, double bStar) {
   this->aStar = aStar;
   this->bStar = bStar;
 }
+
 
 LinRGB Color::linearize(const StdRGB &sRGB) {
   auto linearizeChannel = [](int c) -> double {
@@ -108,4 +111,65 @@ LinRGB Color::cieToRGB(const CIELab &cieColor) {
       cieToRGBMatrix, {cieColor.lStar, cieColor.aStar, cieColor.bStar});
 
   return {linRgb[0], linRgb[1], linRgb[2]};
+}
+
+
+Coord Color::sRGB() {
+
+  if (_sRGB.r >= 0) {
+    return {double(_sRGB.r), double(_sRGB.g), double(_sRGB.b)};
+  }
+
+  if (_linRGB.r >= 0) {
+    _sRGB = applyGamma(_linRGB);
+    return {double(_sRGB.r), double(_sRGB.g), double(_sRGB.b)};
+  }
+
+  if (_cieLab.lStar >= 0) {
+    _linRGB = cieToRGB(_cieLab);
+    _sRGB = applyGamma(_linRGB);
+    return {double(_sRGB.r), double(_sRGB.g), double(_sRGB.b)};
+  }
+
+  throw std::runtime_error("Color state error");
+}
+
+
+Coord Color::linRGB() {
+  if (_linRGB.r >= 0) {
+    return {_linRGB.r, _linRGB.g, _linRGB.b};
+  }
+
+  if (_sRGB.r >= 0) {
+    _linRGB = linearize(_sRGB);
+    return {_linRGB.r, _linRGB.g, _linRGB.b};
+  }
+
+  if (_cieLab.lStar >= 0) {
+    _linRGB = cieToRGB(_cieLab);
+    auto [r, g, b] = _linRGB;
+    return {_linRGB.r, _linRGB.g, _linRGB.b};
+  }
+
+  throw std::runtime_error("Color state error");
+}
+
+
+Coord Color::cieLab() {
+  if (_cieLab.lStar >= 0) {
+    return {_cieLab.lStar, _cieLab.aStar, _cieLab.bStar};
+  }
+
+  if (_linRGB.r >= 0) {
+    _cieLab = rgbToCIE(_linRGB);
+    return {_cieLab.lStar, _cieLab.aStar, _cieLab.bStar};
+  }
+
+  if (_sRGB.r >= 0) {
+    _sRGB = applyGamma(_linRGB);
+    _cieLab = rgbToCIE(_linRGB);
+    return {_cieLab.lStar, _cieLab.aStar, _cieLab.bStar};
+  }
+
+  throw std::runtime_error("Color state error");
 }

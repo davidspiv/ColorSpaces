@@ -4,6 +4,12 @@
 #include "../include/picture.h"
 #include <stdexcept>
 
+struct Coord {
+  double x;
+  double y;
+  double z;
+};
+
 struct StdRGB {
   StdRGB() : r(-1), g(-1), b(-1) {};
   StdRGB(int r, int g, int b);
@@ -25,17 +31,19 @@ struct CIELab {
 };
 
 // include automatic invalidation mechanism
-// include lazy computation of color space structs
+// lazy computation of color space structs
 class Color {
 
 public:
-  enum class ColorState { SRGB, LINRGB, CIELAB };
+  Color::Color(int r, int g, int b) : _sRGB({r, g, b}) {};
+  Color::Color(double r, double g, double b, bool isLin)
+      : _linRGB({r, g, b}) {};
+  Color::Color(double lStar, double aStart, double bStar)
+      : _cieLab({lStar, aStart, bStar}) {};
 
-  Color(int r, int g, int b) : _sRGB({r, g, b}) {};
-
-  StdRGB sRGB() { return _sRGB; }
-  LinRGB linRGB() { return _linRGB; }
-  CIELab cieLab() { return _cieLab; }
+  Coord sRGB();
+  Coord linRGB();
+  Coord cieLab();
 
 private:
   StdRGB _sRGB;
