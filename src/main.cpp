@@ -4,8 +4,8 @@
 #include <iostream>
 
 int main() {
-  Color color(StdRGB(255, 30, 45));
-  CieLab labColor = color.cieLab();
+  StdRGB stdRGB(255, 30, 45);
+  CieLab labColor(stdRGB);
 
   std::cout << "L*: " << labColor.lStar << std::endl;
   std::cout << "a*: " << labColor.aStar << std::endl;

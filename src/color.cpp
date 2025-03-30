@@ -7,42 +7,33 @@
 #include <iostream>
 
 
-Color::Color(const StdRGB &stdRGB) {
+StdRGB::StdRGB(int r, int g, int b) : r(r), g(g), b(b) {
   auto validate = [](int c) {
     if (std::min(255, std::max(0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
     }
   };
 
-  auto [r, g, b] = stdRGB;
   validate(r);
   validate(g);
   validate(b);
-
-  _sRGB = stdRGB;
 };
 
 
-Color::Color(const LinRGB &linRGB) {
+LinRGB::LinRGB(double r, double g, double b) : r(r), g(g), b(b) {
   auto validate = [](double c) {
     if (std::min(1.0, std::max(0.0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 1].");
     }
   };
 
-  auto [r, g, b] = linRGB;
   validate(r);
   validate(g);
   validate(b);
-
-  _linRGB = linRGB;
 };
 
 
-Color::Color(const CieXYZ &ceiLab) {
-
-  auto [x, y, z] = ceiLab;
-
+CieXYZ::CieXYZ(double x, double y, double z) : x(x), y(y), z(z) {
   if (std::min(100.0, std::max(0.0, x)) != x) {
     throw std::domain_error("L* initalized outside of range [0, 100].");
   }
@@ -54,12 +45,39 @@ Color::Color(const CieXYZ &ceiLab) {
   if (std::min(128.0, std::max(-128.0, z)) != z) {
     throw std::domain_error("b* initalized outside of range [-128, 128].");
   }
-
-  _cieXYZ = ceiLab;
-}
+};
 
 
-LinRGB Color::linearize(const StdRGB &sRGB) {
+CieLab::CieLab(double lStar, double aStar, double bStar)
+    : lStar(lStar), aStar(aStar), bStar(bStar) {
+        //   if (std::min(100.0, std::max(0.0, lStar)) != lStar) {
+        //     throw std::domain_error("L* initalized outside of range [0,
+        //     100].");
+        //   }
+
+        //   if (std::min(128.0, std::max(-128.0, aStar)) != aStar) {
+        //     throw std::domain_error("a* initalized outside of range [-128,
+        //     128].");
+        //   }
+
+        //   if (std::min(128.0, std::max(-128.0, bStar)) != bStar) {
+        //     throw std::domain_error("b* initalized outside of range [-128,
+        //     128].");
+        //   }
+      };
+
+CieLab::CieLab(StdRGB stdRgb) {
+  LinRGB linRgb = linearize(stdRgb);
+  CieXYZ cieXYZ = rgbToXYZ(linRgb);
+  auto [lStar, aStar, bStar] = xyzToLab(cieXYZ);
+
+  this->lStar = lStar;
+  this->aStar = aStar;
+  this->bStar = bStar;
+};
+
+
+LinRGB linearize(const StdRGB &sRGB) {
   auto linearizeChannel = [](int c) -> double {
     double normalized = c / 255.0;
     return (normalized <= 0.04045) ? (normalized / 12.92)
@@ -74,7 +92,7 @@ LinRGB Color::linearize(const StdRGB &sRGB) {
 }
 
 
-StdRGB Color::applyGamma(const LinRGB &linRGB) {
+StdRGB applyGamma(const LinRGB &linRGB) {
 
   auto applyGammaToChannel = [](double c) -> int {
     double corrected =
@@ -87,7 +105,7 @@ StdRGB Color::applyGamma(const LinRGB &linRGB) {
 }
 
 
-CieXYZ Color::rgbToXYZ(const LinRGB &linRGB) {
+CieXYZ rgbToXYZ(const LinRGB &linRGB) {
   // reference white - D65
   constexpr std::array<std::array<double, 3>, 3> rgbToXYZMatrix = {
       {{0.4124564, 0.3575761, 0.1804375},
@@ -101,7 +119,7 @@ CieXYZ Color::rgbToXYZ(const LinRGB &linRGB) {
 }
 
 
-LinRGB Color::xyzToRGB(const CieXYZ &ceiLab) {
+LinRGB xyzToRGB(const CieXYZ &ceiLab) {
   // reference white - D65
   constexpr std::array<std::array<double, 3>, 3> xyzToRGBMatrix = {{
       {3.2404542, -1.5371385, -0.4985314},
@@ -116,7 +134,7 @@ LinRGB Color::xyzToRGB(const CieXYZ &ceiLab) {
 }
 
 
-CieLab Color::xyzToLab(const CieXYZ &cieXYZ) {
+CieLab xyzToLab(const CieXYZ &cieXYZ) {
 
   const static CieXYZ referenceWhiteD60 = {0.950470, 1.0, 1.088830};
   const static double epsilon = 216.0 / 24389.0;
@@ -137,85 +155,4 @@ CieLab Color::xyzToLab(const CieXYZ &cieXYZ) {
   const double bStar = 200 * (fY - fZ);
 
   return CieLab(lStar, aStar, bStar);
-};
-
-
-StdRGB Color::sRGB() {
-
-  if (_sRGB.r >= 0) {
-    return _sRGB;
-  }
-
-  if (_linRGB.r >= 0) {
-    _sRGB = applyGamma(_linRGB);
-    return _sRGB;
-  }
-
-  if (_cieXYZ.x >= 0) {
-    _linRGB = xyzToRGB(_cieXYZ);
-    _sRGB = applyGamma(_linRGB);
-    return _sRGB;
-  }
-
-  throw std::runtime_error("Color state error");
-}
-
-
-LinRGB Color::linRGB() {
-  if (_linRGB.r >= 0) {
-    return {_linRGB.r, _linRGB.g, _linRGB.b};
-  }
-
-  if (_sRGB.r >= 0) {
-    _linRGB = linearize(_sRGB);
-    return {_linRGB.r, _linRGB.g, _linRGB.b};
-  }
-
-  if (_cieXYZ.x >= 0) {
-    _linRGB = xyzToRGB(_cieXYZ);
-    return _linRGB;
-  }
-
-  throw std::runtime_error("Color state error");
-}
-
-
-CieXYZ Color::cieXYZ() {
-  if (_cieXYZ.x >= 0) {
-    return {_cieXYZ.x, _cieXYZ.y, _cieXYZ.z};
-  }
-
-  if (_linRGB.r >= 0) {
-    _cieXYZ = rgbToXYZ(_linRGB);
-    return {_cieXYZ.x, _cieXYZ.y, _cieXYZ.z};
-  }
-
-  if (_sRGB.r >= 0) {
-    _linRGB = linearize(_sRGB);
-    _cieXYZ = rgbToXYZ(_linRGB);
-    return _cieXYZ;
-  }
-
-  throw std::runtime_error("Color state error");
-}
-
-
-CieLab Color::cieLab() {
-  if (_cieLab.lStar >= 0) {
-    return {_cieLab.lStar, _cieLab.aStar, _cieLab.bStar};
-  }
-
-  if (_cieXYZ.x >= 0) {
-    _cieLab = xyzToLab(_cieXYZ);
-    return _cieLab;
-  }
-
-  if (_sRGB.r >= 0) {
-    _linRGB = linearize(_sRGB);
-    _cieXYZ = rgbToXYZ(_linRGB);
-    _cieLab = xyzToLab(_cieXYZ);
-    return _cieLab;
-  }
-
-  throw std::runtime_error("Color state error");
 };
