@@ -18,11 +18,10 @@ struct LinRGB {
 };
 
 
-struct CIELab {
-  CIELab() : lStar(-1.0), aStar(-129.0), bStar(-129.0) {};
-  CIELab(double lStar, double aStar, double bStar)
-      : lStar(lStar), aStar(aStar), bStar(bStar) {};
-  double lStar, aStar, bStar;
+struct CieXYZ {
+  CieXYZ() : x(-1.0), y(-129.0), z(-129.0) {};
+  CieXYZ(double x, double y, double z) : x(x), y(y), z(z) {};
+  double x, y, z;
 };
 
 // include automatic invalidation mechanism (overload '=' operator?)
@@ -32,21 +31,21 @@ class Color {
 public:
   explicit Color(const StdRGB &stdRGB);
   explicit Color(const LinRGB &linRGB);
-  explicit Color(const CIELab &ceiLab);
+  explicit Color(const CieXYZ &cieXYZ);
 
   StdRGB sRGB();
   LinRGB linRGB();
-  CIELab cieLab();
+  CieXYZ cieXYZ();
 
 private:
   StdRGB _sRGB;
   LinRGB _linRGB;
-  CIELab _cieLab;
+  CieXYZ _cieXYZ;
 
   LinRGB linearize(const StdRGB &stdRGB);
   StdRGB applyGamma(const LinRGB &linRGB);
-  CIELab rgbToCIE(const LinRGB &linRGB);
-  LinRGB cieToRGB(const CIELab &ceiLab);
+  CieXYZ rgbToXYZ(const LinRGB &linRGB);
+  LinRGB xyzToRGB(const CieXYZ &cieXYZ);
 };
 
 #endif
