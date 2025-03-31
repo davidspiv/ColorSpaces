@@ -6,8 +6,8 @@
 #include <iostream>
 
 int main() {
-  StdRGB startRGB(250, 207, 191);
-  StdRGB endRGB(187, 227, 228);
+  StdRGB startRGB(1, 137, 136);
+  StdRGB endRGB(187, 48, 45);
 
   Picture picture(100, 100);
 
@@ -41,10 +41,4 @@ int main() {
   }
 
   picture.save("result.png");
-
-
-  //   StdRGB startRGB(0, 0, 255);
-  //   StdRGB endRGB(0, 255, 0);
-  //   CieLab startLab(startRGB);
-  //   CieLab endLab(endRGB);
 }
