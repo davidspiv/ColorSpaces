@@ -6,8 +6,8 @@
 #include <iostream>
 
 int main() {
-  StdRGB startRGB(83, 196, 197);
-  StdRGB endRGB(235, 64, 60);
+  StdRGB startRGB(250, 207, 191);
+  StdRGB endRGB(187, 227, 228);
 
   Picture picture(100, 100);
 
