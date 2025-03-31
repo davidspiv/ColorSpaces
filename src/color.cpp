@@ -114,7 +114,11 @@ LinRGB xyzToRGB(const CieXYZ &ceiLab) {
   std::array<double, 3> linRgb =
       multiplyMatrix(xyzToRGBMatrix, {ceiLab.x, ceiLab.y, ceiLab.z});
 
-  return LinRGB(linRgb[0], linRgb[1], linRgb[2]);
+  const double r = std::clamp(linRgb[0], 0.0, 1.0);
+  const double g = std::clamp(linRgb[1], 0.0, 1.0);
+  const double b = std::clamp(linRgb[2], 0.0, 1.0);
+
+  return LinRGB(r, g, b);
 }
 
 CieLab xyzToLab(const CieXYZ &cieXYZ) {
