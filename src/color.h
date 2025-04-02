@@ -2,7 +2,6 @@
 #define COLOR_H
 
 #include <algorithm>
-#include <cstdint> // For uint8_t
 #include <stdexcept>
 
 namespace ColorSpace {
@@ -12,9 +11,9 @@ struct CieXyz;
 struct CieLab;
 
 struct Srgb {
-  uint8_t r, g, b;
+  int r, g, b;
 
-  explicit constexpr Srgb(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {
+  explicit constexpr Srgb(int r, int g, int b) : r(r), g(g), b(b) {
     auto validate = [](int c) {
       if (std::min(255, std::max(0, c)) != c) {
         throw std::domain_error(

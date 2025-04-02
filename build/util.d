@@ -96,23 +96,23 @@ build/util.o: src/util.cpp /usr/include/stdc-predef.h src/util.h \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
  /usr/include/c++/11/bits/vector.tcc \
- /usr/include/c++/11/pstl/execution_defs.h /usr/include/c++/11/cstdint \
- /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
- /usr/include/x86_64-linux-gnu/bits/wchar.h \
- /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /usr/include/c++/11/stdexcept /usr/include/c++/11/exception \
- /usr/include/c++/11/bits/exception_ptr.h \
+ /usr/include/c++/11/pstl/execution_defs.h /usr/include/c++/11/stdexcept \
+ /usr/include/c++/11/exception /usr/include/c++/11/bits/exception_ptr.h \
  /usr/include/c++/11/bits/cxxabi_init_exception.h \
  /usr/include/c++/11/bits/nested_exception.h /usr/include/c++/11/string \
  /usr/include/c++/11/bits/stringfwd.h \
  /usr/include/c++/11/bits/char_traits.h \
  /usr/include/c++/11/bits/postypes.h /usr/include/c++/11/cwchar \
  /usr/include/wchar.h /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
+ /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
+ /usr/include/c++/11/cstdint \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
  /usr/include/c++/11/bits/localefwd.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++locale.h \
  /usr/include/c++/11/clocale /usr/include/locale.h \
@@ -285,11 +285,6 @@ src/color.h:
 /usr/include/c++/11/bits/stl_bvector.h:
 /usr/include/c++/11/bits/vector.tcc:
 /usr/include/c++/11/pstl/execution_defs.h:
-/usr/include/c++/11/cstdint:
-/usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
-/usr/include/stdint.h:
-/usr/include/x86_64-linux-gnu/bits/wchar.h:
-/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 /usr/include/c++/11/stdexcept:
 /usr/include/c++/11/exception:
 /usr/include/c++/11/bits/exception_ptr.h:
@@ -302,11 +297,16 @@ src/color.h:
 /usr/include/c++/11/cwchar:
 /usr/include/wchar.h:
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h:
+/usr/include/x86_64-linux-gnu/bits/wchar.h:
 /usr/include/x86_64-linux-gnu/bits/types/wint_t.h:
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
 /usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
+/usr/include/c++/11/cstdint:
+/usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
+/usr/include/stdint.h:
+/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 /usr/include/c++/11/bits/localefwd.h:
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++locale.h:
 /usr/include/c++/11/clocale:

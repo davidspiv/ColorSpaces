@@ -6,7 +6,6 @@
 namespace ColorSpace {
 
 int distSquared(const Srgb &colorA, const Srgb &colorB) {
-
   const int xD = colorB.r - colorA.r;
   const int yD = colorB.g - colorA.g;
   const int zD = colorB.b - colorA.b;
