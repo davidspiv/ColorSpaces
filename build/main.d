@@ -1,6 +1,5 @@
-build/main.o: src/main.cpp /usr/include/stdc-predef.h \
- src/../include/color.h src/../include/util.h /usr/include/c++/11/array \
- /usr/include/c++/11/utility \
+build/main.o: src/main.cpp /usr/include/stdc-predef.h src/color.h \
+ src/util.h /usr/include/c++/11/array /usr/include/c++/11/utility \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -169,12 +168,12 @@ build/main.o: src/main.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/11/bits/locale_facets.tcc \
  /usr/include/c++/11/bits/basic_ios.tcc \
  /usr/include/c++/11/bits/ostream.tcc /usr/include/c++/11/istream \
- /usr/include/c++/11/bits/istream.tcc src/../include/timer.h \
+ /usr/include/c++/11/bits/istream.tcc src/timer.h \
  /usr/include/c++/11/chrono /usr/include/c++/11/ratio \
  /usr/include/c++/11/ctime /usr/include/c++/11/bits/parse_numbers.h
 /usr/include/stdc-predef.h:
-src/../include/color.h:
-src/../include/util.h:
+src/color.h:
+src/util.h:
 /usr/include/c++/11/array:
 /usr/include/c++/11/utility:
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h:
@@ -381,7 +380,7 @@ src/../include/util.h:
 /usr/include/c++/11/bits/ostream.tcc:
 /usr/include/c++/11/istream:
 /usr/include/c++/11/bits/istream.tcc:
-src/../include/timer.h:
+src/timer.h:
 /usr/include/c++/11/chrono:
 /usr/include/c++/11/ratio:
 /usr/include/c++/11/ctime:

@@ -1,6 +1,5 @@
-build/util.o: src/util.cpp /usr/include/stdc-predef.h \
- src/../include/util.h /usr/include/c++/11/array \
- /usr/include/c++/11/utility \
+build/util.o: src/util.cpp /usr/include/stdc-predef.h src/util.h \
+ /usr/include/c++/11/array /usr/include/c++/11/utility \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -28,7 +27,7 @@ build/util.o: src/util.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/11/bits/stl_iterator.h \
  /usr/include/c++/11/bits/ptr_traits.h /usr/include/c++/11/debug/debug.h \
  /usr/include/c++/11/bits/predefined_ops.h \
- /usr/include/c++/11/bits/range_access.h src/../include/color.h \
+ /usr/include/c++/11/bits/range_access.h src/color.h \
  /usr/include/c++/11/iostream /usr/include/c++/11/ostream \
  /usr/include/c++/11/ios /usr/include/c++/11/iosfwd \
  /usr/include/c++/11/bits/stringfwd.h \
@@ -147,7 +146,7 @@ build/util.o: src/util.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/11/bits/ostream.tcc /usr/include/c++/11/istream \
  /usr/include/c++/11/bits/istream.tcc
 /usr/include/stdc-predef.h:
-src/../include/util.h:
+src/util.h:
 /usr/include/c++/11/array:
 /usr/include/c++/11/utility:
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h:
@@ -182,7 +181,7 @@ src/../include/util.h:
 /usr/include/c++/11/debug/debug.h:
 /usr/include/c++/11/bits/predefined_ops.h:
 /usr/include/c++/11/bits/range_access.h:
-src/../include/color.h:
+src/color.h:
 /usr/include/c++/11/iostream:
 /usr/include/c++/11/ostream:
 /usr/include/c++/11/ios:

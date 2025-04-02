@@ -1,7 +1,7 @@
 // http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
 
-#include "../include/color.h"
-#include "../include/util.h"
+#include "color.h"
+#include "util.h"
 
 #include <algorithm>
 #include <array>
