@@ -4,39 +4,44 @@
 namespace ColorSpace {
 
 struct CieLab;
+struct LinRgb;
+struct CieXyz;
 
-struct StdRGB {
-  StdRGB(int r, int g, int b);
-  explicit StdRGB(const CieLab &ceiLab);
+struct StdRgb {
+  StdRgb(int r, int g, int b);
   int r, g, b;
+
+  LinRgb toLinRgb() const;
+  CieLab toCieLab() const;
 };
 
-struct LinRGB {
-  LinRGB(double r, double g, double b);
+struct LinRgb {
+  LinRgb(double r, double g, double b);
   double r, g, b;
+
+  StdRgb toStdRgb() const;
+  CieXyz toXyz() const;
 };
 
-struct CieXYZ {
-  CieXYZ(double x, double y, double z);
+struct CieXyz {
+  CieXyz(double x, double y, double z);
   double x, y, z;
+
+  LinRgb toLinRgb() const;
+  CieLab toCieLab() const;
 };
 
 struct CieLab {
   CieLab(double lStar, double aStar, double bStar);
-  explicit CieLab(const StdRGB &stdRgb);
   double lStar, aStar, bStar;
+
+  CieXyz toXyz() const;
+  StdRgb toStdRgb() const;
 };
 
-const CieXYZ referenceWhiteD60(0.950470, 1.0, 1.088830);
+const CieXyz referenceWhiteD60(0.950470, 1.0, 1.088830);
 constexpr double epsilon = 216.0 / 24389.0;
 constexpr double kappa = 24389.0 / 27.0;
-
-LinRGB linearize(const StdRGB &stdRGB);
-StdRGB applyGamma(const LinRGB &linRGB);
-CieXYZ rgbToXYZ(const LinRGB &linRGB);
-LinRGB xyzToRGB(const CieXYZ &cieXYZ);
-CieLab xyzToLab(const CieXYZ &cieXYZ);
-CieXYZ labToXYZ(const CieLab &cieLab);
 
 } // namespace ColorSpace
 

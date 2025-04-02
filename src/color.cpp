@@ -10,7 +10,7 @@
 
 namespace ColorSpace {
 
-StdRGB::StdRGB(int r, int g, int b) : r(r), g(g), b(b) {
+StdRgb::StdRgb(int r, int g, int b) : r(r), g(g), b(b) {
   auto validate = [](int c) {
     if (std::min(255, std::max(0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
@@ -23,18 +23,30 @@ StdRGB::StdRGB(int r, int g, int b) : r(r), g(g), b(b) {
 };
 
 
-StdRGB::StdRGB(const CieLab &cieLab) {
-  CieXYZ cieXYZ = labToXYZ(cieLab);
-  LinRGB linRgb = xyzToRGB(cieXYZ);
-  auto [r, b, g] = applyGamma(linRgb);
+LinRgb StdRgb::toLinRgb() const {
+  auto linearizeChannel = [](int c) -> double {
+    double normalized = c / 255.0;
+    return (normalized <= 0.04045) ? (normalized / 12.92)
+                                   : pow((normalized + 0.055) / 1.055, 2.4);
+  };
 
-  this->r = r;
-  this->b = g;
-  this->g = b;
+  const double r = linearizeChannel(this->r);
+  const double g = linearizeChannel(this->g);
+  const double b = linearizeChannel(this->b);
+
+  return LinRgb(r, g, b);
 };
 
 
-LinRGB::LinRGB(double r, double g, double b) : r(r), g(g), b(b) {
+CieLab StdRgb::toCieLab() const {
+  LinRgb linRgb = this->toLinRgb();
+  CieXyz cieXyz = linRgb.toXyz();
+
+  return cieXyz.toCieLab();
+}
+
+
+LinRgb::LinRgb(double r, double g, double b) : r(r), g(g), b(b) {
   auto validate = [](double c) {
     if (std::min(1.0, std::max(0.0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 1].");
@@ -47,53 +59,22 @@ LinRGB::LinRGB(double r, double g, double b) : r(r), g(g), b(b) {
 };
 
 
-CieXYZ::CieXYZ(double x, double y, double z) : x(x), y(y), z(z) {};
-
-
-CieLab::CieLab(double lStar, double aStar, double bStar)
-    : lStar(lStar), aStar(aStar), bStar(bStar) {};
-
-
-CieLab::CieLab(const StdRGB &stdRgb) {
-  LinRGB linRgb = linearize(stdRgb);
-  CieXYZ cieXYZ = rgbToXYZ(linRgb);
-  auto [lStar, aStar, bStar] = xyzToLab(cieXYZ);
-
-  this->lStar = lStar;
-  this->aStar = aStar;
-  this->bStar = bStar;
-};
-
-
-LinRGB linearize(const StdRGB &sRGB) {
-  auto linearizeChannel = [](int c) -> double {
-    double normalized = c / 255.0;
-    return (normalized <= 0.04045) ? (normalized / 12.92)
-                                   : pow((normalized + 0.055) / 1.055, 2.4);
-  };
-
-  double r = linearizeChannel(sRGB.r);
-  double g = linearizeChannel(sRGB.g);
-  double b = linearizeChannel(sRGB.b);
-
-  return {r, g, b};
-}
-
-
-StdRGB applyGamma(const LinRGB &linRGB) {
-
+StdRgb LinRgb::toStdRgb() const {
   auto applyGammaToChannel = [](double c) -> int {
     double corrected =
         (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
     return std::clamp(static_cast<int>(corrected * 255.0), 0, 255);
   };
 
-  return StdRGB(applyGammaToChannel(linRGB.r), applyGammaToChannel(linRGB.g),
-                applyGammaToChannel(linRGB.b));
-}
+  const double r = applyGammaToChannel(this->r);
+  const double g = applyGammaToChannel(this->g);
+  const double b = applyGammaToChannel(this->b);
+
+  return StdRgb(r, g, b);
+};
 
 
-CieXYZ rgbToXYZ(const LinRGB &linRGB) {
+CieXyz LinRgb::toXyz() const {
   // reference white - D65
   constexpr std::array<std::array<double, 3>, 3> rgbToXYZMatrix = {
       {{0.4124564, 0.3575761, 0.1804375},
@@ -101,38 +82,39 @@ CieXYZ rgbToXYZ(const LinRGB &linRGB) {
        {0.0193339, 0.1191920, 0.9503041}}};
 
   std::array<double, 3> cieRGB =
-      multiplyMatrix(rgbToXYZMatrix, {linRGB.r, linRGB.g, linRGB.b});
+      multiplyMatrix(rgbToXYZMatrix, {this->r, this->g, this->b});
 
-  return CieXYZ(cieRGB[0], cieRGB[1], cieRGB[2]);
+  return CieXyz(cieRGB[0], cieRGB[1], cieRGB[2]);
 }
 
 
-LinRGB xyzToRGB(const CieXYZ &ceiLab) {
+CieXyz::CieXyz(double x, double y, double z) : x(x), y(y), z(z) {};
+
+
+LinRgb CieXyz::toLinRgb() const {
   // reference white - D65
-  constexpr std::array<std::array<double, 3>, 3> xyzToRGBMatrix = {{
+  constexpr std::array<std::array<double, 3>, 3> xyzToLinRgbMatrix = {{
       {3.2404542, -1.5371385, -0.4985314},
       {-0.9692660, 1.8760108, 0.0415560},
       {0.0556434, -0.2040259, 1.0572252},
   }};
 
   std::array<double, 3> linRgb =
-      multiplyMatrix(xyzToRGBMatrix, {ceiLab.x, ceiLab.y, ceiLab.z});
+      multiplyMatrix(xyzToLinRgbMatrix, {this->x, this->y, this->z});
 
   const double r = std::clamp(linRgb[0], 0.0, 1.0);
   const double g = std::clamp(linRgb[1], 0.0, 1.0);
   const double b = std::clamp(linRgb[2], 0.0, 1.0);
 
-  return LinRGB(r, g, b);
-}
+  return LinRgb(r, g, b);
+};
 
 
-CieLab xyzToLab(const CieXYZ &cieXYZ) {
+CieLab CieXyz::toCieLab() const {
 
-  auto [x, y, z] = cieXYZ;
-
-  const double xR = x / referenceWhiteD60.x;
-  const double yR = y / referenceWhiteD60.y;
-  const double zR = z / referenceWhiteD60.z;
+  const double xR = this->x / referenceWhiteD60.x;
+  const double yR = this->y / referenceWhiteD60.y;
+  const double zR = this->z / referenceWhiteD60.z;
 
   const double fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0;
   const double fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0;
@@ -143,19 +125,22 @@ CieLab xyzToLab(const CieXYZ &cieXYZ) {
   const double bStar = 200 * (fY - fZ);
 
   return CieLab(lStar, aStar, bStar);
-};
+}
 
 
-CieXYZ labToXYZ(const CieLab &cieLab) {
+CieLab::CieLab(double lStar, double aStar, double bStar)
+    : lStar(lStar), aStar(aStar), bStar(bStar) {};
 
-  const double fY = (cieLab.lStar + 16) / 116.0;
-  const double fX = fY + (cieLab.aStar / 500.0);
-  const double fZ = fY - (cieLab.bStar / 200.0);
+
+CieXyz CieLab::toXyz() const {
+  const double fY = (this->lStar + 16) / 116.0;
+  const double fX = fY + (this->aStar / 500.0);
+  const double fZ = fY - (this->bStar / 200.0);
 
   const double xR =
       (std::pow(fX, 3) > epsilon) ? std::pow(fX, 3) : (116 * fX - 16) / kappa;
-  const double yR = (cieLab.lStar > (kappa * epsilon)) ? std::pow(fY, 3)
-                                                       : cieLab.lStar / kappa;
+  const double yR =
+      (this->lStar > (kappa * epsilon)) ? std::pow(fY, 3) : this->lStar / kappa;
   const double zR =
       (std::pow(fZ, 3) > epsilon) ? std::pow(fZ, 3) : (116 * fZ - 16) / kappa;
 
@@ -163,7 +148,15 @@ CieXYZ labToXYZ(const CieLab &cieLab) {
   const double y = yR * referenceWhiteD60.y;
   const double z = zR * referenceWhiteD60.z;
 
-  return CieXYZ(x, y, z);
+  return CieXyz(x, y, z);
+}
+
+
+StdRgb CieLab::toStdRgb() const {
+  CieXyz cieXyz = this->toXyz();
+  LinRgb linRgb = cieXyz.toLinRgb();
+
+  return linRgb.toStdRgb();
 }
 
 } // namespace ColorSpace

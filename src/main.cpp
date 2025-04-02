@@ -1,17 +1,17 @@
-#include "color.h"
-#include "util.h"
 
 #include <cmath>
 #include <iostream>
 
+#include "color.h"
 #include "timer.h"
+#include "util.h"
 
 int main() {
   Timer timer;
 
-  ColorSpace::StdRGB startRGB(100, 0, 0);
-  const ColorSpace::CieLab lab(startRGB);
+  const ColorSpace::StdRgb startRgb(100, 0, 0);
+  const ColorSpace::CieLab cieLab = startRgb.toCieLab();
 
-  std::cout << "lStar: " << lab.lStar << ", aStar: " << lab.aStar
-            << ", bStar: " << lab.bStar << std::endl;
+  std::cout << "lStar: " << cieLab.lStar << ", aStar: " << cieLab.aStar
+            << ", bStar: " << cieLab.bStar << std::endl;
 }
