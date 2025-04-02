@@ -1,6 +1,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+namespace ColorSpace {
+
 struct CieLab;
 
 struct StdRGB {
@@ -35,5 +37,7 @@ CieXYZ rgbToXYZ(const LinRGB &linRGB);
 LinRGB xyzToRGB(const CieXYZ &cieXYZ);
 CieLab xyzToLab(const CieXYZ &cieXYZ);
 CieXYZ labToXYZ(const CieLab &cieLab);
+
+} // namespace ColorSpace
 
 #endif

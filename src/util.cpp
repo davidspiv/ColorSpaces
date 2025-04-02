@@ -2,6 +2,7 @@
 #include "../include/color.h"
 
 #include <array>
+#include <iostream>
 
 std::array<double, 3>
 multiplyMatrix(const std::array<std::array<double, 3>, 3> &matrix,

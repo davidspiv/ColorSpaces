@@ -8,6 +8,7 @@
 #include <cmath>
 #include <iostream>
 
+namespace ColorSpace {
 
 StdRGB::StdRGB(int r, int g, int b) : r(r), g(g), b(b) {
   auto validate = [](int c) {
@@ -164,3 +165,5 @@ CieXYZ labToXYZ(const CieLab &cieLab) {
 
   return CieXYZ(x, y, z);
 }
+
+} // namespace ColorSpace
