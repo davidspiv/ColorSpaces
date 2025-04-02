@@ -9,9 +9,9 @@
 int main() {
   Timer timer;
 
-  const ColorSpace::StdRgb startRgb(100, 0, 0);
+  const ColorSpace::Srgb startRgb(100, 0, 0);
   const ColorSpace::CieLab cieLab = startRgb.toCieLab();
 
-  std::cout << "lStar: " << cieLab.lStar << ", aStar: " << cieLab.aStar
-            << ", bStar: " << cieLab.bStar << std::endl;
+  std::cout << "l*: " << cieLab.l << ", a*: " << cieLab.a
+            << ", b*: " << cieLab.b << std::endl;
 }

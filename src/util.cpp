@@ -5,7 +5,7 @@
 #include <iostream>
 namespace ColorSpace {
 
-int distSquared(const StdRgb &colorA, const StdRgb &colorB) {
+int distSquared(const Srgb &colorA, const Srgb &colorB) {
 
   const int xD = colorB.r - colorA.r;
   const int yD = colorB.g - colorA.g;
@@ -14,28 +14,28 @@ int distSquared(const StdRgb &colorA, const StdRgb &colorB) {
 }
 
 
-double distSquared(const LinRgb &colorA, const LinRgb &colorB) {
+float distSquared(const LinearRgb &colorA, const LinearRgb &colorB) {
 
-  const double xD = colorB.r - colorA.r;
-  const double yD = colorB.g - colorA.g;
-  const double zD = colorB.b - colorA.b;
+  const float xD = colorB.r - colorA.r;
+  const float yD = colorB.g - colorA.g;
+  const float zD = colorB.b - colorA.b;
   return xD * xD + yD * yD + zD * zD;
 }
 
 
-double distSquared(const CieLab &colorA, const CieLab &colorB) {
+float distSquared(const CieLab &colorA, const CieLab &colorB) {
 
-  const double xD = colorB.lStar - colorA.lStar;
-  const double yD = colorB.aStar - colorA.aStar;
-  const double zD = colorB.bStar - colorA.bStar;
+  const float xD = colorB.l - colorA.l;
+  const float yD = colorB.a - colorA.a;
+  const float zD = colorB.b - colorA.b;
   return xD * xD + yD * yD + zD * zD;
 }
 
-std::array<double, 3>
-multiplyMatrix(const std::array<std::array<double, 3>, 3> &matrix,
-               const std::array<double, 3> &vector) {
+std::array<float, 3>
+multiplyMatrix(const std::array<std::array<float, 3>, 3> &matrix,
+               const std::array<float, 3> &vector) {
 
-  std::array<double, 3> result = {0.0, 0.0, 0.0};
+  std::array<float, 3> result = {0.0, 0.0, 0.0};
 
   for (size_t i = 0; i < 3; i++) {
     for (size_t j = 0; j < 3; j++) {

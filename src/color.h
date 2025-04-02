@@ -1,47 +1,73 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include <algorithm>
+#include <cstdint> // For uint8_t
+#include <stdexcept>
+
 namespace ColorSpace {
 
-struct CieLab;
-struct LinRgb;
+struct LinearRgb;
 struct CieXyz;
+struct CieLab;
 
-struct StdRgb {
-  StdRgb(int r, int g, int b);
-  int r, g, b;
+struct Srgb {
+  uint8_t r, g, b;
 
-  LinRgb toLinRgb() const;
+  explicit constexpr Srgb(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {
+    auto validate = [](int c) {
+      if (std::min(255, std::max(0, c)) != c) {
+        throw std::domain_error(
+            "Channel initalized outside of range [0, 255].");
+      }
+    };
+
+    validate(r);
+    validate(g);
+    validate(b);
+  };
+
+
+  LinearRgb toLinearRgb() const;
   CieLab toCieLab() const;
 };
 
-struct LinRgb {
-  LinRgb(double r, double g, double b);
-  double r, g, b;
+struct LinearRgb {
+  float r, g, b;
 
-  StdRgb toStdRgb() const;
-  CieXyz toXyz() const;
+  explicit constexpr LinearRgb(float r, float g, float b) : r(r), g(g), b(b) {
+    auto validate = [](float c) {
+      if (std::min<float>(1.0, std::max<float>(0.0, c)) != c) {
+        throw std::domain_error("Channel initalized outside of range [0, 1].");
+      }
+    };
+
+    validate(r);
+    validate(g);
+    validate(b);
+  };
+
+  Srgb toSrgb() const;
+  CieXyz toCieXyz() const;
 };
 
 struct CieXyz {
-  CieXyz(double x, double y, double z);
-  double x, y, z;
+  float x, y, z;
 
-  LinRgb toLinRgb() const;
+  explicit constexpr CieXyz(float x, float y, float z) : x(x), y(y), z(z) {};
+
+  LinearRgb toLinearRgb() const;
   CieLab toCieLab() const;
 };
 
 struct CieLab {
-  CieLab(double lStar, double aStar, double bStar);
-  double lStar, aStar, bStar;
+  float l, a, b;
 
-  CieXyz toXyz() const;
-  StdRgb toStdRgb() const;
+  explicit constexpr CieLab(float l, float a, float b) : l(l), a(a), b(b) {};
+
+  CieXyz toCieXyz() const;
+  Srgb toSrgb() const;
 };
-
-const CieXyz referenceWhiteD60(0.950470, 1.0, 1.088830);
-constexpr double epsilon = 216.0 / 24389.0;
-constexpr double kappa = 24389.0 / 27.0;
 
 } // namespace ColorSpace
 
