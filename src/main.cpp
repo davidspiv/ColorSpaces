@@ -1,44 +1,17 @@
 #include "../include/color.h"
-#include "../include/picture.h"
 #include "../include/util.h"
 
 #include <cmath>
 #include <iostream>
 
+#include "../include/timer.h"
+
 int main() {
-  StdRGB startRGB(1, 137, 136);
-  StdRGB endRGB(187, 48, 45);
+  Timer timer;
 
-  Picture picture(100, 100);
+  StdRGB startRGB(100, 0, 0);
+  const CieLab lab(startRGB);
 
-  for (int i = 0; i < picture.width(); i++) {
-    float t = i / float(picture.width() - 1);
-
-    int r = int(round(startRGB.r * (1 - t) + endRGB.r * t));
-    int g = int(round(startRGB.g * (1 - t) + endRGB.g * t));
-    int b = int(round(startRGB.b * (1 - t) + endRGB.b * t));
-
-    for (int j = 0; j < picture.height() / 2; j++) {
-      picture.set(i, j, r, g, b, 255);
-    }
-  }
-
-  CieLab startLab(startRGB);
-  CieLab endLab(endRGB);
-
-  for (int i = 0; i < picture.width(); i++) {
-    float t = i / float(picture.width() - 1);
-
-    double lStar = startLab.lStar * (1 - t) + endLab.lStar * t;
-    double aStar = startLab.aStar * (1 - t) + endLab.aStar * t;
-    double bStar = startLab.bStar * (1 - t) + endLab.bStar * t;
-
-    for (int j = picture.height() / 2; j < picture.height(); j++) {
-      CieLab newLab(lStar, aStar, bStar);
-      auto [r, g, b] = StdRGB(newLab);
-      picture.set(i, j, r, g, b, 255);
-    }
-  }
-
-  picture.save("result.png");
+  std::cout << "lStar: " << lab.lStar << ", aStar: " << lab.aStar
+            << ", bStar: " << lab.bStar << std::endl;
 }

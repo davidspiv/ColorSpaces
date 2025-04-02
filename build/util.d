@@ -138,8 +138,7 @@ build/util.o: src/util.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/11/bits/cxxabi_init_exception.h \
  /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
  /usr/include/c++/11/array /usr/include/c++/11/utility \
- /usr/include/c++/11/bits/stl_relops.h src/../include/color.h \
- /usr/include/c++/11/limits
+ /usr/include/c++/11/bits/stl_relops.h src/../include/color.h
 /usr/include/stdc-predef.h:
 src/../include/util.h:
 src/../include/color.h:
@@ -311,4 +310,3 @@ src/../include/../include/lodepng.h:
 /usr/include/c++/11/utility:
 /usr/include/c++/11/bits/stl_relops.h:
 src/../include/color.h:
-/usr/include/c++/11/limits:

@@ -1,9 +1,6 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include "../include/picture.h"
-#include <stdexcept>
-
 struct CieLab;
 
 struct StdRGB {
@@ -16,7 +13,6 @@ struct LinRGB {
   LinRGB(double r, double g, double b);
   double r, g, b;
 };
-
 
 struct CieXYZ {
   CieXYZ(double x, double y, double z);

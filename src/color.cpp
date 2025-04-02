@@ -1,3 +1,5 @@
+// http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
+
 #include "../include/color.h"
 #include "../include/util.h"
 
@@ -18,6 +20,7 @@ StdRGB::StdRGB(int r, int g, int b) : r(r), g(g), b(b) {
   validate(g);
   validate(b);
 };
+
 
 StdRGB::StdRGB(const CieLab &cieLab) {
   CieXYZ cieXYZ = labToXYZ(cieLab);
@@ -121,6 +124,7 @@ LinRGB xyzToRGB(const CieXYZ &ceiLab) {
   return LinRGB(r, g, b);
 }
 
+
 CieLab xyzToLab(const CieXYZ &cieXYZ) {
 
   auto [x, y, z] = cieXYZ;
@@ -139,6 +143,7 @@ CieLab xyzToLab(const CieXYZ &cieXYZ) {
 
   return CieLab(lStar, aStar, bStar);
 };
+
 
 CieXYZ labToXYZ(const CieLab &cieLab) {
 
