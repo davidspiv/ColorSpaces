@@ -22,10 +22,10 @@ static constexpr float kappa = 24389.0f / 27.0f;
 template <typename ColorT>
 float distEuclideanSquared(const ColorT &a_Color, const ColorT &b_Color) {
 
-  if constexpr (!std::is_same_v<ColorT, LinearRgb> &&
-                !std::is_same_v<ColorT, Xyz> && !std::is_same_v<ColorT, Lab>) {
+  if constexpr (!std::is_same_v<ColorT, Rgb> && !std::is_same_v<ColorT, Xyz> &&
+                !std::is_same_v<ColorT, Lab>) {
 
-    throw std::domain_error("Euclidean distance only valid for LinearRgb, "
+    throw std::domain_error("Euclidean distance only valid for Rgb, "
                             "Xyz, and Lab color spaces");
   }
 

@@ -12,7 +12,7 @@
 namespace ColorSpace {
 
 
-Srgb::Srgb(int r, int g, int b) : mValues({r, g, b}) {
+SRgb::SRgb(int r, int g, int b) : mValues({r, g, b}) {
   auto validate = [](int c) {
     if (std::min(255, std::max(0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
@@ -25,7 +25,7 @@ Srgb::Srgb(int r, int g, int b) : mValues({r, g, b}) {
 };
 
 
-float Srgb::removeGamma(const int c) {
+float SRgb::removeGamma(const int c) {
   float normalChannel = c / 255.0;
 
   const float breakpoint = 0.04045;
@@ -36,22 +36,22 @@ float Srgb::removeGamma(const int c) {
 };
 
 
-LinearRgb Srgb::toLinearRgb() const {
+Rgb SRgb::toRgb() const {
   const float r = this->removeGamma(mValues[0]);
   const float g = this->removeGamma(mValues[1]);
   const float b = this->removeGamma(mValues[2]);
 
-  return LinearRgb(r, g, b);
+  return Rgb(r, g, b);
 };
 
 
-void Srgb::print() const {
+void SRgb::print() const {
   std::cout << "r: " << mValues[0] << "\ng: " << mValues[1]
             << "\nb: " << mValues[2] << std::endl;
 }
 
 
-LinearRgb::LinearRgb(float r, float g, float b) : mValues({r, g, b}) {
+Rgb::Rgb(float r, float g, float b) : mValues({r, g, b}) {
   auto validate = [](float c) {
     if (std::min<float>(1.0, std::max<float>(0.0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 1].");
@@ -64,24 +64,24 @@ LinearRgb::LinearRgb(float r, float g, float b) : mValues({r, g, b}) {
 };
 
 
-float LinearRgb::applyGamma(const int c) {
+float Rgb::applyGamma(const int c) {
   float corrected =
       (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
   return std::clamp(corrected * 255.0, 0.0, 255.0);
 };
 
 
-Srgb LinearRgb::toSrgb() const {
+SRgb Rgb::toSRgb() const {
 
   const float r = this->applyGamma(mValues[0]);
   const float g = this->applyGamma(mValues[1]);
   const float b = this->applyGamma(mValues[2]);
 
-  return Srgb(r, g, b);
+  return SRgb(r, g, b);
 };
 
 
-Xyz LinearRgb::toXyz() const {
+Xyz Rgb::toXyz() const {
   auto [x, y, z] = multiplyMatrix(this->rgbToXyzMatrix, mValues);
 
   return Xyz(x, y, z);
@@ -91,16 +91,16 @@ Xyz LinearRgb::toXyz() const {
 Xyz::Xyz(float x, float y, float z) : mValues({x, y, z}) {};
 
 
-LinearRgb Xyz::toLinearRgb() const {
+Rgb Xyz::toRgb() const {
 
-  std::array<float, Xyz::channelCount> linearRgbAsArr =
-      multiplyMatrix(this->xyzToLinearRgbMatrix, mValues);
+  std::array<float, Xyz::channelCount> rgbAsArr =
+      multiplyMatrix(this->xyzToRgbMatrix, mValues);
 
-  const float r = std::clamp<float>(linearRgbAsArr[0], 0.0, 1.0);
-  const float g = std::clamp<float>(linearRgbAsArr[1], 0.0, 1.0);
-  const float b = std::clamp<float>(linearRgbAsArr[2], 0.0, 1.0);
+  const float r = std::clamp<float>(rgbAsArr[0], 0.0, 1.0);
+  const float g = std::clamp<float>(rgbAsArr[1], 0.0, 1.0);
+  const float b = std::clamp<float>(rgbAsArr[2], 0.0, 1.0);
 
-  return LinearRgb(r, g, b);
+  return Rgb(r, g, b);
 };
 
 

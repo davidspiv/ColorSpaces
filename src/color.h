@@ -7,24 +7,24 @@
 namespace ColorSpace {
 
 
-class LinearRgb;
+class Rgb;
 class Xyz;
 class Lab;
 class Lch;
 
 
-class Srgb {
+class SRgb {
   static constexpr size_t channelCount = 3;
 
 private:
   std::array<int, channelCount> mValues; // r, g, b
 
 public:
-  Srgb(int r, int g, int b);
+  SRgb(int r, int g, int b);
 
   std::array<int, channelCount> getValues() const { return mValues; }
 
-  LinearRgb toLinearRgb() const;
+  Rgb toRgb() const;
 
   void print() const;
 
@@ -33,7 +33,7 @@ private:
 };
 
 
-class LinearRgb {
+class Rgb {
 public:
   static constexpr size_t channelCount = 3;
 
@@ -48,11 +48,11 @@ private:
   std::array<float, channelCount> mValues; // r, g, b
 
 public:
-  LinearRgb(float r, float g, float b);
+  Rgb(float r, float g, float b);
 
   std::array<float, channelCount> getValues() const { return mValues; }
 
-  Srgb toSrgb() const;
+  SRgb toSRgb() const;
   Xyz toXyz() const;
 
 private:
@@ -66,7 +66,7 @@ public:
 
 private:
   static constexpr std::array<std::array<float, channelCount>, channelCount>
-      xyzToLinearRgbMatrix = {{
+      xyzToRgbMatrix = {{
           {3.2404542, -1.5371385, -0.4985314},
           {-0.9692660, 1.8760108, 0.0415560},
           {0.0556434, -0.2040259, 1.0572252} // Reference white - D65
@@ -82,7 +82,7 @@ public:
   float z() const { return mValues[2]; }
   std::array<float, channelCount> getValues() const { return mValues; }
 
-  LinearRgb toLinearRgb() const;
+  Rgb toRgb() const;
   Lab toLab() const;
 
   void print() const;
