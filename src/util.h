@@ -11,6 +11,7 @@ namespace ColorSpace {
 const CieXyz referenceWhiteD60(0.950470, 1.0, 1.088830);
 
 
+// Euclidean distance only valid for LinearRgb, CieXyz, and CieLab color spaces
 template <typename ColorT> struct validEuclideanType {
   static constexpr bool value = std::is_same_v<ColorT, LinearRgb> ||
                                 std::is_same_v<ColorT, CieXyz> ||
