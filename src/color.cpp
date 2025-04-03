@@ -25,14 +25,14 @@ SRgb::SRgb(int r, int g, int b) : mValues({r, g, b}) {
 };
 
 
-float SRgb::removeGamma(const int c) {
-  float normalchAbannel = c / 255.0;
+float SRgb::removeGamma(int c) {
+  float normalChannel = static_cast<double>(c) / 255.0f;
 
-  const float breakpoint = 0.04045;
+  const float breakpoint = 0.04045f;
 
-  return (normalchAbannel <= breakpoint)
-             ? (normalchAbannel / 12.92)
-             : pow((normalchAbannel + 0.055) / 1.055, 2.4);
+  return (normalChannel <= breakpoint)
+             ? (normalChannel / 12.92f)
+             : std::pow((normalChannel + 0.055f) / 1.055f, 2.4f);
 };
 
 
@@ -64,7 +64,7 @@ Rgb::Rgb(float r, float g, float b) : mValues({r, g, b}) {
 };
 
 
-float Rgb::applyGamma(const int c) {
+float Rgb::applyGamma(const float c) {
   float corrected =
       (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
   return std::clamp(corrected * 255.0, 0.0, 255.0);
@@ -85,6 +85,12 @@ Xyz Rgb::toXyz() const {
   auto [x, y, z] = multiplyMatrix(this->rgbToXyzMatrix, mValues);
 
   return Xyz(x, y, z);
+}
+
+
+void Rgb::print() const {
+  std::cout << "R: " << mValues[0] << "\nG: " << mValues[1]
+            << "\nB: " << mValues[2] << std::endl;
 }
 
 
@@ -135,6 +141,10 @@ Luv Xyz::toLuv() const {
   const float yR = y / referenceWhiteD60[1];
 
   const float denominator = x + 15 * y + 3 * z;
+  if (denominator == 0.0f) {
+    return Luv(0.0f, 0.0f, 0.0f);
+  }
+
   const float uPrime = (4 * x) / denominator;
   const float vPrime = (9 * y) / denominator;
 
@@ -142,18 +152,47 @@ Luv Xyz::toLuv() const {
   const float refUPrime = (4 * xRef) / refDenominator;
   const float refVPrime = (9 * yRef) / refDenominator;
 
-  const float l = (yR > epsilon) ? 16 * std::cbrt(yR) - 16 : kappa * yR;
-  const float u = 13 * l * (uPrime - refUPrime);
-  const float v = 13 * l * (vPrime - refVPrime);
+  const float l =
+      (yR > epsilon) ? (116.0 * std::cbrt(yR) - 16.0) : (kappa * yR);
+  const float u = 13.0 * l * (uPrime - refUPrime);
+  const float v = 13.0 * l * (vPrime - refVPrime);
 
   return Luv(l, u, v);
 }
+
+// Luv Xyz::toLuv() const {
+//     auto [xRef, yRef, zRef] = referenceWhiteD60;
+//     auto [x, y, z] = mValues;
+
+//     const float yR = std::clamp(y / referenceWhiteD60[1], 0.0f, 1.0f); //
+//     Ensure valid range
+
+//     const float denominator = x + 15 * y + 3 * z;
+//     if (denominator == 0.0f) {  // Handle black (0,0,0) case
+//         return Luv(0.0f, 0.0f, 0.0f);
+//     }
+
+//     const float uPrime = (4 * x) / denominator;
+//     const float vPrime = (9 * y) / denominator;
+
+//     const float refDenominator = xRef + 15 * yRef + 3 * zRef;
+//     const float refUPrime = (4 * xRef) / refDenominator;
+//     const float refVPrime = (9 * yRef) / refDenominator;
+
+//     // Compute L* using the standard condition
+//     const float l = (yR > epsilon) ? (116.0f * std::cbrt(yR) - 16.0f) :
+//     (kappa * yR); const float u = 13.0f * l * (uPrime - refUPrime); const
+//     float v = 13.0f * l * (vPrime - refVPrime);
+
+//     return Luv(l, u, v);
+// }
 
 
 Xyy Xyz::toXyy() const {
   auto [x, y, z] = mValues;
   const float sum = x + y + z;
-  if (std::abs(sum) < 1e-5) {
+
+  if (sum == 0.0) {
     return Xyy(referenceWhiteD60[0], referenceWhiteD60[1], y);
   }
 
@@ -188,12 +227,9 @@ Xyz Lab::toXyz() const {
 
 
 LchAb Lab::toLchAb() const {
-  const float c = std::sqrt(mValues[0] * mValues[0] + mValues[1] * mValues[1]);
-  const float hComponent = toDegrees(std::atan2(mValues[2], mValues[1]));
+  const auto [l, c, h] = toPolarColorSpace(mValues);
 
-  const float h = (hComponent >= 0) ? hComponent : hComponent + 360.0;
-
-  return LchAb(mValues[0], c, h);
+  return LchAb(l, c, h);
 };
 
 
@@ -218,9 +254,28 @@ void LchAb::print() const {
 Luv::Luv(float l, float u, float v) : mValues({l, u, v}) {}
 
 
+LchUv Luv::toLchUv() const {
+  const float c = std::sqrt(mValues[0] * mValues[0] + mValues[1] * mValues[1]);
+  const float hComponent = toDegrees(std::atan2(mValues[2], mValues[1]));
+
+  const float h = (hComponent >= 0) ? hComponent : hComponent + 360.0;
+
+  return LchUv(mValues[0], c, h);
+}
+
+
 void Luv::print() const {
   std::cout << "L: " << mValues[0] << "\nu: " << mValues[1]
             << "\nv: " << mValues[2] << std::endl;
+}
+
+
+LchUv::LchUv(float l, float c, float h) : mValues({l, c, h}) {}
+
+
+void LchUv::print() const {
+  std::cout << "L: " << mValues[0] << "\nc: " << mValues[1]
+            << "\nh: " << mValues[2] << std::endl;
 }
 
 

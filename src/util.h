@@ -19,15 +19,20 @@ static constexpr float epsilon = 216.0f / 24389.0f;
 static constexpr float kappa = 24389.0f / 27.0f;
 
 
+std::array<float, 3> toPolarColorSpace(std::array<float, 3> coordIn);
+
+
 template <typename ColorT>
 float distEuclideanSquared(const ColorT &a_Color, const ColorT &b_Color) {
-  constexpr size_t channelCount = 3;
+  // type check: constraints, ifconstexpr (implemented), or SFINAE?
   if constexpr (!std::is_same_v<ColorT, Rgb> && !std::is_same_v<ColorT, Xyz> &&
                 !std::is_same_v<ColorT, Lab>) {
 
     throw std::domain_error("Euclidean distance only valid for Rgb, "
                             "Xyz, and Lab color spaces");
   }
+
+  constexpr size_t channelCount = 3;
 
   std::array<float, channelCount> a_Values = a_Color.getValues();
   std::array<float, channelCount> b_Values = b_Color.getValues();

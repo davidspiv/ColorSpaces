@@ -13,6 +13,7 @@ class Lab;
 class LchAb;
 class Luv;
 class Xyy;
+class LchUv;
 
 class SRgb {
   static constexpr size_t channelCount = 3;
@@ -56,8 +57,10 @@ public:
   SRgb toSRgb() const;
   Xyz toXyz() const;
 
+  void print() const;
+
 private:
-  static float applyGamma(int c);
+  static float applyGamma(float c);
 };
 
 
@@ -133,6 +136,24 @@ private:
 
 public:
   Luv(float l, float u, float v);
+
+  std::array<float, channelCount> getValues() const { return mValues; }
+
+  LchUv toLchUv() const;
+
+  void print() const;
+};
+
+
+class LchUv {
+public:
+  static constexpr size_t channelCount = 3;
+
+private:
+  std::array<float, channelCount> mValues; // l, c, h
+
+public:
+  LchUv(float l, float c, float h);
 
   std::array<float, channelCount> getValues() const { return mValues; }
 
