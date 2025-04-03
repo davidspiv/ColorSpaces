@@ -106,9 +106,9 @@ Rgb Xyz::toRgb() const {
 
 Lab Xyz::toLab() const {
 
-  const float xR = mValues[0] / referenceWhiteD60.x();
-  const float yR = mValues[1] / referenceWhiteD60.y();
-  const float zR = mValues[2] / referenceWhiteD60.z();
+  const float xR = mValues[0] / referenceWhiteD60[0];
+  const float yR = mValues[1] / referenceWhiteD60[1];
+  const float zR = mValues[2] / referenceWhiteD60[2];
 
   const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0;
   const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0;
@@ -128,6 +128,42 @@ void Xyz::print() const {
 }
 
 
+Luv Xyz::toLuv() const {
+  auto [xRef, yRef, zRef] = referenceWhiteD60;
+  auto [x, y, z] = mValues;
+
+  const float yR = y / referenceWhiteD60[1];
+
+  const float denominator = x + 15 * y + 3 * z;
+  const float uPrime = (4 * x) / denominator;
+  const float vPrime = (9 * y) / denominator;
+
+  const float refDenominator = xRef + 15 * yRef + 3 * zRef;
+  const float refUPrime = (4 * xRef) / refDenominator;
+  const float refVPrime = (9 * yRef) / refDenominator;
+
+  const float l = (yR > epsilon) ? 16 * std::cbrt(yR) - 16 : kappa * yR;
+  const float u = 13 * l * (uPrime - refUPrime);
+  const float v = 13 * l * (vPrime - refVPrime);
+
+  return Luv(l, u, v);
+}
+
+
+XyY Xyz::toXyY() const {
+  auto [x, y, z] = mValues;
+  const float sum = x + y + z;
+  if (std::abs(sum) < 1e-5) {
+    return XyY(referenceWhiteD60[0], referenceWhiteD60[1], y);
+  }
+
+  const float xNew = x / sum;
+  const float yNew = y / sum;
+
+  return XyY(xNew, yNew, y);
+}
+
+
 Xyz Lab::toXyz() const {
   const float fY = (mValues[0] + 16) / 116.0;
   const float fX = fY + (mValues[1] / 500.0);
@@ -143,9 +179,9 @@ Xyz Lab::toXyz() const {
                        ? std::pow(fZ, Lab::channelCount)
                        : (116 * fZ - 16) / kappa;
 
-  const float x = xR * referenceWhiteD60.x();
-  const float y = yR * referenceWhiteD60.y();
-  const float z = zR * referenceWhiteD60.z();
+  const float x = xR * referenceWhiteD60[0];
+  const float y = yR * referenceWhiteD60[1];
+  const float z = zR * referenceWhiteD60[2];
 
   return Xyz(x, y, z);
 }
@@ -185,6 +221,15 @@ Luv::Luv(float l, float u, float v) : mValues({l, u, v}) {}
 void Luv::print() const {
   std::cout << "L: " << mValues[0] << "\nu: " << mValues[1]
             << "\nv: " << mValues[2] << std::endl;
+}
+
+
+XyY::XyY(float x, float y, float Y) : mValues({x, y, Y}) {}
+
+
+void XyY::print() const {
+  std::cout << "x: " << mValues[0] << "\ny: " << mValues[1]
+            << "\nY: " << mValues[2] << std::endl;
 }
 
 } // namespace ColorSpace

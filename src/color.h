@@ -11,7 +11,8 @@ class Rgb;
 class Xyz;
 class Lab;
 class Lch;
-
+class Luv;
+class XyY;
 
 class SRgb {
   static constexpr size_t channelCount = 3;
@@ -77,13 +78,12 @@ private:
 public:
   Xyz(float x, float y, float z);
 
-  float x() const { return mValues[0]; }
-  float y() const { return mValues[1]; }
-  float z() const { return mValues[2]; }
   std::array<float, channelCount> getValues() const { return mValues; }
 
   Rgb toRgb() const;
   Lab toLab() const;
+  Luv toLuv() const;
+  XyY toXyY() const;
 
   void print() const;
 };
@@ -133,6 +133,22 @@ private:
 
 public:
   Luv(float l, float u, float v);
+
+  std::array<float, channelCount> getValues() const { return mValues; }
+
+  void print() const;
+};
+
+
+class XyY {
+public:
+  static constexpr size_t channelCount = 3;
+
+private:
+  std::array<float, channelCount> mValues; // x, y, Y
+
+public:
+  XyY(float l, float u, float v);
 
   std::array<float, channelCount> getValues() const { return mValues; }
 
