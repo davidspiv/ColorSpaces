@@ -2,70 +2,81 @@
 #define COLOR_H
 
 #include <algorithm>
-#include <stdexcept>
+#include <array>
 
 namespace ColorSpace {
 
-struct LinearRgb;
-struct CieXyz;
-struct CieLab;
+class LinearRgb;
+class CieXyz;
+class CieLab;
 
-struct Srgb {
-  int r, g, b;
+class Srgb {
+private:
+  std::array<float, 3> values; // r, b, g
 
-  explicit constexpr Srgb(int r, int g, int b) : r(r), g(g), b(b) {
-    auto validate = [](int c) {
-      if (std::min(255, std::max(0, c)) != c) {
-        throw std::domain_error(
-            "Channel initalized outside of range [0, 255].");
-      }
-    };
+  static float removeGamma(const float c);
 
-    validate(r);
-    validate(g);
-    validate(b);
-  };
-
+public:
+  Srgb(float r, float g, float b);
 
   LinearRgb toLinearRgb() const;
+  void print() const;
 };
 
-struct LinearRgb {
-  float r, g, b;
 
-  explicit constexpr LinearRgb(float r, float g, float b) : r(r), g(g), b(b) {
-    auto validate = [](float c) {
-      if (std::min<float>(1.0, std::max<float>(0.0, c)) != c) {
-        throw std::domain_error("Channel initalized outside of range [0, 1].");
-      }
-    };
+class LinearRgb {
+private:
+  std::array<float, 3> values; // r, b, g
 
-    validate(r);
-    validate(g);
-    validate(b);
-  };
+public:
+  LinearRgb(float r, float g, float b);
 
   Srgb toSrgb() const;
   CieXyz toCieXyz() const;
   float distEuclideanSquared(const LinearRgb &other) const;
   float distEuclidean(const LinearRgb &other) const;
+
+private:
+  static float applyGamma(int c);
+
+  static constexpr std::array<std::array<float, 3>, 3> rgbToCieXyzMatrix = {
+      {{0.4124564, 0.3575761, 0.1804375},
+       {0.2126729, 0.7151522, 0.0721750},
+       {0.0193339, 0.1191920, 0.9503041}}}; // reference white - D65
 };
 
-struct CieXyz {
-  float x, y, z;
+class CieXyz {
+private:
+  std::array<float, 3> values; // x, y, z
 
-  explicit constexpr CieXyz(float x, float y, float z) : x(x), y(y), z(z) {};
+public:
+  explicit constexpr CieXyz(float x, float y, float z) : values({x, y, z}) {};
+
+  float x() const { return values[0]; }
+  float y() const { return values[1]; }
+  float z() const { return values[2]; }
 
   LinearRgb toLinearRgb() const;
   CieLab toCieLab() const;
   float distEuclideanSquared(const CieXyz &other) const;
   float distEuclidean(const CieXyz &other) const;
+
+  void print() const;
+
+private:
+  static constexpr std::array<std::array<float, 3>, 3> xyzToLinearRgbMatrix = {{
+      {3.2404542, -1.5371385, -0.4985314},
+      {-0.9692660, 1.8760108, 0.0415560},
+      {0.0556434, -0.2040259, 1.0572252}, // reference white - D65
+  }};
 };
 
-struct CieLab {
-  float l, a, b;
+class CieLab {
+private:
+  std::array<float, 3> values; // l, a, b
 
-  explicit constexpr CieLab(float l, float a, float b) : l(l), a(a), b(b) {};
+public:
+  explicit constexpr CieLab(float l, float a, float b) : values({l, a, b}) {};
 
   CieXyz toCieXyz() const;
   float distEuclideanSquared(const CieLab &other) const;
@@ -73,6 +84,11 @@ struct CieLab {
   // float distCIE76(const CieLab &other);
   // float distCIEDE2000(const CieLab &other);
   // float distCIE94(const CieLab &other);
+
+  void print() const;
+
+  static constexpr float epsilon = 216.0 / 24389.0;
+  static constexpr float kappa = 24389.0 / 27.0;
 };
 
 } // namespace ColorSpace
