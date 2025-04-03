@@ -150,7 +150,29 @@ build/util.o: src/util.cpp /usr/include/stdc-predef.h src/util.h \
  /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
  /usr/include/x86_64-linux-gnu/bits/types/error_t.h \
  /usr/include/c++/11/bits/charconv.h \
- /usr/include/c++/11/bits/basic_string.tcc /usr/include/c++/11/iostream \
+ /usr/include/c++/11/bits/basic_string.tcc /usr/include/c++/11/cmath \
+ /usr/include/math.h /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+ /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+ /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+ /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+ /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+ /usr/include/c++/11/bits/specfun.h /usr/include/c++/11/limits \
+ /usr/include/c++/11/tr1/gamma.tcc \
+ /usr/include/c++/11/tr1/special_function_util.h \
+ /usr/include/c++/11/tr1/bessel_function.tcc \
+ /usr/include/c++/11/tr1/beta_function.tcc \
+ /usr/include/c++/11/tr1/ell_integral.tcc \
+ /usr/include/c++/11/tr1/exp_integral.tcc \
+ /usr/include/c++/11/tr1/hypergeometric.tcc \
+ /usr/include/c++/11/tr1/legendre_function.tcc \
+ /usr/include/c++/11/tr1/modified_bessel_func.tcc \
+ /usr/include/c++/11/tr1/poly_hermite.tcc \
+ /usr/include/c++/11/tr1/poly_laguerre.tcc \
+ /usr/include/c++/11/tr1/riemann_zeta.tcc /usr/include/c++/11/iostream \
  /usr/include/c++/11/ostream /usr/include/c++/11/ios \
  /usr/include/c++/11/bits/ios_base.h \
  /usr/include/c++/11/bits/locale_classes.h \
@@ -356,6 +378,31 @@ src/color.h:
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 /usr/include/c++/11/bits/charconv.h:
 /usr/include/c++/11/bits/basic_string.tcc:
+/usr/include/c++/11/cmath:
+/usr/include/math.h:
+/usr/include/x86_64-linux-gnu/bits/math-vector.h:
+/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
+/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
+/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+/usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
+/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
+/usr/include/x86_64-linux-gnu/bits/iscanonical.h:
+/usr/include/c++/11/bits/specfun.h:
+/usr/include/c++/11/limits:
+/usr/include/c++/11/tr1/gamma.tcc:
+/usr/include/c++/11/tr1/special_function_util.h:
+/usr/include/c++/11/tr1/bessel_function.tcc:
+/usr/include/c++/11/tr1/beta_function.tcc:
+/usr/include/c++/11/tr1/ell_integral.tcc:
+/usr/include/c++/11/tr1/exp_integral.tcc:
+/usr/include/c++/11/tr1/hypergeometric.tcc:
+/usr/include/c++/11/tr1/legendre_function.tcc:
+/usr/include/c++/11/tr1/modified_bessel_func.tcc:
+/usr/include/c++/11/tr1/poly_hermite.tcc:
+/usr/include/c++/11/tr1/poly_laguerre.tcc:
+/usr/include/c++/11/tr1/riemann_zeta.tcc:
 /usr/include/c++/11/iostream:
 /usr/include/c++/11/ostream:
 /usr/include/c++/11/ios:

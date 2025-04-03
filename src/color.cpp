@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
-#include <iostream>
 
 namespace ColorSpace {
 
@@ -24,14 +23,6 @@ LinearRgb Srgb::toLinearRgb() const {
 
   return LinearRgb(r, g, b);
 };
-
-
-CieLab Srgb::toCieLab() const {
-  LinearRgb linearRgb = this->toLinearRgb();
-  CieXyz cieXyz = linearRgb.toCieXyz();
-
-  return cieXyz.toCieLab();
-}
 
 
 Srgb LinearRgb::toSrgb() const {
@@ -71,14 +62,15 @@ LinearRgb CieXyz::toLinearRgb() const {
       {0.0556434, -0.2040259, 1.0572252},
   }};
 
-  std::array<float, 3> linearRgb =
+  std::array<float, 3> linearRgbAsArr =
       multiplyMatrix(xyzToLinearRgbMatrix, {this->x, this->y, this->z});
 
-  const float r = std::clamp<float>(linearRgb[0], 0.0, 1.0);
-  const float g = std::clamp<float>(linearRgb[1], 0.0, 1.0);
-  const float b = std::clamp<float>(linearRgb[2], 0.0, 1.0);
+  const float r = std::clamp<float>(linearRgbAsArr[0], 0.0, 1.0);
+  const float g = std::clamp<float>(linearRgbAsArr[1], 0.0, 1.0);
+  const float b = std::clamp<float>(linearRgbAsArr[2], 0.0, 1.0);
 
   return LinearRgb(r, g, b);
+  ;
 };
 
 
@@ -117,14 +109,6 @@ CieXyz CieLab::toCieXyz() const {
   const float z = zR * referenceWhiteD60.z;
 
   return CieXyz(x, y, z);
-}
-
-
-Srgb CieLab::toSrgb() const {
-  CieXyz cieXyz = this->toCieXyz();
-  LinearRgb linearRgb = cieXyz.toLinearRgb();
-
-  return linearRgb.toSrgb();
 }
 
 } // namespace ColorSpace

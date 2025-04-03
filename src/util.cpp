@@ -5,30 +5,44 @@
 #include <iostream>
 namespace ColorSpace {
 
-int distSquared(const Srgb &colorA, const Srgb &colorB) {
-  const int xD = colorB.r - colorA.r;
-  const int yD = colorB.g - colorA.g;
-  const int zD = colorB.b - colorA.b;
-  return xD * xD + yD * yD + zD * zD;
-}
 
-
-float distSquared(const LinearRgb &colorA, const LinearRgb &colorB) {
-
+float distEuclideanSquared(const LinearRgb &colorA, const LinearRgb &colorB) {
   const float xD = colorB.r - colorA.r;
   const float yD = colorB.g - colorA.g;
   const float zD = colorB.b - colorA.b;
   return xD * xD + yD * yD + zD * zD;
 }
 
+float distEuclideanSquared(const CieXyz &colorA, const CieXyz &colorB) {
+  const float xD = colorB.x - colorA.x;
+  const float yD = colorB.y - colorA.y;
+  const float zD = colorB.z - colorA.z;
+  return xD * xD + yD * yD + zD * zD;
+}
 
-float distSquared(const CieLab &colorA, const CieLab &colorB) {
 
+float distEuclideanSquared(const CieLab &colorA, const CieLab &colorB) {
   const float xD = colorB.l - colorA.l;
   const float yD = colorB.a - colorA.a;
   const float zD = colorB.b - colorA.b;
   return xD * xD + yD * yD + zD * zD;
 }
+
+
+float distEuclidean(const LinearRgb &colorA, const LinearRgb &colorB) {
+  return std::sqrt(distEuclideanSquared(colorA, colorB));
+};
+
+
+float distEuclidean(const CieXyz &colorA, const CieXyz &colorB) {
+  return std::sqrt(distEuclideanSquared(colorA, colorB));
+};
+
+
+float distEuclidean(const CieLab &colorA, const CieLab &colorB) {
+  return std::sqrt(distEuclideanSquared(colorA, colorB));
+};
+
 
 std::array<float, 3>
 multiplyMatrix(const std::array<std::array<float, 3>, 3> &matrix,

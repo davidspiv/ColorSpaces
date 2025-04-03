@@ -11,18 +11,23 @@ int main() {
 
   const ColorSpace::Srgb sRgbA(100, 0, 0);
   const ColorSpace::LinearRgb linearRgbA = sRgbA.toLinearRgb();
-  const ColorSpace::CieLab cieLabA = sRgbA.toCieLab();
+  const ColorSpace::CieXyz cieXyzA = linearRgbA.toCieXyz();
+  const ColorSpace::CieLab cieLabA = cieXyzA.toCieLab();
 
   const ColorSpace::Srgb sRgbB(0, 201, 0);
   const ColorSpace::LinearRgb linearRgbB = sRgbB.toLinearRgb();
-  const ColorSpace::CieLab cieLabB = sRgbB.toCieLab();
+  const ColorSpace::CieXyz cieXyzB = linearRgbB.toCieXyz();
+  const ColorSpace::CieLab cieLabB = cieXyzB.toCieLab();
 
-  const int distRgb = distSquared(sRgbA, sRgbB);
-  const float distLinear = distSquared(linearRgbA, linearRgbB);
-  const float distLab = distSquared(cieLabA, cieLabB);
+  //   const float distLinear = distEuclideanSquared(linearRgbA, linearRgbB);
+  //   const float distXyz = distEuclideanSquared(cieXyzA, cieXyzB);
+  //   const float distLab = distEuclideanSquared(cieLabA, cieLabB);
 
-  std::cout << "srgb: " << distRgb << '\n';
+  const float distLinear = distEuclidean(linearRgbA, linearRgbB);
+  const float distXyz = distEuclidean(cieXyzA, cieXyzB);
+  const float distLab = distEuclidean(cieLabA, cieLabB);
+
   std::cout << "linear: " << distLinear << '\n';
+  std::cout << "xyz: " << distXyz << '\n';
   std::cout << "lab: " << distLab << '\n';
 }
- 

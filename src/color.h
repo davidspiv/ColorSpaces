@@ -28,7 +28,6 @@ struct Srgb {
 
 
   LinearRgb toLinearRgb() const;
-  CieLab toCieLab() const;
 };
 
 struct LinearRgb {
@@ -65,7 +64,6 @@ struct CieLab {
   explicit constexpr CieLab(float l, float a, float b) : l(l), a(a), b(b) {};
 
   CieXyz toCieXyz() const;
-  Srgb toSrgb() const;
 };
 
 } // namespace ColorSpace
