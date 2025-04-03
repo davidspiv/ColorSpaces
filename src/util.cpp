@@ -1,5 +1,4 @@
-#include "util.h"
-#include "color.h"
+#include "../include/util.h"
 
 #include <array>
 #include <cmath>

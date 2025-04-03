@@ -1,10 +1,11 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-#include "color.h"
 #include <array>
 #include <cmath>
 #include <stdexcept>
+
+#include "colorDefinitions.h"
 
 namespace ColorSpace {
 

@@ -1,10 +1,9 @@
 
-#include <cmath>
 #include <iostream>
 
-#include "color.h"
-#include "timer.h"
-#include "util.h"
+#include "../include/colorDefinitions.h"
+#include "../include/timer.h"
+#include "../include/util.h"
 
 int main() {
   Timer timer;
