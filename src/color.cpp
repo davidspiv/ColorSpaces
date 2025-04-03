@@ -12,9 +12,9 @@
 namespace ColorSpace {
 
 
-Srgb::Srgb(float r, float g, float b) : mValues({r, g, b}) {
-  auto validate = [](float c) {
-    if (std::min<float>(255, std::max<float>(0, c)) != c) {
+Srgb::Srgb(int r, int g, int b) : mValues({r, g, b}) {
+  auto validate = [](int c) {
+    if (std::min(255, std::max(0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
     }
   };
@@ -25,7 +25,7 @@ Srgb::Srgb(float r, float g, float b) : mValues({r, g, b}) {
 };
 
 
-float Srgb::removeGamma(const float c) {
+float Srgb::removeGamma(const int c) {
   float normalChannel = c / 255.0;
 
   const float breakpoint = 0.04045;
@@ -64,7 +64,7 @@ LinearRgb::LinearRgb(float r, float g, float b) : mValues({r, g, b}) {
 };
 
 
-float LinearRgb::applyGamma(const float c) {
+float LinearRgb::applyGamma(const int c) {
   float corrected =
       (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
   return std::clamp(corrected * 255.0, 0.0, 255.0);

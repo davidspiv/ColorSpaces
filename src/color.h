@@ -13,18 +13,18 @@ class CieLab;
 
 class Srgb {
 private:
-  std::array<float, 3> mValues; // r, b, g
+  std::array<int, 3> mValues; // r, b, g
 
 public:
-  Srgb(float r, float g, float b);
+  Srgb(int r, int g, int b);
 
-  std::array<float, 3> values() { return mValues; };
+  std::array<int, 3> values() { return mValues; };
 
   LinearRgb toLinearRgb() const;
   void print() const;
 
 private:
-  static float removeGamma(const float c);
+  static float removeGamma(const int c);
 };
 
 
@@ -41,7 +41,7 @@ public:
   CieXyz toCieXyz() const;
 
 private:
-  static float applyGamma(float c);
+  static float applyGamma(const int c);
 
   static constexpr std::array<std::array<float, 3>, 3> rgbToCieXyzMatrix = {
       {{0.4124564, 0.3575761, 0.1804375},
