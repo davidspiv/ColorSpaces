@@ -12,8 +12,7 @@ Xyz::Xyz(float x, float y, float z) : mValues({x, y, z}) {};
 
 Rgb Xyz::toRgb() const {
 
-  std::array<float, Xyz::channelCount> rgbAsArr =
-      multiplyMatrix(this->xyzToRgbMatrix, mValues);
+  std::array<float, 3> rgbAsArr = multiplyMatrix(this->xyzToRgbMatrix, mValues);
 
   const float r = std::clamp<float>(rgbAsArr[0], 0.0, 1.0);
   const float g = std::clamp<float>(rgbAsArr[1], 0.0, 1.0);
