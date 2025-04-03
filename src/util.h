@@ -12,8 +12,8 @@ const CieXyz referenceWhiteD60(0.950470, 1.0, 1.088830);
 template <typename ColorT>
 float distEuclideanSquared(const ColorT &a_Color, const ColorT &b_Color) {
 
-  std::array<float, 3> a_Values = a_Color.values();
-  std::array<float, 3> b_Values = b_Color.values();
+  std::array<float, 3> a_Values = a_Color.getValues();
+  std::array<float, 3> b_Values = b_Color.getValues();
 
   const float xD = a_Values[0] - b_Values[0];
   const float yD = a_Values[1] - b_Values[1];
