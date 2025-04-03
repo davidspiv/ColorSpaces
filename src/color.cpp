@@ -26,7 +26,7 @@ SRgb::SRgb(int r, int g, int b) : mValues({r, g, b}) {
 
 
 float SRgb::removeGamma(int c) {
-  float normalChannel = static_cast<double>(c) / 255.0f;
+  float normalChannel = static_cast<double>(c) / 255.0;
 
   const float breakpoint = 0.04045f;
 
@@ -130,7 +130,7 @@ Lab Xyz::toLab() const {
 
 void Xyz::print() const {
   std::cout << "X: " << mValues[0] << "\nY: " << mValues[1]
-            << "\nZ: " << mValues[2] << std::endl;
+            << "\nZ: " << mValues[2] << "\n\n";
 }
 
 
@@ -140,52 +140,29 @@ Luv Xyz::toLuv() const {
 
   const float yR = y / referenceWhiteD60[1];
 
-  const float denominator = x + 15 * y + 3 * z;
-  if (denominator == 0.0f) {
-    return Luv(0.0f, 0.0f, 0.0f);
+  const float denominator = x + 15.0 * y + 3 * z;
+  if (denominator == 0.0) {
+    return Luv(0.0, 0.0, 0.0);
   }
 
-  const float uPrime = (4 * x) / denominator;
-  const float vPrime = (9 * y) / denominator;
+  const float uPrime = (4.0 * x) / denominator;
+  const float vPrime = (9.0 * y) / denominator;
 
-  const float refDenominator = xRef + 15 * yRef + 3 * zRef;
-  const float refUPrime = (4 * xRef) / refDenominator;
-  const float refVPrime = (9 * yRef) / refDenominator;
+  const float refDenominator = xRef + 15.0 * yRef + 3.0 * zRef;
+  const float refUPrime = (4.0 * xRef) / refDenominator;
+  const float refVPrime = (9.0 * yRef) / refDenominator;
+
+  constexpr double accError = 1e-7;
+  const float uDiff = uPrime - refUPrime;
+  const float vDiff = vPrime - refVPrime;
 
   const float l =
       (yR > epsilon) ? (116.0 * std::cbrt(yR) - 16.0) : (kappa * yR);
-  const float u = 13.0 * l * (uPrime - refUPrime);
-  const float v = 13.0 * l * (vPrime - refVPrime);
+  const float u = (uDiff > accError) ? 13.0 * l * uDiff : 0;
+  const float v = (vDiff > accError) ? 13.0 * l * vDiff : 0;
 
   return Luv(l, u, v);
 }
-
-// Luv Xyz::toLuv() const {
-//     auto [xRef, yRef, zRef] = referenceWhiteD60;
-//     auto [x, y, z] = mValues;
-
-//     const float yR = std::clamp(y / referenceWhiteD60[1], 0.0f, 1.0f); //
-//     Ensure valid range
-
-//     const float denominator = x + 15 * y + 3 * z;
-//     if (denominator == 0.0f) {  // Handle black (0,0,0) case
-//         return Luv(0.0f, 0.0f, 0.0f);
-//     }
-
-//     const float uPrime = (4 * x) / denominator;
-//     const float vPrime = (9 * y) / denominator;
-
-//     const float refDenominator = xRef + 15 * yRef + 3 * zRef;
-//     const float refUPrime = (4 * xRef) / refDenominator;
-//     const float refVPrime = (9 * yRef) / refDenominator;
-
-//     // Compute L* using the standard condition
-//     const float l = (yR > epsilon) ? (116.0f * std::cbrt(yR) - 16.0f) :
-//     (kappa * yR); const float u = 13.0f * l * (uPrime - refUPrime); const
-//     float v = 13.0f * l * (vPrime - refVPrime);
-
-//     return Luv(l, u, v);
-// }
 
 
 Xyy Xyz::toXyy() const {
@@ -193,7 +170,7 @@ Xyy Xyz::toXyy() const {
   const float sum = x + y + z;
 
   if (sum == 0.0) {
-    return Xyy(referenceWhiteD60[0], referenceWhiteD60[1], y);
+    return Xyy(chromaticityD60[0], chromaticityD60[1], y);
   }
 
   const float xNew = x / sum;
@@ -238,7 +215,7 @@ Lab::Lab(float l, float a, float b) : mValues({l, a, b}) {};
 
 void Lab::print() const {
   std::cout << "L: " << mValues[0] << "\na: " << mValues[1]
-            << "\nb: " << mValues[2] << std::endl;
+            << "\nb: " << mValues[2] << "\n\n";
 }
 
 
@@ -247,7 +224,7 @@ LchAb::LchAb(float l, float c, float h) : mValues({l, c, h}) {}
 
 void LchAb::print() const {
   std::cout << "L: " << mValues[0] << "\nc: " << mValues[1]
-            << "\nh: " << mValues[2] << std::endl;
+            << "\nh: " << mValues[2] << "\n\n";
 }
 
 
@@ -255,18 +232,15 @@ Luv::Luv(float l, float u, float v) : mValues({l, u, v}) {}
 
 
 LchUv Luv::toLchUv() const {
-  const float c = std::sqrt(mValues[0] * mValues[0] + mValues[1] * mValues[1]);
-  const float hComponent = toDegrees(std::atan2(mValues[2], mValues[1]));
+  const auto [l, u, v] = toPolarColorSpace(mValues);
 
-  const float h = (hComponent >= 0) ? hComponent : hComponent + 360.0;
-
-  return LchUv(mValues[0], c, h);
-}
+  return LchUv(l, u, v);
+};
 
 
 void Luv::print() const {
   std::cout << "L: " << mValues[0] << "\nu: " << mValues[1]
-            << "\nv: " << mValues[2] << std::endl;
+            << "\nv: " << mValues[2] << "\n\n";
 }
 
 
@@ -275,7 +249,7 @@ LchUv::LchUv(float l, float c, float h) : mValues({l, c, h}) {}
 
 void LchUv::print() const {
   std::cout << "L: " << mValues[0] << "\nc: " << mValues[1]
-            << "\nh: " << mValues[2] << std::endl;
+            << "\nh: " << mValues[2] << "\n\n";
 }
 
 
@@ -284,7 +258,7 @@ Xyy::Xyy(float x, float y, float Y) : mValues({x, y, Y}) {}
 
 void Xyy::print() const {
   std::cout << "x: " << mValues[0] << "\ny: " << mValues[1]
-            << "\nY: " << mValues[2] << std::endl;
+            << "\nY: " << mValues[2] << "\n\n";
 }
 
 } // namespace ColorSpace

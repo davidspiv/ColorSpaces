@@ -6,17 +6,16 @@
 #include <cmath>
 #include <stdexcept>
 
-template <typename T> T toDegrees(const T radians) {
-  return radians * (180.0 / M_PI);
-}
-
-
 namespace ColorSpace {
 
 
 constexpr std::array<float, 3> referenceWhiteD60 = {0.950470, 1.0, 1.088830};
+constexpr std::array<float, 2> chromaticityD60 = {0.312727, 0.329023};
 static constexpr float epsilon = 216.0f / 24389.0f;
 static constexpr float kappa = 24389.0f / 27.0f;
+
+
+double toDegrees(const double radians);
 
 
 std::array<float, 3> toPolarColorSpace(std::array<float, 3> coordIn);
