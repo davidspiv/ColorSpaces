@@ -4,24 +4,30 @@
 #include "color.h"
 #include <array>
 #include <cmath>
+#include <stdexcept>
+
+template <typename T> T toDegrees(const T radians) {
+  return radians * (180.0 / M_PI);
+}
+
 
 namespace ColorSpace {
 
 
-const CieXyz referenceWhiteD60(0.950470, 1.0, 1.088830);
+const Xyz referenceWhiteD60(0.950470, 1.0, 1.088830);
+static constexpr float epsilon = 216.0f / 24389.0f;
+static constexpr float kappa = 24389.0f / 27.0f;
 
 
-// Euclidean distance only valid for LinearRgb, CieXyz, and CieLab color spaces
-template <typename ColorT> struct validEuclideanType {
-  static constexpr bool value = std::is_same_v<ColorT, LinearRgb> ||
-                                std::is_same_v<ColorT, CieXyz> ||
-                                std::is_same_v<ColorT, CieLab>;
-};
-
-
-template <typename ColorT,
-          std::enable_if_t<validEuclideanType<ColorT>::value, int> = 0>
+template <typename ColorT>
 float distEuclideanSquared(const ColorT &a_Color, const ColorT &b_Color) {
+
+  if constexpr (!std::is_same_v<ColorT, LinearRgb> &&
+                !std::is_same_v<ColorT, Xyz> && !std::is_same_v<ColorT, Lab>) {
+
+    throw std::domain_error("Euclidean distance only valid for LinearRgb, "
+                            "Xyz, and Lab color spaces");
+  }
 
   std::array<float, 3> a_Values = a_Color.getValues();
   std::array<float, 3> b_Values = b_Color.getValues();
@@ -33,8 +39,7 @@ float distEuclideanSquared(const ColorT &a_Color, const ColorT &b_Color) {
 }
 
 
-template <typename ColorT,
-          std::enable_if_t<validEuclideanType<ColorT>::value, int> = 0>
+template <typename ColorT>
 float distEuclidean(const ColorT &a_Color, const ColorT &b_Color) {
   return std::sqrt(distEuclideanSquared(a_Color, b_Color));
 };
@@ -49,9 +54,9 @@ multiplyMatrix(const std::array<std::array<float, 3>, 3> &matrix,
 #endif
 
 // Distance Metrics (future implementations)
-// float distCIE76(const CieLab &other);
-// float distCIEDE2000(const CieLab &other);
-// float distCIE94(const CieLab &other);
+// float distCIE76(const Lab &other);
+// float distCIEDE2000(const Lab &other);
+// float distCIE94(const Lab &other);
 // float distEuclideanSquared(const CieLch &other);
 // float distEuclidean(const CieLch &other);
 // float distCIE76(const CieLch &other);

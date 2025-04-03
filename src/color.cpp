@@ -81,19 +81,19 @@ Srgb LinearRgb::toSrgb() const {
 };
 
 
-CieXyz LinearRgb::toCieXyz() const {
-  auto [x, y, z] = multiplyMatrix(this->rgbToCieXyzMatrix, mValues);
+Xyz LinearRgb::toXyz() const {
+  auto [x, y, z] = multiplyMatrix(this->rgbToXyzMatrix, mValues);
 
-  return CieXyz(x, y, z);
+  return Xyz(x, y, z);
 }
 
 
-CieXyz::CieXyz(float x, float y, float z) : mValues({x, y, z}) {};
+Xyz::Xyz(float x, float y, float z) : mValues({x, y, z}) {};
 
 
-LinearRgb CieXyz::toLinearRgb() const {
+LinearRgb Xyz::toLinearRgb() const {
 
-  std::array<float, 3> linearRgbAsArr =
+  std::array<float, Xyz::channelCount> linearRgbAsArr =
       multiplyMatrix(this->xyzToLinearRgbMatrix, mValues);
 
   const float r = std::clamp<float>(linearRgbAsArr[0], 0.0, 1.0);
@@ -104,59 +104,87 @@ LinearRgb CieXyz::toLinearRgb() const {
 };
 
 
-CieLab CieXyz::toCieLab() const {
+Lab Xyz::toLab() const {
 
   const float xR = mValues[0] / referenceWhiteD60.x();
   const float yR = mValues[1] / referenceWhiteD60.y();
   const float zR = mValues[2] / referenceWhiteD60.z();
 
-  const float fX = (xR > CieLab::epsilon) ? std::cbrt(xR)
-                                          : (CieLab::kappa * xR + 16) / 116.0;
-  const float fY = (yR > CieLab::epsilon) ? std::cbrt(yR)
-                                          : (CieLab::kappa * yR + 16) / 116.0;
-  const float fZ = (zR > CieLab::epsilon) ? std::cbrt(zR)
-                                          : (CieLab::kappa * zR + 16) / 116.0;
+  const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0;
+  const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0;
+  const float fZ = (zR > epsilon) ? std::cbrt(zR) : (kappa * zR + 16) / 116.0;
 
   const float l = 116 * fY - 16;
   const float a = 500 * (fX - fY);
   const float b = 200 * (fY - fZ);
 
-  return CieLab(l, a, b);
+  return Lab(l, a, b);
 }
 
 
-void CieXyz::print() const {
+void Xyz::print() const {
   std::cout << "X: " << mValues[0] << "\nY: " << mValues[1]
             << "\nZ: " << mValues[2] << std::endl;
 }
 
 
-CieXyz CieLab::toCieXyz() const {
+Xyz Lab::toXyz() const {
   const float fY = (mValues[0] + 16) / 116.0;
   const float fX = fY + (mValues[1] / 500.0);
   const float fZ = fY - (mValues[2] / 200.0);
 
-  const float xR =
-      (std::pow(fX, 3) > epsilon) ? std::pow(fX, 3) : (116 * fX - 16) / kappa;
-  const float yR =
-      (mValues[0] > (kappa * epsilon)) ? std::pow(fY, 3) : mValues[0] / kappa;
-  const float zR =
-      (std::pow(fZ, 3) > epsilon) ? std::pow(fZ, 3) : (116 * fZ - 16) / kappa;
+  const float xR = (std::pow(fX, Lab::channelCount) > epsilon)
+                       ? std::pow(fX, Lab::channelCount)
+                       : (116 * fX - 16) / kappa;
+  const float yR = (mValues[0] > (kappa * epsilon))
+                       ? std::pow(fY, Lab::channelCount)
+                       : mValues[0] / kappa;
+  const float zR = (std::pow(fZ, Lab::channelCount) > epsilon)
+                       ? std::pow(fZ, Lab::channelCount)
+                       : (116 * fZ - 16) / kappa;
 
   const float x = xR * referenceWhiteD60.x();
   const float y = yR * referenceWhiteD60.y();
   const float z = zR * referenceWhiteD60.z();
 
-  return CieXyz(x, y, z);
+  return Xyz(x, y, z);
 }
 
 
-CieLab::CieLab(float l, float a, float b) : mValues({l, a, b}) {};
+Lch Lab::toLch() const {
+  const float c = std::sqrt(mValues[0] * mValues[0] + mValues[1] * mValues[1]);
+  const float hComponent = toDegrees(std::atan2(mValues[2], mValues[1]));
+
+  const float h = (hComponent >= 0) ? hComponent : hComponent + 360.0;
+
+  return Lch(mValues[0], c, h);
+};
 
 
-void CieLab::print() const {
+Lab::Lab(float l, float a, float b) : mValues({l, a, b}) {};
+
+
+void Lab::print() const {
   std::cout << "L: " << mValues[0] << "\na: " << mValues[1]
             << "\nb: " << mValues[2] << std::endl;
+}
+
+
+Lch::Lch(float l, float c, float h) : mValues({l, c, h}) {}
+
+
+void Lch::print() const {
+  std::cout << "L: " << mValues[0] << "\nc: " << mValues[1]
+            << "\nh: " << mValues[2] << std::endl;
+}
+
+
+Luv::Luv(float l, float u, float v) : mValues({l, u, v}) {}
+
+
+void Luv::print() const {
+  std::cout << "L: " << mValues[0] << "\nu: " << mValues[1]
+            << "\nv: " << mValues[2] << std::endl;
 }
 
 } // namespace ColorSpace

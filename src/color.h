@@ -8,14 +8,15 @@ namespace ColorSpace {
 
 
 class LinearRgb;
-class CieXyz;
-class CieLab;
+class Xyz;
+class Lab;
+class Lch;
 
 
 class Srgb {
-private:
   static constexpr size_t channelCount = 3;
 
+private:
   std::array<int, channelCount> mValues; // r, g, b
 
 public:
@@ -33,10 +34,12 @@ private:
 
 
 class LinearRgb {
-private:
+public:
   static constexpr size_t channelCount = 3;
+
+private:
   static constexpr std::array<std::array<float, channelCount>, channelCount>
-      rgbToCieXyzMatrix = {{
+      rgbToXyzMatrix = {{
           {0.4124564, 0.3575761, 0.1804375},
           {0.2126729, 0.7151522, 0.0721750},
           {0.0193339, 0.1191920, 0.9503041} // Reference white - D65
@@ -50,16 +53,18 @@ public:
   std::array<float, channelCount> getValues() const { return mValues; }
 
   Srgb toSrgb() const;
-  CieXyz toCieXyz() const;
+  Xyz toXyz() const;
 
 private:
   static float applyGamma(int c);
 };
 
 
-class CieXyz {
-private:
+class Xyz {
+public:
   static constexpr size_t channelCount = 3;
+
+private:
   static constexpr std::array<std::array<float, channelCount>, channelCount>
       xyzToLinearRgbMatrix = {{
           {3.2404542, -1.5371385, -0.4985314},
@@ -70,7 +75,7 @@ private:
   std::array<float, channelCount> mValues; // x, y, z
 
 public:
-  CieXyz(float x, float y, float z);
+  Xyz(float x, float y, float z);
 
   float x() const { return mValues[0]; }
   float y() const { return mValues[1]; }
@@ -78,29 +83,62 @@ public:
   std::array<float, channelCount> getValues() const { return mValues; }
 
   LinearRgb toLinearRgb() const;
-  CieLab toCieLab() const;
+  Lab toLab() const;
 
   void print() const;
 };
 
 
-class CieLab {
-private:
+class Lab {
+public:
   static constexpr size_t channelCount = 3;
-  static constexpr float epsilon = 216.0f / 24389.0f;
-  static constexpr float kappa = 24389.0f / 27.0f;
 
+private:
   std::array<float, channelCount> mValues; // l, a, b
 
 public:
-  CieLab(float l, float a, float b);
+  Lab(float l, float a, float b);
 
   std::array<float, channelCount> getValues() const { return mValues; }
 
-  CieXyz toCieXyz() const;
+  Xyz toXyz() const;
+  Lch toLch() const;
 
   void print() const;
 };
+
+
+class Lch {
+public:
+  static constexpr size_t channelCount = 3;
+
+private:
+  std::array<float, channelCount> mValues; // l, c, h
+
+public:
+  Lch(float l, float c, float h);
+
+  std::array<float, channelCount> getValues() const { return mValues; }
+
+  void print() const;
+};
+
+
+class Luv {
+public:
+  static constexpr size_t channelCount = 3;
+
+private:
+  std::array<float, channelCount> mValues; // l, c, h
+
+public:
+  Luv(float l, float u, float v);
+
+  std::array<float, channelCount> getValues() const { return mValues; }
+
+  void print() const;
+};
+
 
 } // namespace ColorSpace
 
