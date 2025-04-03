@@ -2,6 +2,7 @@
 #include "../include/util.h"
 
 #include <array>
+#include <cmath>
 #include <iostream>
 
 namespace ColorSpace {
