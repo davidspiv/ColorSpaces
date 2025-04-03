@@ -9,23 +9,23 @@
 int main() {
   Timer timer;
 
-  const ColorSpace::Srgb sRgbA(100, 0, 0);
-  const ColorSpace::LinearRgb linearRgbA = sRgbA.toLinearRgb();
-  const ColorSpace::CieXyz cieXyzA = linearRgbA.toCieXyz();
-  const ColorSpace::CieLab cieLabA = cieXyzA.toCieLab();
+  const ColorSpace::Srgb sRgb_A(100, 0, 0);
+  const ColorSpace::LinearRgb linearRgb_A = sRgb_A.toLinearRgb();
+  const ColorSpace::CieXyz cieXy_A = linearRgb_A.toCieXyz();
+  const ColorSpace::CieLab cieLab_A = cieXy_A.toCieLab();
 
-  const ColorSpace::Srgb sRgbB(0, 201, 0);
-  const ColorSpace::LinearRgb linearRgbB = sRgbB.toLinearRgb();
-  const ColorSpace::CieXyz cieXyzB = linearRgbB.toCieXyz();
-  const ColorSpace::CieLab cieLabB = cieXyzB.toCieLab();
+  const ColorSpace::Srgb sRgb_B(0, 201, 0);
+  const ColorSpace::LinearRgb linearRgb_B = sRgb_B.toLinearRgb();
+  const ColorSpace::CieXyz cieXyz_B = linearRgb_B.toCieXyz();
+  const ColorSpace::CieLab cieLab_B = cieXyz_B.toCieLab();
 
-  //   const float distLinear = distEuclideanSquared(linearRgbA, linearRgbB);
-  //   const float distXyz = distEuclideanSquared(cieXyzA, cieXyzB);
-  //   const float distLab = distEuclideanSquared(cieLabA, cieLabB);
+  //   const float distLinear = distEuclideanSquared(linearRgb_A, linearRgb_B);
+  //   const float distXyz = distEuclideanSquared(cieXy_A, cieXyz_B);
+  //   const float distLab = distEuclideanSquared(cieLab_A, cieLab_B);
 
-  const float distLinear = distEuclidean(linearRgbA, linearRgbB);
-  const float distXyz = distEuclidean(cieXyzA, cieXyzB);
-  const float distLab = distEuclidean(cieLabA, cieLabB);
+  const float distLinear = linearRgb_A.distEuclidean(linearRgb_B);
+  const float distXyz = cieXy_A.distEuclidean(cieXyz_B);
+  const float distLab = cieLab_A.distEuclidean(cieLab_B);
 
   std::cout << "linear: " << distLinear << '\n';
   std::cout << "xyz: " << distXyz << '\n';

@@ -54,6 +54,18 @@ CieXyz LinearRgb::toCieXyz() const {
 }
 
 
+float LinearRgb::distEuclideanSquared(const LinearRgb &other) const {
+  const float xD = this->r - other.r;
+  const float yD = this->g - other.g;
+  const float zD = this->b - other.b;
+  return xD * xD + yD * yD + zD * zD;
+}
+
+float LinearRgb::distEuclidean(const LinearRgb &other) const {
+  return std::sqrt(this->distEuclideanSquared(other));
+};
+
+
 LinearRgb CieXyz::toLinearRgb() const {
   // reference white - D65
   constexpr std::array<std::array<float, 3>, 3> xyzToLinearRgbMatrix = {{
@@ -92,6 +104,18 @@ CieLab CieXyz::toCieLab() const {
 }
 
 
+float CieXyz::distEuclideanSquared(const CieXyz &other) const {
+  const float xD = this->x - other.x;
+  const float yD = this->y - other.y;
+  const float zD = this->z - other.z;
+  return xD * xD + yD * yD + zD * zD;
+}
+
+float CieXyz::distEuclidean(const CieXyz &other) const {
+  return std::sqrt(this->distEuclideanSquared(other));
+};
+
+
 CieXyz CieLab::toCieXyz() const {
   const float fY = (this->l + 16) / 116.0;
   const float fX = fY + (this->a / 500.0);
@@ -110,5 +134,19 @@ CieXyz CieLab::toCieXyz() const {
 
   return CieXyz(x, y, z);
 }
+
+
+float CieLab::distEuclideanSquared(const CieLab &other) const {
+  const float xD = this->l - other.l;
+  const float yD = this->a - other.a;
+  const float zD = this->b - other.b;
+  return xD * xD + yD * yD + zD * zD;
+}
+
+
+float CieLab::distEuclidean(const CieLab &other) const {
+  return std::sqrt(this->distEuclideanSquared(other));
+};
+
 
 } // namespace ColorSpace

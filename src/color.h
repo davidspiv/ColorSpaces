@@ -47,6 +47,8 @@ struct LinearRgb {
 
   Srgb toSrgb() const;
   CieXyz toCieXyz() const;
+  float distEuclideanSquared(const LinearRgb &other) const;
+  float distEuclidean(const LinearRgb &other) const;
 };
 
 struct CieXyz {
@@ -56,6 +58,8 @@ struct CieXyz {
 
   LinearRgb toLinearRgb() const;
   CieLab toCieLab() const;
+  float distEuclideanSquared(const CieXyz &other) const;
+  float distEuclidean(const CieXyz &other) const;
 };
 
 struct CieLab {
@@ -64,8 +68,19 @@ struct CieLab {
   explicit constexpr CieLab(float l, float a, float b) : l(l), a(a), b(b) {};
 
   CieXyz toCieXyz() const;
+  float distEuclideanSquared(const CieLab &other) const;
+  float distEuclidean(const CieLab &other) const;
+  // float distCIE76(const CieLab &other);
+  // float distCIEDE2000(const CieLab &other);
+  // float distCIE94(const CieLab &other);
 };
 
 } // namespace ColorSpace
 
 #endif
+
+// float distEuclideanSquared(const CieLch &other);
+// float distEuclidean(const CieLch &other);
+// float distCIE76(const CieLch &other);
+// float distCIEDE2000(const CieLch &other);
+// float distCIE94(const CieLch &other);
