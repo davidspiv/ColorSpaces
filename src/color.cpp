@@ -64,10 +64,10 @@ LinearRgb::LinearRgb(float r, float g, float b) : mValues({r, g, b}) {
 };
 
 
-float LinearRgb::applyGamma(const int c) {
+float LinearRgb::applyGamma(const float c) {
   float corrected =
       (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
-  return std::clamp(static_cast<int>(corrected * 255.0), 0, 255);
+  return std::clamp(corrected * 255.0, 0.0, 255.0);
 };
 
 

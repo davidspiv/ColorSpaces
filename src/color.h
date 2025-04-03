@@ -10,6 +10,7 @@ class LinearRgb;
 class CieXyz;
 class CieLab;
 
+
 class Srgb {
 private:
   std::array<float, 3> mValues; // r, b, g
@@ -40,13 +41,14 @@ public:
   CieXyz toCieXyz() const;
 
 private:
-  static float applyGamma(int c);
+  static float applyGamma(float c);
 
   static constexpr std::array<std::array<float, 3>, 3> rgbToCieXyzMatrix = {
       {{0.4124564, 0.3575761, 0.1804375},
        {0.2126729, 0.7151522, 0.0721750},
        {0.0193339, 0.1191920, 0.9503041}}}; // reference white - D65
 };
+
 
 class CieXyz {
 private:
@@ -73,6 +75,7 @@ private:
   }};
 };
 
+
 class CieLab {
 private:
   std::array<float, 3> mValues; // l, a, b
@@ -92,6 +95,7 @@ public:
 
   void print() const;
 };
+
 
 } // namespace ColorSpace
 
