@@ -7,9 +7,19 @@
 
 namespace ColorSpace {
 
+
 const CieXyz referenceWhiteD60(0.950470, 1.0, 1.088830);
 
-template <typename ColorT>
+
+template <typename ColorT> struct validEuclideanType {
+  static constexpr bool value = std::is_same_v<ColorT, LinearRgb> ||
+                                std::is_same_v<ColorT, CieXyz> ||
+                                std::is_same_v<ColorT, CieLab>;
+};
+
+
+template <typename ColorT,
+          std::enable_if_t<validEuclideanType<ColorT>::value, int> = 0>
 float distEuclideanSquared(const ColorT &a_Color, const ColorT &b_Color) {
 
   std::array<float, 3> a_Values = a_Color.getValues();
@@ -22,7 +32,8 @@ float distEuclideanSquared(const ColorT &a_Color, const ColorT &b_Color) {
 }
 
 
-template <typename ColorT>
+template <typename ColorT,
+          std::enable_if_t<validEuclideanType<ColorT>::value, int> = 0>
 float distEuclidean(const ColorT &a_Color, const ColorT &b_Color) {
   return std::sqrt(distEuclideanSquared(a_Color, b_Color));
 };
