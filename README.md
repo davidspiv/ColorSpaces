@@ -1,6 +1,6 @@
 # ColorSpaces
 
-A C++ library for color space conversion and calculating color difference. This library supports a variety of color models and offers functions for converting between them as well as calculating color distances.
+A C++ library for working with color. Includes functions for converting between color models and calculating color difference.
 
 ### Dependencies
 
