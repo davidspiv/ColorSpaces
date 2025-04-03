@@ -26,13 +26,13 @@ SRgb::SRgb(int r, int g, int b) : mValues({r, g, b}) {
 
 
 float SRgb::removeGamma(const int c) {
-  float normalChannel = c / 255.0;
+  float normalchAbannel = c / 255.0;
 
   const float breakpoint = 0.04045;
 
-  return (normalChannel <= breakpoint)
-             ? (normalChannel / 12.92)
-             : pow((normalChannel + 0.055) / 1.055, 2.4);
+  return (normalchAbannel <= breakpoint)
+             ? (normalchAbannel / 12.92)
+             : pow((normalchAbannel + 0.055) / 1.055, 2.4);
 };
 
 
@@ -150,17 +150,17 @@ Luv Xyz::toLuv() const {
 }
 
 
-XyY Xyz::toXyY() const {
+Xyy Xyz::toXyy() const {
   auto [x, y, z] = mValues;
   const float sum = x + y + z;
   if (std::abs(sum) < 1e-5) {
-    return XyY(referenceWhiteD60[0], referenceWhiteD60[1], y);
+    return Xyy(referenceWhiteD60[0], referenceWhiteD60[1], y);
   }
 
   const float xNew = x / sum;
   const float yNew = y / sum;
 
-  return XyY(xNew, yNew, y);
+  return Xyy(xNew, yNew, y);
 }
 
 
@@ -187,13 +187,13 @@ Xyz Lab::toXyz() const {
 }
 
 
-Lch Lab::toLch() const {
+LchAb Lab::toLchAb() const {
   const float c = std::sqrt(mValues[0] * mValues[0] + mValues[1] * mValues[1]);
   const float hComponent = toDegrees(std::atan2(mValues[2], mValues[1]));
 
   const float h = (hComponent >= 0) ? hComponent : hComponent + 360.0;
 
-  return Lch(mValues[0], c, h);
+  return LchAb(mValues[0], c, h);
 };
 
 
@@ -206,10 +206,10 @@ void Lab::print() const {
 }
 
 
-Lch::Lch(float l, float c, float h) : mValues({l, c, h}) {}
+LchAb::LchAb(float l, float c, float h) : mValues({l, c, h}) {}
 
 
-void Lch::print() const {
+void LchAb::print() const {
   std::cout << "L: " << mValues[0] << "\nc: " << mValues[1]
             << "\nh: " << mValues[2] << std::endl;
 }
@@ -224,10 +224,10 @@ void Luv::print() const {
 }
 
 
-XyY::XyY(float x, float y, float Y) : mValues({x, y, Y}) {}
+Xyy::Xyy(float x, float y, float Y) : mValues({x, y, Y}) {}
 
 
-void XyY::print() const {
+void Xyy::print() const {
   std::cout << "x: " << mValues[0] << "\ny: " << mValues[1]
             << "\nY: " << mValues[2] << std::endl;
 }

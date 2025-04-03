@@ -9,26 +9,26 @@
 int main() {
   Timer timer;
 
-  const ColorSpace::SRgb sRgb_A(113, 91, 255);
-  const ColorSpace::Rgb rgb_A = sRgb_A.toRgb();
-  const ColorSpace::Xyz cieXy_A = rgb_A.toXyz();
-  const ColorSpace::Lab lab_A = cieXy_A.toLab();
-  const ColorSpace::Lch lch_A = lab_A.toLch();
+  const ColorSpace::SRgb a_sRgb(113, 91, 255);
+  const ColorSpace::Rgb a_rgb = a_sRgb.toRgb();
+  const ColorSpace::Xyz a_cieXy = a_rgb.toXyz();
+  const ColorSpace::Lab a_lab = a_cieXy.toLab();
+  const ColorSpace::LchAb a_lchAb = a_lab.toLchAb();
 
-  lch_A.print();
+  a_lchAb.print();
 
-  const ColorSpace::SRgb sRgb_B(0, 201, 0);
-  const ColorSpace::Rgb rgb_B = sRgb_B.toRgb();
-  const ColorSpace::Xyz xyz_B = rgb_B.toXyz();
-  const ColorSpace::Lab lab_B = xyz_B.toLab();
+  const ColorSpace::SRgb b_sRgb(0, 201, 0);
+  const ColorSpace::Rgb b_rgb = b_sRgb.toRgb();
+  const ColorSpace::Xyz b_xyz = b_rgb.toXyz();
+  const ColorSpace::Lab b_lab = b_xyz.toLab();
 
-  //   const float distRgb = distEuclideanSquared(rgb_A, rgb_B);
-  //   const float distXyz = distEuclideanSquared(cieXy_A, xyz_B);
-  //   const float distLab = distEuclideanSquared(lab_A, lab_B);
+  //   const float distRgb = distEuclideanSquared(a_rgb, b_rgb);
+  //   const float distXyz = distEuclideanSquared(a_cieXy, b_xyz);
+  //   const float distLab = distEuclideanSquared(a_lab, b_lab);
 
-  const float distRgb = distEuclidean(rgb_A, rgb_B);
-  const float distXyz = distEuclidean(cieXy_A, xyz_B);
-  const float distLab = distEuclidean(lab_A, lab_B);
+  const float distRgb = distEuclidean(a_rgb, b_rgb);
+  const float distXyz = distEuclidean(a_cieXy, b_xyz);
+  const float distLab = distEuclidean(a_lab, b_lab);
 
   std::cout << '\n'
             << "rgb: " << distRgb << '\n'

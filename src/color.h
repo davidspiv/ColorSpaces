@@ -10,9 +10,9 @@ namespace ColorSpace {
 class Rgb;
 class Xyz;
 class Lab;
-class Lch;
+class LchAb;
 class Luv;
-class XyY;
+class Xyy;
 
 class SRgb {
   static constexpr size_t channelCount = 3;
@@ -83,7 +83,7 @@ public:
   Rgb toRgb() const;
   Lab toLab() const;
   Luv toLuv() const;
-  XyY toXyY() const;
+  Xyy toXyy() const;
 
   void print() const;
 };
@@ -102,13 +102,13 @@ public:
   std::array<float, channelCount> getValues() const { return mValues; }
 
   Xyz toXyz() const;
-  Lch toLch() const;
+  LchAb toLchAb() const;
 
   void print() const;
 };
 
 
-class Lch {
+class LchAb {
 public:
   static constexpr size_t channelCount = 3;
 
@@ -116,7 +116,7 @@ private:
   std::array<float, channelCount> mValues; // l, c, h
 
 public:
-  Lch(float l, float c, float h);
+  LchAb(float l, float c, float h);
 
   std::array<float, channelCount> getValues() const { return mValues; }
 
@@ -140,7 +140,7 @@ public:
 };
 
 
-class XyY {
+class Xyy {
 public:
   static constexpr size_t channelCount = 3;
 
@@ -148,7 +148,7 @@ private:
   std::array<float, channelCount> mValues; // x, y, Y
 
 public:
-  XyY(float l, float u, float v);
+  Xyy(float l, float u, float v);
 
   std::array<float, channelCount> getValues() const { return mValues; }
 
