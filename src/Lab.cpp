@@ -8,6 +8,9 @@
 namespace ColorSpace {
 
 
+Lab::Lab(float l, float a, float b) : mValues({l, a, b}) {};
+
+
 Xyz Lab::toXyz() const {
   const float fY = (mValues[0] + 16) / 116.0;
   const float fX = fY + (mValues[1] / 500.0);
@@ -33,9 +36,6 @@ LchAb Lab::toLchAb() const {
 
   return LchAb(l, c, h);
 };
-
-
-Lab::Lab(float l, float a, float b) : mValues({l, a, b}) {};
 
 
 void Lab::print() const {
