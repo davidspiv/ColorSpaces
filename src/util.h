@@ -47,3 +47,13 @@ multiplyMatrix(const std::array<std::array<float, 3>, 3> &matrix,
 } // namespace ColorSpace
 
 #endif
+
+// Distance Metrics (future implementations)
+// float distCIE76(const CieLab &other);
+// float distCIEDE2000(const CieLab &other);
+// float distCIE94(const CieLab &other);
+// float distEuclideanSquared(const CieLch &other);
+// float distEuclidean(const CieLch &other);
+// float distCIE76(const CieLch &other);
+// float distCIEDE2000(const CieLch &other);
+// float distCIE94(const CieLch &other);
