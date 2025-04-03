@@ -27,7 +27,7 @@ A C++ library for working with color. Includes functions for converting between 
 
 ### Usage
 
-Once integrated, you can use the library functions to convert between color spaces and calculate color differences. Example usage:
+These functions are all callable from main if you want to experiment before integrating!
 
 ```cpp
 #include "colorDefinitions.h"
