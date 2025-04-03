@@ -15,20 +15,15 @@ A C++ library for working with color. Includes functions for converting between 
    cd ColorSpaces
 	```
 
-3. Build the library:
-	```bash
-	make
-	```
+2. Integrate the library into your project by including the necessary files:
+	* colorDefinitions.h
+	* util.h
+	* Relevant color space files in /src
 
-4. To run tests:
+3. To run tests:
 	```bash
 	make run
 	```
-
-5. Integrate the library into your project by including the necessary files:
-	* colorDefinitions.h
-	* util.h
-	* Relevant src files for your use case
 
 ### Usage
 
