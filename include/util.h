@@ -19,7 +19,8 @@ static constexpr float kappa = 24389.0f / 27.0f;
 double toDegrees(const double radians);
 
 
-std::array<float, 3> toPolarColorSpace(std::array<float, 3> coordIn);
+std::array<float, 3>
+toPolarColorSpace(const std::array<float, 3> &cartesianColorSpace);
 
 
 template <typename ColorT>
