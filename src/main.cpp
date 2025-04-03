@@ -8,7 +8,7 @@
 int main() {
   Timer timer;
 
-  const ColorSpace::SRgb sRgb(255, 255, 255);
+  const ColorSpace::SRgb sRgb(0, 0, 0);
   const ColorSpace::Rgb rgb = sRgb.toRgb();
   const ColorSpace::Xyz xyz = rgb.toXyz();
   const ColorSpace::Lab lab = xyz.toLab();
