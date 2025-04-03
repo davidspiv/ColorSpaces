@@ -1,5 +1,6 @@
 
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 
 #include "color.h"
@@ -29,7 +30,7 @@ int main() {
   const float distXyz = distEuclidean(cieXy_A, cieXyz_B);
   const float distLab = distEuclidean(cieLab_A, cieLab_B);
 
-  std::cout << "linear: " << distLinear << '\n';
-  std::cout << "xyz: " << distXyz << '\n';
-  std::cout << "lab: " << distLab << '\n';
+  std::cout << setw(10) << "linear: " << distLinear << '\n';
+  std::cout << setw(10) << "xyz: " << distXyz << '\n';
+  std::cout << setw(10) << "lab: " << distLab << '\n' << std::endl;
 }

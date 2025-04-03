@@ -18,7 +18,7 @@ private:
 public:
   Srgb(int r, int g, int b);
 
-  std::array<int, 3> values() { return mValues; };
+  std::array<int, 3> values() const { return mValues; }
 
   LinearRgb toLinearRgb() const;
   void print() const;
@@ -35,7 +35,7 @@ private:
 public:
   LinearRgb(float r, float g, float b);
 
-  std::array<float, 3> values() { return mValues; };
+  std::array<float, 3> values() const { return mValues; }
 
   Srgb toSrgb() const;
   CieXyz toCieXyz() const;
@@ -60,7 +60,7 @@ public:
   float x() const { return mValues[0]; }
   float y() const { return mValues[1]; }
   float z() const { return mValues[2]; }
-  std::array<float, 3> values() { return mValues; };
+  std::array<float, 3> values() const { return mValues; }
 
   LinearRgb toLinearRgb() const;
   CieLab toCieLab() const;
@@ -83,7 +83,7 @@ private:
 public:
   CieLab(float l, float a, float b);
 
-  std::array<float, 3> values() { return mValues; };
+  std::array<float, 3> values() const { return mValues; }
 
   static constexpr float epsilon = 216.0 / 24389.0;
   static constexpr float kappa = 24389.0 / 27.0;
