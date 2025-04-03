@@ -30,7 +30,9 @@ int main() {
   const float distXyz = distEuclidean(cieXy_A, cieXyz_B);
   const float distLab = distEuclidean(cieLab_A, cieLab_B);
 
-  std::cout << setw(10) << "linear: " << distLinear << '\n';
-  std::cout << setw(10) << "xyz: " << distXyz << '\n';
-  std::cout << setw(10) << "lab: " << distLab << '\n' << std::endl;
+  std::cout << '\n'
+            << setw(10) << "linear: " << distLinear << '\n'
+            << setw(10) << "xyz: " << distXyz << '\n'
+            << setw(10) << "lab: " << distLab << '\n'
+            << std::endl;
 }
