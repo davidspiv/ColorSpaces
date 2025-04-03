@@ -12,29 +12,32 @@ class CieLab;
 
 class Srgb {
 private:
-  std::array<float, 3> values; // r, b, g
-
-  static float removeGamma(const float c);
+  std::array<float, 3> mValues; // r, b, g
 
 public:
   Srgb(float r, float g, float b);
 
+  std::array<float, 3> values() { return mValues; };
+
   LinearRgb toLinearRgb() const;
   void print() const;
+
+private:
+  static float removeGamma(const float c);
 };
 
 
 class LinearRgb {
 private:
-  std::array<float, 3> values; // r, b, g
+  std::array<float, 3> mValues; // r, b, g
 
 public:
   LinearRgb(float r, float g, float b);
 
+  std::array<float, 3> values() { return mValues; };
+
   Srgb toSrgb() const;
   CieXyz toCieXyz() const;
-  float distEuclideanSquared(const LinearRgb &other) const;
-  float distEuclidean(const LinearRgb &other) const;
 
 private:
   static float applyGamma(int c);
@@ -47,19 +50,18 @@ private:
 
 class CieXyz {
 private:
-  std::array<float, 3> values; // x, y, z
+  std::array<float, 3> mValues; // x, y, z
 
 public:
-  explicit constexpr CieXyz(float x, float y, float z) : values({x, y, z}) {};
+  CieXyz(float x, float y, float z);
 
-  float x() const { return values[0]; }
-  float y() const { return values[1]; }
-  float z() const { return values[2]; }
+  float x() const { return mValues[0]; }
+  float y() const { return mValues[1]; }
+  float z() const { return mValues[2]; }
+  std::array<float, 3> values() { return mValues; };
 
   LinearRgb toLinearRgb() const;
   CieLab toCieLab() const;
-  float distEuclideanSquared(const CieXyz &other) const;
-  float distEuclidean(const CieXyz &other) const;
 
   void print() const;
 
@@ -73,22 +75,22 @@ private:
 
 class CieLab {
 private:
-  std::array<float, 3> values; // l, a, b
+  std::array<float, 3> mValues; // l, a, b
 
 public:
-  explicit constexpr CieLab(float l, float a, float b) : values({l, a, b}) {};
+  CieLab(float l, float a, float b);
+
+  std::array<float, 3> values() { return mValues; };
+
+  static constexpr float epsilon = 216.0 / 24389.0;
+  static constexpr float kappa = 24389.0 / 27.0;
 
   CieXyz toCieXyz() const;
-  float distEuclideanSquared(const CieLab &other) const;
-  float distEuclidean(const CieLab &other) const;
   // float distCIE76(const CieLab &other);
   // float distCIEDE2000(const CieLab &other);
   // float distCIE94(const CieLab &other);
 
   void print() const;
-
-  static constexpr float epsilon = 216.0 / 24389.0;
-  static constexpr float kappa = 24389.0 / 27.0;
 };
 
 } // namespace ColorSpace
