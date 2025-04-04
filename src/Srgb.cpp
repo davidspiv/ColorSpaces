@@ -5,10 +5,10 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace ColorSpace {
+namespace Color_Space {
 
 
-SRgb::SRgb(int r, int g, int b) : mValues({r, g, b}) {
+Srgb::Srgb(int r, int g, int b) : m_values({r, g, b}) {
   auto validate = [](int c) {
     if (std::min(255, std::max(0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
@@ -21,7 +21,7 @@ SRgb::SRgb(int r, int g, int b) : mValues({r, g, b}) {
 };
 
 
-float SRgb::removeGamma(int c) {
+float Srgb::remove_gamma(int c) {
   float normalChannel = static_cast<double>(c) / 255.0;
 
   const float breakpoint = 0.04045f;
@@ -32,19 +32,19 @@ float SRgb::removeGamma(int c) {
 };
 
 
-Rgb SRgb::toRgb() const {
-  const float r = this->removeGamma(mValues[0]);
-  const float g = this->removeGamma(mValues[1]);
-  const float b = this->removeGamma(mValues[2]);
+Rgb Srgb::to_rgb() const {
+  const float r = this->remove_gamma(m_values[0]);
+  const float g = this->remove_gamma(m_values[1]);
+  const float b = this->remove_gamma(m_values[2]);
 
   return Rgb(r, g, b);
 };
 
 
-void SRgb::print() const {
-  std::cout << "r: " << mValues[0] << "\ng: " << mValues[1]
-            << "\nb: " << mValues[2] << std::endl;
+void Srgb::print() const {
+  std::cout << "r: " << m_values[0] << "\ng: " << m_values[1]
+            << "\nb: " << m_values[2] << std::endl;
 }
 
 
-} // namespace ColorSpace
+} // namespace Color_Space

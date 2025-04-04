@@ -5,10 +5,10 @@
 #include <array>
 #include <iostream>
 
-namespace ColorSpace {
+namespace Color_Space {
 
 
-Rgb::Rgb(float r, float g, float b) : mValues({r, g, b}) {
+Rgb::Rgb(float r, float g, float b) : m_values({r, g, b}) {
   auto validate = [](float c) {
     if (std::min<float>(1.0, std::max<float>(0.0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 1].");
@@ -21,34 +21,34 @@ Rgb::Rgb(float r, float g, float b) : mValues({r, g, b}) {
 };
 
 
-float Rgb::applyGamma(const float c) {
+float Rgb::apply_gamma(const float c) {
   float corrected =
       (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
   return std::clamp(corrected * 255.0, 0.0, 255.0);
 };
 
 
-SRgb Rgb::toSRgb() const {
+Srgb Rgb::to_srgb() const {
 
-  const float r = this->applyGamma(mValues[0]);
-  const float g = this->applyGamma(mValues[1]);
-  const float b = this->applyGamma(mValues[2]);
+  const float r = this->apply_gamma(m_values[0]);
+  const float g = this->apply_gamma(m_values[1]);
+  const float b = this->apply_gamma(m_values[2]);
 
-  return SRgb(r, g, b);
+  return Srgb(r, g, b);
 };
 
 
-Xyz Rgb::toXyz() const {
-  auto [x, y, z] = multiplyMatrix(this->rgbToXyzMatrix, mValues);
+Xyz Rgb::to_xyz() const {
+  auto [x, y, z] = multiply_matrix(this->rgbTo_xyzMatrix, m_values);
 
   return Xyz(x, y, z);
 }
 
 
 void Rgb::print() const {
-  std::cout << "R: " << mValues[0] << "\nG: " << mValues[1]
-            << "\nB: " << mValues[2] << std::endl;
+  std::cout << "R: " << m_values[0] << "\nG: " << m_values[1]
+            << "\nB: " << m_values[2] << std::endl;
 }
 
 
-} // namespace ColorSpace
+} // namespace Color_Space

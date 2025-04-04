@@ -4,16 +4,16 @@
 #include <cmath>
 #include <iostream>
 
-namespace ColorSpace {
+namespace Color_Space {
 
 
-LchAb::LchAb(float l, float c, float h) : mValues({l, c, h}) {}
+Lch_Ab::Lch_Ab(float l, float c, float h) : m_values({l, c, h}) {}
 
 
-void LchAb::print() const {
-  std::cout << "L: " << mValues[0] << "\nc: " << mValues[1]
-            << "\nh: " << mValues[2] << "\n\n";
+void Lch_Ab::print() const {
+  std::cout << "L: " << m_values[0] << "\nc: " << m_values[1]
+            << "\nh: " << m_values[2] << "\n\n";
 }
 
 
-} // namespace ColorSpace
+} // namespace Color_Space

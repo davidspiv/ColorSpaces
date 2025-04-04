@@ -4,15 +4,16 @@
 #include <algorithm>
 #include <cmath>
 
-namespace ColorSpace {
+namespace Color_Space {
 
 
-Xyz::Xyz(float x, float y, float z) : mValues({x, y, z}) {};
+Xyz::Xyz(float x, float y, float z) : m_values({x, y, z}) {};
 
 
-Rgb Xyz::toRgb() const {
+Rgb Xyz::to_rgb() const {
 
-  std::array<float, 3> rgbAsArr = multiplyMatrix(this->xyzToRgbMatrix, mValues);
+  std::array<float, 3> rgbAsArr =
+      multiply_matrix(this->xyzTo_rgbMatrix, m_values);
 
   const float r = std::clamp<float>(rgbAsArr[0], 0.0, 1.0);
   const float g = std::clamp<float>(rgbAsArr[1], 0.0, 1.0);
@@ -22,11 +23,11 @@ Rgb Xyz::toRgb() const {
 }
 
 
-Lab Xyz::toLab() const {
+Lab Xyz::to_lab() const {
 
-  const float xR = mValues[0] / referenceWhiteD60[0];
-  const float yR = mValues[1] / referenceWhiteD60[1];
-  const float zR = mValues[2] / referenceWhiteD60[2];
+  const float xR = m_values[0] / reference_white_d60[0];
+  const float yR = m_values[1] / reference_white_d60[1];
+  const float zR = m_values[2] / reference_white_d60[2];
 
   const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0;
   const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0;
@@ -40,11 +41,11 @@ Lab Xyz::toLab() const {
 }
 
 
-Luv Xyz::toLuv() const {
-  auto [xRef, yRef, zRef] = referenceWhiteD60;
-  auto [x, y, z] = mValues;
+Luv Xyz::to_luv() const {
+  auto [xRef, yRef, zRef] = reference_white_d60;
+  auto [x, y, z] = m_values;
 
-  const float yR = y / referenceWhiteD60[1];
+  const float yR = y / reference_white_d60[1];
 
   const float denominator = x + 15.0 * y + 3 * z;
   if (denominator == 0.0) {
@@ -71,12 +72,12 @@ Luv Xyz::toLuv() const {
 }
 
 
-Xyy Xyz::toXyy() const {
-  auto [x, y, z] = mValues;
+Xyy Xyz::to_xyy() const {
+  auto [x, y, z] = m_values;
   const float sum = x + y + z;
 
   if (sum == 0.0) {
-    return Xyy(chromaticityD60[0], chromaticityD60[1], y);
+    return Xyy(chromaticity_d60[0], chromaticity_d60[1], y);
   }
 
   const float xNew = x / sum;
@@ -87,9 +88,9 @@ Xyy Xyz::toXyy() const {
 
 
 void Xyz::print() const {
-  std::cout << "X: " << mValues[0] << "\nY: " << mValues[1]
-            << "\nZ: " << mValues[2] << "\n\n";
+  std::cout << "X: " << m_values[0] << "\nY: " << m_values[1]
+            << "\nZ: " << m_values[2] << "\n\n";
 }
 
 
-} // namespace ColorSpace
+} // namespace Color_Space

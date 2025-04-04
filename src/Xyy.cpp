@@ -2,16 +2,16 @@
 
 #include <iostream>
 
-namespace ColorSpace {
+namespace Color_Space {
 
 
-Xyy::Xyy(float x, float y, float Y) : mValues({x, y, Y}) {}
+Xyy::Xyy(float x, float y, float Y) : m_values({x, y, Y}) {}
 
 
 void Xyy::print() const {
-  std::cout << "x: " << mValues[0] << "\ny: " << mValues[1]
-            << "\nY: " << mValues[2] << "\n\n";
+  std::cout << "x: " << m_values[0] << "\ny: " << m_values[1]
+            << "\nY: " << m_values[2] << "\n\n";
 }
 
 
-} // namespace ColorSpace
+} // namespace Color_Space
