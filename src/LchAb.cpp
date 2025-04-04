@@ -25,6 +25,7 @@ float LchAb::diffCie94(const LchAb &other, Mode mode) {
     hDelta += 360.0;
   }
 
+  // parametric weighting factors
   const float kL = 1.0;
   const float kC = (mode == GRAPHICS) ? 0.045 : 0.048;
   const float kH = (mode == GRAPHICS) ? 0.015 : 0.014;

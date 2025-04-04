@@ -6,6 +6,8 @@
 
 namespace ColorSpace {
 
+enum Mode { GRAPHICS, TEXTILES };
+
 class Lab;
 class LchAb;
 class LchUv;
@@ -14,10 +16,6 @@ class Rgb;
 class SRgb;
 class Xyy;
 class Xyz;
-
-
-enum Mode { GRAPHICS, TEXTILES };
-
 
 class Lab {
 private:
@@ -34,6 +32,7 @@ public:
 
   // Distance Metrics
   float diffCie76(const Lab &other);
+  float diffCiede2000(const Lab &other);
 
   void print() const;
 };
@@ -50,7 +49,6 @@ public:
 
   // Distance Metrics
   float diffCie94(const LchAb &other, Mode mode = GRAPHICS);
-  //   float diffCiede2000(const LchAb &other);
 
   void print() const;
 };

@@ -16,6 +16,8 @@ constexpr float kappa = 24389.0f / 27.0f;
 
 double toDegrees(const double radians);
 
+double toRadians(const double degrees);
+
 
 std::array<float, 3>
 toPolarColorSpace(const std::array<float, 3> &cartesianColorSpace);
@@ -24,6 +26,12 @@ toPolarColorSpace(const std::array<float, 3> &cartesianColorSpace);
 template <typename T>
 auto euclideanNorm(const T xMag, const T yMag, const T zMag) {
   return std::sqrt(xMag * xMag + yMag * yMag + zMag * zMag);
+}
+
+
+template <typename T>
+auto euclideanNorm(const T xMag, const T yMag) {
+  return std::sqrt(xMag * xMag + yMag * yMag);
 }
 
 

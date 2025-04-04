@@ -10,6 +10,9 @@ namespace ColorSpace {
 double toDegrees(const double radians) { return radians * (180.0 / M_PI); }
 
 
+double toRadians(const double degrees) { return degrees * (M_PI / 180.0); }
+
+
 std::array<float, 3>
 toPolarColorSpace(const std::array<float, 3> &cartesianColorSpace) {
   const auto [l, a, b] = cartesianColorSpace; // LchAb equivalents: a=u and b=v
