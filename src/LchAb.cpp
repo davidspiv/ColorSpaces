@@ -10,7 +10,7 @@ namespace ColorSpace {
 LchAb::LchAb(float l, float c, float h) : mValues({l, c, h}) {}
 
 
-float LchAb::diffCie94(const LchAb &other, Mode mode) {
+float LchAb::diffCie94(const LchAb &other, Mode mode) const {
   auto [lOther, cOther, hOther] = other.getValues();
 
   const float lDelta = mValues[0] - lOther;

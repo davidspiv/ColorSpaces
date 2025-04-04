@@ -31,8 +31,8 @@ public:
   LchAb toLchAb() const;
 
   // Distance Metrics
-  float diffCie76(const Lab &other);
-  float diffCiede2000(const Lab &other);
+  float diffCie76(const Lab &other) const;
+  float diffCiede2000(const Lab &other) const;
 
   void print() const;
 };
@@ -48,7 +48,7 @@ public:
   std::array<float, 3> getValues() const { return mValues; }
 
   // Distance Metrics
-  float diffCie94(const LchAb &other, Mode mode = GRAPHICS);
+  float diffCie94(const LchAb &other, Mode mode = GRAPHICS) const;
 
   void print() const;
 };
