@@ -22,13 +22,13 @@ Srgb::Srgb(int r, int g, int b) : m_values({r, g, b}) {
 
 
 float Srgb::remove_gamma(int c) {
-  float normalChannel = static_cast<double>(c) / 255.0;
+  float normalized_channel = static_cast<double>(c) / 255.0;
 
   const float breakpoint = 0.04045f;
 
-  return (normalChannel <= breakpoint)
-             ? (normalChannel / 12.92f)
-             : std::pow((normalChannel + 0.055f) / 1.055f, 2.4f);
+  return (normalized_channel <= breakpoint)
+             ? (normalized_channel / 12.92f)
+             : std::pow((normalized_channel + 0.055f) / 1.055f, 2.4f);
 };
 
 
