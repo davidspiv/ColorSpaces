@@ -9,12 +9,10 @@
 
 namespace ColorSpace {
 
-
 constexpr std::array<float, 3> referenceWhiteD60 = {0.950470, 1.0, 1.088830};
 constexpr std::array<float, 2> chromaticityD60 = {0.312727, 0.329023};
-static constexpr float epsilon = 216.0f / 24389.0f;
-static constexpr float kappa = 24389.0f / 27.0f;
-
+constexpr float epsilon = 216.0f / 24389.0f;
+constexpr float kappa = 24389.0f / 27.0f;
 
 double toDegrees(const double radians);
 
@@ -23,48 +21,39 @@ std::array<float, 3>
 toPolarColorSpace(const std::array<float, 3> &cartesianColorSpace);
 
 
-template <typename ColorT>
-float distEuclideanSquared(const ColorT &a_Color, const ColorT &b_Color) {
-  // type check: constraints, ifconstexpr (implemented), or SFINAE?
-  if constexpr (!std::is_same_v<ColorT, Rgb> && !std::is_same_v<ColorT, Xyz> &&
-                !std::is_same_v<ColorT, Lab>) {
-
-    throw std::domain_error("Euclidean distance only valid for Rgb, "
-                            "Xyz, and Lab color spaces");
-  }
-
-  constexpr size_t channelCount = 3;
-
-  std::array<float, channelCount> a_Values = a_Color.getValues();
-  std::array<float, channelCount> b_Values = b_Color.getValues();
-
-  const float xD = a_Values[0] - b_Values[0];
-  const float yD = a_Values[1] - b_Values[1];
-  const float zD = a_Values[2] - b_Values[2];
-  return xD * xD + yD * yD + zD * zD;
+template <typename T>
+auto euclideanNorm(const T xMag, const T yMag, const T zMag) {
+  return std::sqrt(xMag * xMag + yMag * yMag + zMag * zMag);
 }
 
 
 template <typename ColorT>
-float distEuclidean(const ColorT &a_Color, const ColorT &b_Color) {
-  return std::sqrt(distEuclideanSquared(a_Color, b_Color));
-};
+float diffEuclidean(const ColorT &a_Color, const ColorT &b_Color) {
+  // type check: constraints, ifconstexpr (implemented), or SFINAE?
+  //   if constexpr (!std::is_same_v<ColorT, Rgb> && !std::is_same_v<ColorT,
+  //   Xyz> &&
+  //                 !std::is_same_v<ColorT, Lab>) {
+
+  //     throw std::domain_error("Euclidean distance only valid for Rgb, "
+  //                             "Xyz, and Lab color spaces");
+  //   }
+
+  std::array<float, 3> aChannels = a_Color.getValues();
+  std::array<float, 3> bChannels = b_Color.getValues();
+
+  const float xD = aChannels[0] - bChannels[0];
+  const float yD = aChannels[1] - bChannels[1];
+  const float zD = aChannels[2] - bChannels[2];
+
+  return euclideanNorm(xD, yD, zD);
+}
 
 
 std::array<float, 3>
 multiplyMatrix(const std::array<std::array<float, 3>, 3> &matrix,
                const std::array<float, 3> &vector);
 
+
 } // namespace ColorSpace
 
 #endif
-
-// Distance Metrics (future implementations)
-// float distCIE76(const Lab &other);
-// float distCIEDE2000(const Lab &other);
-// float distCIE94(const Lab &other);
-// float distEuclideanSquared(const CieLch &other);
-// float distEuclidean(const CieLch &other);
-// float distCIE76(const CieLch &other);
-// float distCIEDE2000(const CieLch &other);
-// float distCIE94(const CieLch &other);

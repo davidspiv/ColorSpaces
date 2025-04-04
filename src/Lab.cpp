@@ -38,18 +38,12 @@ LchAb Lab::toLchAb() const {
 };
 
 
+float Lab::diffCie76(const Lab &other) { return diffEuclidean(*this, other); }
+
+
 void Lab::print() const {
   std::cout << "L: " << mValues[0] << "\na: " << mValues[1]
             << "\nb: " << mValues[2] << "\n\n";
-}
-
-
-LchAb::LchAb(float l, float c, float h) : mValues({l, c, h}) {}
-
-
-void LchAb::print() const {
-  std::cout << "L: " << mValues[0] << "\nc: " << mValues[1]
-            << "\nh: " << mValues[2] << "\n\n";
 }
 
 
