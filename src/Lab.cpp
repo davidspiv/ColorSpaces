@@ -40,7 +40,47 @@ LchAb Lab::toLchAb() const {
 };
 
 
-float Lab::diffCie76(const Lab &other) const { return diffEuclidean(*this, other); }
+float Lab::diffCie76(const Lab &other) const {
+  return diffEuclidean(*this, other);
+}
+
+
+float Lab::diffCie94(const Lab &other, Mode mode) const {
+  auto [L1, a1, b1] = mValues;
+  auto [L2, a2, b2] = other.getValues();
+
+  const float C1 = euclideanNorm(a1, b1);
+  const float C2 = euclideanNorm(a2, b2);
+
+  const float deltaL = L1 - L2;
+  const float deltaC = C1 - C2;
+
+  const float deltaA = a1 - a2;
+  const float deltaB = b1 - b2;
+
+  // In the calculation of ΔH, the value inside the radical is, in theory,
+  // always greater than or equal to zero. However in an actual implementation,
+  // it may become a very slightly negative value, due to limited arithmetic
+  // precision.
+  const float deltaH_sq =
+      std::max(0.0f, deltaA * deltaA + deltaB * deltaB - deltaC * deltaC);
+  const float deltaH = std::sqrt(deltaH_sq);
+
+  // Parametric factors
+  const float kL = (mode == GRAPHICS) ? 1.0f : 2.0f;
+  const float k1 = (mode == GRAPHICS) ? 0.045f : 0.048f;
+  const float k2 = (mode == GRAPHICS) ? 0.015f : 0.014f;
+
+  const float sL = 1.0f;
+  const float sC = 1.0f + k1 * C1;
+  const float sH = 1.0f + k2 * C1;
+
+  const float xMag = deltaL / (kL * sL);
+  const float yMag = deltaC / sC;
+  const float zMag = deltaH / sH;
+
+  return std::sqrt(xMag * xMag + yMag * yMag + zMag * zMag);
+}
 
 
 float Lab::diffCiede2000(const Lab &other) const {
