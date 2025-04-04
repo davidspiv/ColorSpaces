@@ -91,9 +91,11 @@ float Lab::diffCiede2000(const Lab &other) const {
   const float C2 = euclideanNorm(a2, b2);
   const float C_mean = (C1 + C2) / 2.0f;
 
-  const float G_component = std::pow(25.0f, 7);
-  const float G = 0.5f * (1.0f - std::sqrt(std::pow(C_mean, 7)) /
-                                     (std::pow(C_mean, 7) + G_component));
+  const float G_component_a = std::pow(25.0f, 7);
+  const float G_component_b = std::pow(C_mean, 7);
+  const float G =
+      0.5f *
+      (1.0f - std::sqrt(G_component_b / (G_component_b + G_component_a)));
 
   const float a1_prime = a1 * (1 + G);
   const float a2_prime = a2 * (1 + G);
@@ -105,8 +107,8 @@ float Lab::diffCiede2000(const Lab &other) const {
   const float h1_prime = toDegrees(std::atan2(b1, a1_prime));
   const float h2_prime = toDegrees(std::atan2(b2, a2_prime));
 
-  const float h1_corrected = (h1_prime >= 0) ? h1_prime : h1_prime + 360.0f;
-  const float h2_corrected = (h2_prime >= 0) ? h2_prime : h2_prime + 360.0f;
+  const float h1_corrected = (h1_prime >= 0.0f) ? h1_prime : h1_prime + 360.0f;
+  const float h2_corrected = (h2_prime >= 0.0f) ? h2_prime : h2_prime + 360.0f;
 
   float delta_h_prime;
   if (std::abs(h1_corrected - h2_corrected) <= 180.0f) {
@@ -143,8 +145,9 @@ float Lab::diffCiede2000(const Lab &other) const {
   const float delta_theta =
       30.0f * std::exp(-std::pow((H_prime_mean - 275.0f) / 25.0f, 2));
 
-  const float R_C = 2.0f * std::sqrt(std::pow(C_prime_mean, 7) /
-                                     (std::pow(C_prime_mean, 7) + G_component));
+  const float R_C =
+      2.0f * std::sqrt(std::pow(C_prime_mean, 7) /
+                       (std::pow(C_prime_mean, 7) + G_component_a));
 
   const float R_T = -R_C * sin(toRadians(2.0f * delta_theta));
 
