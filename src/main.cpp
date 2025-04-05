@@ -19,6 +19,7 @@ int main() {
 
   std::string line;
   size_t errorCt = 0;
+  const float errTolerance = 0.0001f;
 
   for (int i = 0; i < 32; ++i) {
     std::vector<float> tokens;
@@ -66,14 +67,14 @@ int main() {
     // Output both labs
     const float answer = a_lab.diff_cie_2000(b_lab);
 
-    if ((std::abs(answer - deltaE) >= 0.0001f)) {
-      std::cout << "ERROR at input: " << i << std::endl;
-      std::cout << "answer: " << answer << std::endl;
-      std::cout << "result: " << deltaE << std::endl;
+    if ((std::abs(answer - deltaE) >= errTolerance)) {
+      std::cout << "ERROR with CEI2000 at input #" << i << std::endl;
+      std::cout << "answer: " << answer << '\n';
+      std::cout << "result: " << deltaE << '\n' << std::endl;
       ++errorCt;
     }
   }
   if (!errorCt) {
-    std::cout << "All tests passed!" << std::endl;
+    std::cout << "CEI2000 test passed!" << std::endl;
   }
 }
