@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <array>
 #include <iostream>
+#include <vector>
 
 namespace Color_Space {
 
@@ -39,9 +40,13 @@ Srgb Rgb::to_srgb() const {
 
 
 Xyz Rgb::to_xyz() const {
-  auto [x, y, z] = multiply_matrix(this->rgbTo_xyzMatrix, m_values);
 
-  return Xyz(x, y, z);
+  std::vector<float> values_as_vector(m_values.begin(), m_values.end());
+
+  Matrix resultMatrix = create_rgb_to_xyz_transformation_matrix().multiply(
+      Matrix({values_as_vector}));
+
+  return Xyz(resultMatrix(0, 0), resultMatrix(0, 1), resultMatrix(0, 2));
 }
 
 

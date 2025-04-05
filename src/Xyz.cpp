@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <vector>
 
 namespace Color_Space {
 
@@ -12,12 +13,15 @@ Xyz::Xyz(float x, float y, float z) : m_values({x, y, z}) {};
 
 Rgb Xyz::to_rgb() const {
 
-  std::array<float, 3> rgbAsArr =
-      multiply_matrix(this->xyzTo_rgbMatrix, m_values);
+  std::vector<float> values_as_vector(m_values.begin(), m_values.end());
 
-  const float r = std::clamp<float>(rgbAsArr[0], 0.0, 1.0);
-  const float g = std::clamp<float>(rgbAsArr[1], 0.0, 1.0);
-  const float b = std::clamp<float>(rgbAsArr[2], 0.0, 1.0);
+
+  Matrix rgb_matrix = create_xyz_to_rgb_transformation_matrix().multiply(
+      Matrix({values_as_vector}));
+
+  const float r = std::clamp<float>(rgb_matrix(0, 0), 0.0f, 1.0f);
+  const float g = std::clamp<float>(rgb_matrix(0, 1), 0.0f, 1.0f);
+  const float b = std::clamp<float>(rgb_matrix(0, 2), 0.0f, 1.0f);
 
   return Rgb(r, g, b);
 }
