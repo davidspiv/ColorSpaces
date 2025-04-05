@@ -1,24 +1,79 @@
-#include <iomanip>
+#include <cstring> // for strtok
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include "../include/colorDefinitions.h"
 #include "../include/timer.h"
 #include "../include/util.h"
 
+
 int main() {
-  Timer timer;
+  std::ifstream in("test.dat");
+  if (!in) {
+    std::cerr << "Failed to open file.\n";
+    return 1;
+  }
 
-  //   const Color_Space::SRgb sRgb(77, 3, 155);
-  //   const Color_Space::Rgb rgb = sRgb.toRgb();
-  //   const Color_Space::Xyz xyz = rgb.toXyz();
-  //   const Color_Space::Lab lab = xyz.toLab();
+  std::string line;
+  size_t errorCt = 0;
 
-  Color_Space::Lab a_lab = {87.8823f, -84.6508f, 80.0226f};
-  Color_Space::Lab b_lab = {23.7018f, 56.8350f, -63.5484f};
+  for (int i = 0; i < 32; ++i) {
+    std::vector<float> tokens;
 
-  std::cout << setw(20) << "CIE 1976: " << a_lab.diff_cie_76(b_lab) << '\n';
-  std::cout << setw(20) << "CIE 1994 (g): " << a_lab.diff_cie_94(b_lab) << '\n';
-  std::cout << setw(20) << "CIE 1994 (t): "
-            << a_lab.diff_cie_94(b_lab, Color_Space::TEXTILES) << '\n';
-  std::cout << setw(20) << "CIE 2000: " << a_lab.diff_cie_2000(b_lab) << '\n';
+    // Read first line
+    if (!std::getline(in, line)) {
+      std::cerr << "Unexpected end of file at line " << 2 * i + 1 << '\n';
+      break;
+    }
+
+    std::istringstream iss1(line);
+    float value;
+    while (iss1 >> value) {
+      tokens.push_back(value);
+    }
+
+    if (tokens.size() < 5) {
+      std::cerr << "Not enough values in line " << 2 * i + 1 << '\n';
+      continue;
+    }
+
+    Color_Space::Lab a_lab(tokens[2], tokens[3], tokens[4]);
+    float deltaE = tokens.back();
+
+    tokens.clear();
+
+    // Read second line
+    if (!std::getline(in, line)) {
+      std::cerr << "Unexpected end of file at line " << 2 * i + 2 << '\n';
+      break;
+    }
+
+    std::istringstream iss2(line);
+    while (iss2 >> value) {
+      tokens.push_back(value);
+    }
+
+    if (tokens.size() < 5) {
+      std::cerr << "Not enough values in line " << 2 * i + 2 << '\n';
+      continue;
+    }
+
+    Color_Space::Lab b_lab(tokens[1], tokens[2], tokens[3]);
+
+    // Output both labs
+    const float answer = a_lab.diff_cie_2000(b_lab);
+
+    if ((std::abs(answer - deltaE) >= 0.0001f)) {
+      std::cout << "ERROR at input: " << i << std::endl;
+      std::cout << "answer: " << answer << std::endl;
+      std::cout << "result: " << deltaE << std::endl;
+      ++errorCt;
+    }
+  }
+  if (!errorCt) {
+    std::cout << "All tests passed!" << std::endl;
+  }
 }
