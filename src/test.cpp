@@ -5,8 +5,25 @@
 #include <vector>
 
 #include "../include/colorDefinitions.h"
-#include "../include/timer.h"
 #include "../include/util.h"
+
+using namespace Color_Space;
+
+
+void test_xyz_to_rgb_to_xyz(const Srgb &in_srgb) {
+  auto [in_r, in_g, in_b] = in_srgb.get_values();
+
+  const Srgb out_srgb = in_srgb.to_rgb().to_xyz().to_rgb().to_srgb();
+
+  auto [out_r, out_g, out_b] = out_srgb.get_values();
+
+  if (abs(out_r - in_r) <= 1 && abs(out_g - in_g) <= 1 &&
+      abs(out_b - in_b) <= 1) {
+    std::cout << "rgb->xyz->rgb test passed!" << std::endl;
+  } else {
+    std::cout << "FAILED: rgb->xyz->rgb test" << std::endl;
+  }
+};
 
 
 void test_cie2000() {
