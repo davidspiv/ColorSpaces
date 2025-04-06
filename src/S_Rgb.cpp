@@ -1,4 +1,4 @@
-#include "../include/colorDefinitions.h"
+#include "../include/Color.h"
 
 #include <array>
 #include <cmath>
@@ -8,7 +8,7 @@
 namespace Color_Space {
 
 
-Srgb::Srgb(int r, int g, int b) : m_values({r, g, b}) {
+S_Rgb::S_Rgb(int r, int g, int b) : m_values({r, g, b}) {
   auto validate = [](int c) {
     if (std::min(255, std::max(0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
@@ -21,7 +21,7 @@ Srgb::Srgb(int r, int g, int b) : m_values({r, g, b}) {
 };
 
 
-float Srgb::remove_gamma(int c) {
+float S_Rgb::remove_gamma(int c) {
   float normalized_channel = static_cast<double>(c) / 255.0;
 
   const float breakpoint = 0.04045f;
@@ -32,7 +32,7 @@ float Srgb::remove_gamma(int c) {
 };
 
 
-Rgb Srgb::to_rgb() const {
+Rgb S_Rgb::to_rgb() const {
   const float r = this->remove_gamma(m_values[0]);
   const float g = this->remove_gamma(m_values[1]);
   const float b = this->remove_gamma(m_values[2]);
@@ -41,7 +41,7 @@ Rgb Srgb::to_rgb() const {
 };
 
 
-void Srgb::print() const {
+void S_Rgb::print() const {
   std::cout << "r: " << m_values[0] << "\ng: " << m_values[1]
             << "\nb: " << m_values[2] << std::endl;
 }

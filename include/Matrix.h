@@ -1,6 +1,8 @@
 #ifndef MATRICES_H
 #define MATRICES_H
 
+#include "Matrix.h"
+
 #include <iostream>
 #include <vector>
 
@@ -25,6 +27,8 @@ private:
   size_t m_cols;
 };
 
+
 std::ostream &operator<<(std::ostream &os, const Matrix &a);
+
 
 #endif

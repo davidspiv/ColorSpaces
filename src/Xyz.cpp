@@ -1,4 +1,4 @@
-#include "../include/colorDefinitions.h"
+#include "../include/Color.h"
 #include "../include/util.h"
 
 #include <algorithm>
@@ -30,9 +30,9 @@ Rgb Xyz::to_rgb() const {
 
 Lab Xyz::to_lab() const {
 
-  const float xR = m_values[0] / reference_white_d60[0];
-  const float yR = m_values[1] / reference_white_d60[1];
-  const float zR = m_values[2] / reference_white_d60[2];
+  const float xR = m_values[0] / reference_white_d60.get_values()[0];
+  const float yR = m_values[1] / reference_white_d60.get_values()[1];
+  const float zR = m_values[2] / reference_white_d60.get_values()[2];
 
   const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0;
   const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0;
@@ -47,10 +47,10 @@ Lab Xyz::to_lab() const {
 
 
 Luv Xyz::to_luv() const {
-  auto [xRef, yRef, zRef] = reference_white_d60;
+  auto [xRef, yRef, zRef] = reference_white_d60.get_values();
   auto [x, y, z] = m_values;
 
-  const float yR = y / reference_white_d60[1];
+  const float yR = y / reference_white_d60.get_values()[1];
 
   const float denominator = x + 15.0 * y + 3 * z;
   if (denominator == 0.0) {

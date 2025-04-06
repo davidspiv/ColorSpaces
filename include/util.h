@@ -5,12 +5,12 @@
 #include <cmath>
 #include <stdexcept>
 
+#include "Color.h"
 #include "Matrix.h"
-#include "colorDefinitions.h"
 
 namespace Color_Space {
 
-constexpr std::array<float, 3> reference_white_d60 = {0.950470, 1.0, 1.088830};
+const Xyz reference_white_d60(0.950470, 1.0, 1.088830);
 constexpr std::array<float, 2> chromaticity_d60 = {0.312727, 0.329023};
 constexpr float epsilon = 216.0f / 24389.0f;
 constexpr float kappa = 24389.0f / 27.0f;
@@ -63,10 +63,17 @@ multiply_matrix(const std::array<std::array<float, 3>, 3> &matrix,
                 const std::array<float, 3> &vector);
 
 
+template <typename Color_T> Matrix color_to_column(Color_T color) {
+  auto [x, y, z] = color.get_values();
+
+  return Matrix({{x}, {y}, {z}});
+}
+
 Matrix create_rgb_to_xyz_transformation_matrix();
 
 
 Matrix create_xyz_to_rgb_transformation_matrix();
+
 
 } // namespace Color_Space
 

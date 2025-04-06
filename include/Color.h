@@ -13,7 +13,7 @@ class Lch_Ab;
 class Lch_Uv;
 class Luv;
 class Rgb;
-class Srgb;
+class S_Rgb;
 class Xyy;
 class Xyz;
 
@@ -92,7 +92,7 @@ public:
   std::array<float, 3> get_values() const { return m_values; }
 
   // Conversions
-  Srgb to_srgb() const;
+  S_Rgb to_s_rgb() const;
   Xyz to_xyz() const;
 
   void print() const;
@@ -102,13 +102,13 @@ private:
 };
 
 
-class Srgb {
+class S_Rgb {
 
 private:
   std::array<int, 3> m_values; // r, g, b
 
 public:
-  Srgb(int r, int g, int b);
+  S_Rgb(int r, int g, int b);
 
   std::array<int, 3> get_values() const { return m_values; }
 

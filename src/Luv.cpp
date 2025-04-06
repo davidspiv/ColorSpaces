@@ -1,4 +1,4 @@
-#include "../include/colorDefinitions.h"
+#include "../include/Color.h"
 #include "../include/util.h"
 
 #include <array>

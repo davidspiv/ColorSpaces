@@ -1,5 +1,5 @@
+#include "../include/Color.h"
 #include "../include/Matrix.h"
-#include "../include/colorDefinitions.h"
 #include "../include/util.h"
 
 #include <algorithm>
@@ -29,13 +29,13 @@ float Rgb::apply_gamma(const float c) {
 };
 
 
-Srgb Rgb::to_srgb() const {
+S_Rgb Rgb::to_s_rgb() const {
 
   const float r = this->apply_gamma(m_values[0]);
   const float g = this->apply_gamma(m_values[1]);
   const float b = this->apply_gamma(m_values[2]);
 
-  return Srgb(r, g, b);
+  return S_Rgb(r, g, b);
 };
 
 

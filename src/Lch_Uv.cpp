@@ -1,4 +1,4 @@
-#include "../include/colorDefinitions.h"
+#include "../include/Color.h"
 
 namespace Color_Space {
 

@@ -4,18 +4,18 @@
 #include <string>
 #include <vector>
 
-#include "../include/colorDefinitions.h"
+#include "../include/Color.h"
 #include "../include/util.h"
 
 using namespace Color_Space;
 
 
-void test_xyz_to_rgb_to_xyz(const Srgb &in_srgb) {
-  auto [in_r, in_g, in_b] = in_srgb.get_values();
+void test_xyz_to_rgb_to_xyz(const S_Rgb &in_s_Rgb) {
+  auto [in_r, in_g, in_b] = in_s_Rgb.get_values();
 
-  const Srgb out_srgb = in_srgb.to_rgb().to_xyz().to_rgb().to_srgb();
+  const S_Rgb out_s_rgb = in_s_Rgb.to_rgb().to_xyz().to_rgb().to_s_rgb();
 
-  auto [out_r, out_g, out_b] = out_srgb.get_values();
+  auto [out_r, out_g, out_b] = out_s_rgb.get_values();
 
   if (abs(out_r - in_r) <= 1 && abs(out_g - in_g) <= 1 &&
       abs(out_b - in_b) <= 1) {

@@ -42,7 +42,7 @@ multiply_matrix(const std::array<std::array<float, 3>, 3> &matrix,
 
 
 Matrix create_rgb_to_xyz_transformation_matrix() {
-  Matrix d65_matrix = Matrix({{0.95047}, {1.00000}, {1.08883}});
+  Matrix d65_matrix = color_to_column(reference_white_d60);
 
   // sRGB
   float x_r = 0.6400;
@@ -74,6 +74,7 @@ Matrix create_rgb_to_xyz_transformation_matrix() {
 
   return XYZ_matrix.column_wise_scaling(S_matrix);
 }
+
 
 Matrix create_xyz_to_rgb_transformation_matrix() {
   return create_rgb_to_xyz_transformation_matrix().invert();

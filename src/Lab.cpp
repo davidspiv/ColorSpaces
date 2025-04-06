@@ -1,4 +1,4 @@
-#include "../include/colorDefinitions.h"
+#include "../include/Color.h"
 #include "../include/util.h"
 
 #include <array>
@@ -25,9 +25,9 @@ Xyz Lab::to_xyz() const {
                        ? std::pow(fZ, 3)
                        : (116.0f * fZ - 16.0f) / kappa;
 
-  const float x = xR * reference_white_d60[0];
-  const float y = yR * reference_white_d60[1];
-  const float z = zR * reference_white_d60[2];
+  const float x = xR * reference_white_d60.get_values()[0];
+  const float y = yR * reference_white_d60.get_values()[1];
+  const float z = zR * reference_white_d60.get_values()[2];
 
   return Xyz(x, y, z);
 }
