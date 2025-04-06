@@ -27,7 +27,7 @@ void test_xyz_to_rgb_to_xyz(const Srgb &in_srgb) {
 
 
 void test_cie2000() {
-  std::ifstream in("test.dat");
+  std::ifstream in("./test/test.dat");
   if (!in) {
     std::cerr << "Failed to open file.\n";
     return;
