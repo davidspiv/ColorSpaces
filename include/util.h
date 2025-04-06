@@ -5,6 +5,7 @@
 #include <cmath>
 #include <stdexcept>
 
+#include "Matrix.h"
 #include "colorDefinitions.h"
 
 namespace Color_Space {
@@ -61,6 +62,11 @@ std::array<float, 3>
 multiply_matrix(const std::array<std::array<float, 3>, 3> &matrix,
                 const std::array<float, 3> &vector);
 
+
+Matrix create_rgb_to_xyz_transformation_matrix();
+
+
+Matrix create_xyz_to_rgb_transformation_matrix();
 
 } // namespace Color_Space
 
