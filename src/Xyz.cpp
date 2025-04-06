@@ -11,9 +11,13 @@ Xyz::Xyz(float x, float y, float z) : m_values({x, y, z}) {};
 
 
 Rgb Xyz::to_rgb() const {
+  static constexpr std::array<std::array<float, 3>, 3> xyzTo_rgbMatrix = {{
+      {3.2404542, -1.5371385, -0.4985314},
+      {-0.9692660, 1.8760108, 0.0415560},
+      {0.0556434, -0.2040259, 1.0572252} // Reference white - D65
+  }};
 
-  std::array<float, 3> rgbAsArr =
-      multiply_matrix(this->xyzTo_rgbMatrix, m_values);
+  std::array<float, 3> rgbAsArr = multiply_matrix(xyzTo_rgbMatrix, m_values);
 
   const float r = std::clamp<float>(rgbAsArr[0], 0.0, 1.0);
   const float g = std::clamp<float>(rgbAsArr[1], 0.0, 1.0);
