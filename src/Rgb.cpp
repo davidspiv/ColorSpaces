@@ -42,12 +42,11 @@ S_Rgb Rgb::to_s_rgb() const {
 Xyz Rgb::to_xyz() const {
   Matrix M_matrix = create_rgb_to_xyz_transformation_matrix();
 
-  const std::array<std::array<float, 3>, 3> M_matrix_as_array = {
-      {{M_matrix(0, 0), M_matrix(0, 1), M_matrix(0, 2)},
-       {M_matrix(1, 0), M_matrix(1, 1), M_matrix(1, 2)},
-       {M_matrix(2, 0), M_matrix(2, 1), M_matrix(2, 2)}}};
+  Matrix xyz_as_matrix = M_matrix.multiply(to_column(m_values));
 
-  auto [x, y, z] = multiply_matrix(M_matrix_as_array, m_values);
+  const float x = std::clamp<float>(xyz_as_matrix(0, 0), 0.0, 1.0);
+  const float y = std::clamp<float>(xyz_as_matrix(1, 0), 0.0, 1.0);
+  const float z = std::clamp<float>(xyz_as_matrix(2, 0), 0.0, 1.0);
 
   return Xyz(x, y, z);
 }
@@ -57,4 +56,3 @@ void Rgb::print() const {
   std::cout << "R: " << m_values[0] << "\nG: " << m_values[1]
             << "\nB: " << m_values[2] << std::endl;
 }
-

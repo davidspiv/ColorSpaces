@@ -12,16 +12,11 @@ Xyz::Xyz(float x, float y, float z) : m_values({x, y, z}) {};
 Rgb Xyz::to_rgb() const {
   Matrix M_matrix = create_xyz_to_rgb_transformation_matrix();
 
-  const std::array<std::array<float, 3>, 3> M_matrix_as_array = {
-      {{M_matrix(0, 0), M_matrix(0, 1), M_matrix(0, 2)},
-       {M_matrix(1, 0), M_matrix(1, 1), M_matrix(1, 2)},
-       {M_matrix(2, 0), M_matrix(2, 1), M_matrix(2, 2)}}};
+  Matrix rbg_as_matrix = M_matrix.multiply(to_column(m_values));
 
-  std::array<float, 3> rgbAsArr = multiply_matrix(M_matrix_as_array, m_values);
-
-  const float r = std::clamp<float>(rgbAsArr[0], 0.0, 1.0);
-  const float g = std::clamp<float>(rgbAsArr[1], 0.0, 1.0);
-  const float b = std::clamp<float>(rgbAsArr[2], 0.0, 1.0);
+  const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0, 1.0);
+  const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0, 1.0);
+  const float b = std::clamp<float>(rbg_as_matrix(2, 0), 0.0, 1.0);
 
   return Rgb(r, g, b);
 }
@@ -29,7 +24,7 @@ Rgb Xyz::to_rgb() const {
 
 Lab Xyz::to_lab() const {
 
-	auto [x,y,z] = reference_white_d60.get_values();
+  auto [x, y, z] = reference_white_d60.get_values();
 
   const float xR = m_values[0] / x;
   const float yR = m_values[1] / y;
@@ -97,4 +92,3 @@ void Xyz::print() const {
   std::cout << "X: " << m_values[0] << "\nY: " << m_values[1]
             << "\nZ: " << m_values[2] << "\n\n";
 }
-

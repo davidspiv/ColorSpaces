@@ -1,8 +1,8 @@
 #include "../include/Matrix.h"
 
+#include <array>
 #include <iomanip>
 #include <vector>
-
 
 Matrix::Matrix(int rows, int cols)
     : m_values(
@@ -110,6 +110,10 @@ Matrix Matrix::invert() const {
   return result;
 }
 
+Matrix to_column(std::array<float, 3> m_values) {
+  return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
+}
+ 
 
 std::ostream &operator<<(std::ostream &os, const Matrix &a) {
   for (size_t row = 0; row < a.rows(); row++) {
