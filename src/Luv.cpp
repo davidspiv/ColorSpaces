@@ -1,5 +1,5 @@
 #include "../include/Color.h"
-#include "../include/util.h"
+#include "../include/util_internal.h"
 
 #include <array>
 #include <iostream>

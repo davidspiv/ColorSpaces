@@ -1,11 +1,12 @@
 #include "../include/Color.h"
-#include "../include/util.h"
+#include "../include/util_internal.h"
 
 #include <array>
 #include <cmath>
 #include <iostream>
 
 using namespace Color_Space;
+
 
 Lab::Lab(float l, float a, float b) : m_values({l, a, b}) {};
 

@@ -1,4 +1,4 @@
-#include "../include/util.h"
+#include "../include/util_internal.h"
 #include "../include/Matrix.h"
 
 #include <array>

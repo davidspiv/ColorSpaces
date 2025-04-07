@@ -1,7 +1,6 @@
 #include "../include/Color.h"
 #include "../include/test.h"
 #include "../include/timer.h"
-#include "../include/util.h"
 
 using namespace Color_Space;
 

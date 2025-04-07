@@ -1,12 +1,13 @@
 #include "../include/Color.h"
 #include "../include/Matrix.h"
-#include "../include/util.h"
+#include "../include/util_internal.h"
 
 #include <algorithm>
 #include <array>
 #include <iostream>
 
 using namespace Color_Space;
+
 
 Rgb::Rgb(float r, float g, float b) : m_values({r, g, b}) {
   auto validate = [](float c) {

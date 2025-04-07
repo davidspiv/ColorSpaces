@@ -1,8 +1,9 @@
-#include "../include/util.h"
+#include "../include/util_internal.h"
 
 #include <iostream>
 
 using namespace Color_Space;
+
 
 Xyy::Xyy(float x, float y, float Y) : m_values({x, y, Y}) {}
 

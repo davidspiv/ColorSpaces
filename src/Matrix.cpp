@@ -3,10 +3,12 @@
 #include <iomanip>
 #include <vector>
 
+
 Matrix::Matrix(int rows, int cols)
     : m_values(
           std::vector<std::vector<float>>(rows, std::vector<float>(cols, 0))),
       m_rows(rows), m_cols(cols) {};
+
 
 Matrix::Matrix(const std::vector<std::vector<float>> &arr_2d) {
   m_rows = arr_2d.size();
@@ -14,9 +16,12 @@ Matrix::Matrix(const std::vector<std::vector<float>> &arr_2d) {
   m_values = arr_2d;
 };
 
+
 float &Matrix::operator()(int i, int j) { return m_values[i][j]; }
 
+
 const float &Matrix::operator()(int i, int j) const { return m_values[i][j]; }
+
 
 Matrix Matrix::multiply(const Matrix &other) const {
   if (m_cols != other.rows()) {

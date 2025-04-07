@@ -17,7 +17,6 @@ class S_Rgb;
 class Xyy;
 class Xyz;
 
-
 class Lab {
 private:
   std::array<float, 3> m_values; // l, a, b
