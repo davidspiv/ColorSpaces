@@ -8,8 +8,7 @@
 using namespace Color_Space;
 
 
-Lab::Lab(float l, float a, float b) : m_values({l, a, b}) {};
-
+Lab::Lab(float l, float a, float b) { m_values = {l, a, b}; }
 
 Xyz Lab::to_xyz() const {
   const float fX = (m_values[0] + 16.0f) / 116.0f;

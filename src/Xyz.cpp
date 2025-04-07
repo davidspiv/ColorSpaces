@@ -6,13 +6,14 @@
 
 using namespace Color_Space;
 
-Xyz::Xyz(float x, float y, float z) : m_values({x, y, z}) {};
+
+Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
 Rgb Xyz::to_rgb() const {
   Matrix M_matrix = create_xyz_to_rgb_transformation_matrix();
 
-  Matrix rbg_as_matrix = M_matrix.multiply(to_column(m_values));
+  Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 
   const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0, 1.0);
   const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0, 1.0);
@@ -92,3 +93,8 @@ void Xyz::print() const {
   std::cout << "X: " << m_values[0] << "\nY: " << m_values[1]
             << "\nZ: " << m_values[2] << "\n\n";
 }
+
+
+Matrix Xyz::to_column() const {
+  return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
+};

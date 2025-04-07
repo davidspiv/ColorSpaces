@@ -5,7 +5,7 @@
 using namespace Color_Space;
 
 
-Xyy::Xyy(float x, float y, float Y) : m_values({x, y, Y}) {}
+Xyy::Xyy(float x, float y, float Y) { m_values = {x, y, Y}; }
 
 
 void Xyy::print() const {

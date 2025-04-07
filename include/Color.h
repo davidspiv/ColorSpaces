@@ -1,6 +1,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include "Matrix.h"
+
 #include <array>
 #include <iostream>
 
@@ -17,14 +19,22 @@ class S_Rgb;
 class Xyy;
 class Xyz;
 
-class Lab {
-private:
-  std::array<float, 3> m_values; // l, a, b
+class Color_Base {
+protected:
+  std::array<float, 3> m_values;
 
 public:
-  Lab(float l, float a, float b);
-
   std::array<float, 3> get_values() const { return m_values; }
+
+  Matrix to_column() const {
+    return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
+  };
+};
+
+
+class Lab : public Color_Base {
+public:
+  Lab(float l, float a, float b);
 
   // Conversions
   Xyz to_xyz() const;
@@ -39,40 +49,25 @@ public:
 };
 
 
-class Lch_Ab {
-private:
-  std::array<float, 3> m_values; // l, c, h
-
+class Lch_Ab : public Color_Base {
 public:
   Lch_Ab(float l, float c, float h);
 
-  std::array<float, 3> get_values() const { return m_values; }
-
   void print() const;
 };
 
 
-class Lch_Uv {
-private:
-  std::array<float, 3> m_values; // l, c, h
-
+class Lch_Uv : public Color_Base {
 public:
   Lch_Uv(float l, float c, float h);
 
-  std::array<float, 3> get_values() const { return m_values; }
-
   void print() const;
 };
 
 
-class Luv {
-private:
-  std::array<float, 3> m_values; // l, c, h
-
+class Luv : public Color_Base {
 public:
   Luv(float l, float u, float v);
-
-  std::array<float, 3> get_values() const { return m_values; }
 
   // Conversions
   Lch_Uv to_lch_uv() const;
@@ -81,35 +76,26 @@ public:
 };
 
 
-class Rgb {
-private:
-  std::array<float, 3> m_values; // r, g, b
-
+class Rgb : public Color_Base {
 public:
   Rgb(float r, float g, float b);
-
-  std::array<float, 3> get_values() const { return m_values; }
 
   // Conversions
   S_Rgb to_s_rgb() const;
   Xyz to_xyz() const;
 
   void print() const;
+  Matrix to_column() const;
+
 
 private:
   static float apply_gamma(float c);
 };
 
 
-class S_Rgb {
-
-private:
-  std::array<int, 3> m_values; // r, g, b
-
+class S_Rgb : public Color_Base {
 public:
-  S_Rgb(int r, int g, int b);
-
-  std::array<int, 3> get_values() const { return m_values; }
+  S_Rgb(float r, float g, float b);
 
   // Conversions
   Rgb to_rgb() const;
@@ -121,27 +107,17 @@ private:
 };
 
 
-class Xyy {
-private:
-  std::array<float, 3> m_values; // x, y, Y
-
+class Xyy : public Color_Base {
 public:
   Xyy(float l, float u, float v);
-
-  std::array<float, 3> get_values() const { return m_values; }
 
   void print() const;
 };
 
 
-class Xyz {
-private:
-  std::array<float, 3> m_values; // x, y, z
-
+class Xyz : public Color_Base {
 public:
   Xyz(float x, float y, float z);
-
-  std::array<float, 3> get_values() const { return m_values; }
 
   // Conversions
   Rgb to_rgb() const;
@@ -150,6 +126,7 @@ public:
   Xyy to_xyy() const;
 
   void print() const;
+  Matrix to_column() const;
 };
 
 

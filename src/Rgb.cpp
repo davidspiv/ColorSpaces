@@ -9,7 +9,7 @@
 using namespace Color_Space;
 
 
-Rgb::Rgb(float r, float g, float b) : m_values({r, g, b}) {
+Rgb::Rgb(float r, float g, float b) {
   auto validate = [](float c) {
     if (std::min<float>(1.0, std::max<float>(0.0, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 1].");
@@ -19,6 +19,8 @@ Rgb::Rgb(float r, float g, float b) : m_values({r, g, b}) {
   validate(r);
   validate(g);
   validate(b);
+
+  m_values = {r, g, b};
 };
 
 
@@ -42,7 +44,7 @@ S_Rgb Rgb::to_s_rgb() const {
 Xyz Rgb::to_xyz() const {
   Matrix M_matrix = create_rgb_to_xyz_transformation_matrix();
 
-  Matrix xyz_as_matrix = M_matrix.multiply(to_column(m_values));
+  Matrix xyz_as_matrix = M_matrix.multiply(this->to_column());
 
   const float x = std::clamp<float>(xyz_as_matrix(0, 0), 0.0, 1.0);
   const float y = std::clamp<float>(xyz_as_matrix(1, 0), 0.0, 1.0);
@@ -56,3 +58,7 @@ void Rgb::print() const {
   std::cout << "R: " << m_values[0] << "\nG: " << m_values[1]
             << "\nB: " << m_values[2] << std::endl;
 }
+
+Matrix Rgb::to_column() const {
+  return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
+};

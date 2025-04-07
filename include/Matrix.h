@@ -3,9 +3,9 @@
 
 #include "Matrix.h"
 
+#include <array>
 #include <iostream>
 #include <vector>
-#include <array>
 
 class Matrix {
 public:
@@ -27,8 +27,6 @@ private:
   size_t m_rows;
   size_t m_cols;
 };
-
-Matrix to_column(std::array<float, 3> m_values);
 
 std::ostream &operator<<(std::ostream &os, const Matrix &a);
 

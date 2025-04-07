@@ -8,9 +8,9 @@
 using namespace Color_Space;
 
 
-S_Rgb::S_Rgb(int r, int g, int b) : m_values({r, g, b}) {
-  auto validate = [](int c) {
-    if (std::min(255, std::max(0, c)) != c) {
+S_Rgb::S_Rgb(float r, float g, float b) {
+  auto validate = [](float c) {
+    if (std::min(255.0f, std::max(0.0f, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
     }
   };
@@ -18,6 +18,8 @@ S_Rgb::S_Rgb(int r, int g, int b) : m_values({r, g, b}) {
   validate(r);
   validate(g);
   validate(b);
+
+  m_values = {r, g, b};
 };
 
 

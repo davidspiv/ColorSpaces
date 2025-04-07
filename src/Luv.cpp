@@ -7,7 +7,7 @@
 using namespace Color_Space;
 
 
-Luv::Luv(float l, float u, float v) : m_values({l, u, v}) {}
+Luv::Luv(float l, float u, float v) { m_values = {l, u, v}; }
 
 
 Lch_Uv Luv::to_lch_uv() const {
