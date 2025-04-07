@@ -10,7 +10,7 @@ int main() {
 
   S_Rgb s_rgb(100, 45, 200);
 
-  s_rgb.to_rgb().to_xyz();
+  s_rgb.to_rgb().to_xyz().print();
   //   .adapt_to_white_point(illuminants.at("d65"), illuminants.at("d50"))
 
 
