@@ -93,8 +93,3 @@ void Xyz::print() const {
   std::cout << "X: " << m_values[0] << "\nY: " << m_values[1]
             << "\nZ: " << m_values[2] << "\n\n";
 }
-
-
-Matrix Xyz::to_column() const {
-  return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
-};

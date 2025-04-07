@@ -58,7 +58,3 @@ void Rgb::print() const {
   std::cout << "R: " << m_values[0] << "\nG: " << m_values[1]
             << "\nB: " << m_values[2] << std::endl;
 }
-
-Matrix Rgb::to_column() const {
-  return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
-};

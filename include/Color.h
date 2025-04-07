@@ -85,8 +85,6 @@ public:
   Xyz to_xyz() const;
 
   void print() const;
-  Matrix to_column() const;
-
 
 private:
   static float apply_gamma(float c);
@@ -126,7 +124,6 @@ public:
   Xyy to_xyy() const;
 
   void print() const;
-  Matrix to_column() const;
 };
 
 
