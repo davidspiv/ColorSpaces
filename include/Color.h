@@ -124,7 +124,8 @@ public:
   // Conversions
   //   Rgb to_rgb(const Xyz &reference_white,
   //              const std::array<Xyz, 3> &primaries) const;
-  Rgb to_rgb() const;
+  Rgb to_rgb(const Xyz &reference_white,
+             const std::array<Xyz, 3> &primaries) const;
   Lab to_lab() const;
   Luv to_luv() const;
   Xyy to_xyy() const;

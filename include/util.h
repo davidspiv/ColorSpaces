@@ -48,10 +48,9 @@ template <typename T> auto euclidean_norm(const T xMag, const T yMag) {
 }
 
 
-Matrix compute_rgb_to_xyz_matrix(const Xyz &reference_white,
-                                 const Xyz &r_primary, const Xyz &g_primary,
-                                 const Xyz &b_primary);
-
+Matrix create_to_xyz_transformation_matrix(const Xyz &r_xyz, const Xyz &g_xyz,
+                                           const Xyz &b_xyz,
+                                           const Xyz &reference_illuminant);
 
 template <typename T>
 auto euclidean_norm(const T xMag, const T yMag, const T zMag) {

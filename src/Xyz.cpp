@@ -11,13 +11,37 @@ using namespace Color_Space;
 Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
-Rgb Xyz::to_rgb() const { // add rendering intent arg
-  Xyz primary_r(0.6400, 0.3300, 0.212656);
-  Xyz primary_g(0.3000, 0.6000, 0.715158);
-  Xyz primary_b(0.1500, 0.0600, 0.072186);
+// Rgb Xyz::to_rgb() const { // add rendering intent arg
+//   Xyz primary_r(0.6400, 0.3300, 0.212656);
+//   Xyz primary_g(0.3000, 0.6000, 0.715158);
+//   Xyz primary_b(0.1500, 0.0600, 0.072186);
 
-  Matrix M_matrix = compute_rgb_to_xyz_matrix(primary_r, primary_g, primary_b,
-                                              illuminants.at("d65"))
+//   Matrix M_matrix = create_to_xyz_transformation_matrix(
+//                         illuminants.at("d65"), primary_r, primary_g,
+//                         primary_b) .invert();
+
+//   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
+
+//   //// Absolute colorimetric
+//   const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0f, 1.0f);
+//   const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0f, 1.0f);
+//   const float b = std::clamp<float>(rbg_as_matrix(2, 0), 0.0f, 1.0f);
+
+//   return Rgb(r, g, b);
+// }
+
+
+Rgb Xyz::to_rgb(const Xyz &reference_white, const std::array<Xyz, 3> &primaries)
+    const { // add rendering intent arg
+
+  auto [primary_r, primary_g, primary_b] = primaries;
+
+  //   Xyz primary_r(0.6400, 0.3300, 0.212656);
+  //   Xyz primary_g(0.3000, 0.6000, 0.715158);
+  //   Xyz primary_b(0.1500, 0.0600, 0.072186);
+
+  Matrix M_matrix = create_to_xyz_transformation_matrix(
+                        reference_white, primary_r, primary_g, primary_b)
                         .invert();
 
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
@@ -29,32 +53,6 @@ Rgb Xyz::to_rgb() const { // add rendering intent arg
 
   return Rgb(r, g, b);
 }
-
-
-// Rgb Xyz::to_rgb(const Xyz &reference_white, const std::array<Xyz, 3>
-// &primaries)
-//     const { // add rendering intent arg
-
-//   auto [primary_r, primary_g, primary_b] = primaries;
-
-//   //   Xyz primary_r(0.6400, 0.3300, 0.212656);
-//   //   Xyz primary_g(0.3000, 0.6000, 0.715158);
-//   //   Xyz primary_b(0.1500, 0.0600, 0.072186);
-
-//   Matrix M_matrix = compute_rgb_to_xyz_matrix(primary_r, primary_g,
-//   primary_b,
-//                                               reference_white)
-//                         .invert();
-
-//   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
-
-//   //// Absolute colorimetric
-//   const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0f, 1.0f);
-//   const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0f, 1.0f);
-//   const float b = std::clamp<float>(rbg_as_matrix(2, 0), 0.0f, 1.0f);
-
-//   return Rgb(r, g, b);
-// }
 
 
 Lab Xyz::to_lab() const {

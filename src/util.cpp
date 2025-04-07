@@ -27,14 +27,14 @@ to_polar_color_space(const std::array<float, 3> &cartesianColor_Space) {
 }
 
 
-Matrix compute_rgb_to_xyz_matrix(const Xyz &reference_illuminant,
-                                 const Xyz &r_primary, const Xyz &g_primary,
-                                 const Xyz &b_primary) {
+Matrix create_to_xyz_transformation_matrix(const Xyz &r_xyz, const Xyz &g_xyz,
+                                           const Xyz &b_xyz,
+                                           const Xyz &reference_illuminant) {
   Matrix illuminant_matrix = color_to_column(reference_illuminant);
 
-  auto [r_x, r_y, r_z] = r_primary.get_values();
-  auto [g_x, g_y, g_z] = g_primary.get_values();
-  auto [b_x, b_y, b_z] = b_primary.get_values();
+  auto [r_x, r_y, r_z] = r_xyz.get_values();
+  auto [g_x, g_y, g_z] = g_xyz.get_values();
+  auto [b_x, b_y, b_z] = b_xyz.get_values();
 
   const float r_X = r_x / r_y;
   const float r_Y = 1;
