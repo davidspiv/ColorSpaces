@@ -1,5 +1,5 @@
 #include "../include/Color.h"
-#include "../include/util_internal.h"
+#include "../include/util.h"
 
 #include <algorithm>
 #include <cmath>
@@ -10,17 +10,18 @@ using namespace Color_Space;
 Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
-Rgb Xyz::to_rgb() const {
-  Xyy primary_r(0.6400, 0.3300, 0.212656);
-  Xyy primary_g(0.3000, 0.6000, 0.715158);
-  Xyy primary_b(0.1500, 0.0600, 0.072186);
+Rgb Xyz::to_rgb() const { // add rendering intent arg
+  Xyz primary_r(0.6400, 0.3300, 0.212656);
+  Xyz primary_g(0.3000, 0.6000, 0.715158);
+  Xyz primary_b(0.1500, 0.0600, 0.072186);
 
-  Matrix M_matrix =
-      create_to_xyz_transformation_matrix(primary_r, primary_g, primary_b)
-          .invert();
+  Matrix M_matrix = create_to_xyz_transformation_matrix(
+                        primary_r, primary_g, primary_b, illuminants.at("d65"))
+                        .invert();
 
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 
+  //// Absolute colorimetric
   const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0, 1.0);
   const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0, 1.0);
   const float b = std::clamp<float>(rbg_as_matrix(2, 0), 0.0, 1.0);
@@ -31,7 +32,7 @@ Rgb Xyz::to_rgb() const {
 
 Lab Xyz::to_lab() const {
 
-  auto [x, y, z] = reference_white_d60.get_values();
+  auto [x, y, z] = illuminants.at("d65").get_values();
 
   const float xR = m_values[0] / x;
   const float yR = m_values[1] / y;
@@ -50,10 +51,10 @@ Lab Xyz::to_lab() const {
 
 
 Luv Xyz::to_luv() const {
-  auto [xRef, yRef, zRef] = reference_white_d60.get_values();
+  auto [xRef, yRef, zRef] = illuminants.at("d65").get_values();
   auto [x, y, z] = m_values;
 
-  const float yR = y / reference_white_d60.get_values()[1];
+  const float yR = y / illuminants.at("d65").get_values()[1];
 
   const float denominator = x + 15.0 * y + 3 * z;
   if (denominator == 0.0) {
@@ -85,7 +86,12 @@ Xyy Xyz::to_xyy() const {
   const float sum = x + y + z;
 
   if (sum == 0.0) {
-    return Xyy(chromaticity_d60[0], chromaticity_d60[1], y);
+
+    const Xyy chromaticity_d65 = illuminants.at("d65").to_xyy();
+
+    auto [w_x, w_y, w_Y] = chromaticity_d65.get_values();
+
+    return Xyy(w_x, w_y, y);
   }
 
   const float xNew = x / sum;

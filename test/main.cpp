@@ -5,6 +5,7 @@
 using namespace Color_Space;
 
 int main() {
+  Timer timer;
 
   S_Rgb s_rgb(100, 45, 200);
 

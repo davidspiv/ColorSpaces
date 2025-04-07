@@ -4,16 +4,26 @@
 #include <array>
 #include <cmath>
 #include <stdexcept>
+#include <string>
+#include <unordered_map>
 
 #include "Color.h"
 #include "Matrix.h"
 
 using namespace Color_Space;
 
-const Xyz reference_white_d60(0.950470, 1.0, 1.088830);
-constexpr std::array<float, 2> chromaticity_d60 = {0.312727, 0.329023};
-constexpr float epsilon = 216.0f / 24389.0f;
-constexpr float kappa = 24389.0f / 27.0f;
+static const std::unordered_map<std::string, Xyz> illuminants = {
+    {"a", Xyz(1.09850f, 1.00000f, 0.35585f)},
+    {"b", Xyz(0.99072f, 1.00000f, 0.85223f)},
+    {"c", Xyz(0.98074f, 1.00000f, 1.18232f)},
+    {"d50", Xyz(0.96422f, 1.00000f, 0.82521f)},
+    {"d55", Xyz(0.95682f, 1.00000f, 0.92149f)},
+    {"d65", Xyz(0.95047f, 1.00000f, 1.08883f)},
+    {"d75", Xyz(0.94972f, 1.00000f, 1.22638f)},
+    {"e", Xyz(1.00000f, 1.00000f, 1.00000f)},
+    {"f2", Xyz(0.99186f, 1.00000f, 0.67393f)},
+    {"f7", Xyz(0.95041f, 1.00000f, 1.08747f)},
+    {"f11", Xyz(1.00962f, 1.00000f, 0.64350f)}};
 
 double to_degrees(const double radians);
 
@@ -69,8 +79,8 @@ template <typename Color_T> Matrix color_to_column(Color_T color) {
   return Matrix({{x}, {y}, {z}});
 }
 
-Matrix create_to_xyz_transformation_matrix(const Xyy &primary_r,
-                                           const Xyy &primary_g,
-                                           const Xyy &primary_b);
+Matrix create_to_xyz_transformation_matrix(const Xyz &r_xyz, const Xyz &g_xyz,
+                                           const Xyz &b_xyz,
+                                           const Xyz &reference_illuminant);
 
 #endif

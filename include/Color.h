@@ -24,12 +24,15 @@ protected:
   std::array<float, 3> m_values;
 
 public:
-
   std::array<float, 3> get_values() const { return m_values; }
 
   Matrix to_column() const {
     return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
   };
+
+protected:
+  static constexpr float epsilon = 216.0f / 24389.0f;
+  static constexpr float kappa = 24389.0f / 27.0f;
 };
 
 

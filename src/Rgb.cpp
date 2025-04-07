@@ -1,6 +1,6 @@
 #include "../include/Color.h"
 #include "../include/Matrix.h"
-#include "../include/util_internal.h"
+#include "../include/util.h"
 
 #include <algorithm>
 #include <array>
@@ -23,7 +23,7 @@ Rgb::Rgb(float r, float g, float b) {
   m_values = {r, g, b};
 };
 
-
+// tone-response curve
 float Rgb::apply_gamma(const float c) {
   float corrected =
       (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
@@ -42,11 +42,12 @@ S_Rgb Rgb::to_s_rgb() const {
 
 
 Xyz Rgb::to_xyz() const {
-  Xyy r(0.6400, 0.3300, 0.212656);
-  Xyy g(0.3000, 0.6000, 0.715158);
-  Xyy b(0.1500, 0.0600, 0.072186);
+  Xyz r(0.6400, 0.3300, 0.212656);
+  Xyz g(0.3000, 0.6000, 0.715158);
+  Xyz b(0.1500, 0.0600, 0.072186);
 
-  Matrix M_matrix = create_to_xyz_transformation_matrix(r, g, b);
+  Matrix M_matrix =
+      create_to_xyz_transformation_matrix(r, g, b, illuminants.at("d65"));
 
   Matrix xyz_as_matrix = M_matrix.multiply(this->to_column());
 

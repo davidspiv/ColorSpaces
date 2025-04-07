@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "../include/Color.h"
-#include "../include/util_internal.h"
+#include "../include/util.h"
 
 using namespace Color_Space;
 

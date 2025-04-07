@@ -1,10 +1,11 @@
-#include "../include/util_internal.h"
+#include "../include/util.h"
 #include "../include/Color.h"
 #include "../include/Matrix.h"
 
 #include <array>
 #include <cmath>
 #include <iostream>
+#include <string>
 
 using namespace Color_Space;
 
@@ -41,14 +42,14 @@ multiply_matrix(const std::array<std::array<float, 3>, 3> &matrix,
 }
 
 
-Matrix create_to_xyz_transformation_matrix(const Xyy &primary_r,
-                                           const Xyy &primary_g,
-                                           const Xyy &primary_b) {
-  Matrix d65_matrix = color_to_column(reference_white_d60);
+Matrix create_to_xyz_transformation_matrix(const Xyz &r_xyz, const Xyz &g_xyz,
+                                           const Xyz &b_xyz,
+                                           const Xyz &reference_illuminant) {
+  Matrix illuminant_matrix = color_to_column(reference_illuminant);
 
-  auto [r_x, r_y, r_z] = primary_r.get_values();
-  auto [g_x, g_y, g_z] = primary_g.get_values();
-  auto [b_x, b_y, b_z] = primary_b.get_values();
+  auto [r_x, r_y, r_z] = r_xyz.get_values();
+  auto [g_x, g_y, g_z] = g_xyz.get_values();
+  auto [b_x, b_y, b_z] = b_xyz.get_values();
 
   const float r_X = r_x / r_y;
   const float r_Y = 1;
@@ -68,7 +69,7 @@ Matrix create_to_xyz_transformation_matrix(const Xyy &primary_r,
 
   const Matrix XYZ_matrix(XYZ);
   const Matrix XYZ_matrix_inverted = XYZ_matrix.invert();
-  const Matrix S_matrix = XYZ_matrix_inverted.multiply(d65_matrix);
+  const Matrix S_matrix = XYZ_matrix_inverted.multiply(illuminant_matrix);
 
   return XYZ_matrix.column_wise_scaling(S_matrix);
 }
