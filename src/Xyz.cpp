@@ -4,8 +4,7 @@
 #include <algorithm>
 #include <cmath>
 
-namespace Color_Space {
-
+using namespace Color_Space;
 
 Xyz::Xyz(float x, float y, float z) : m_values({x, y, z}) {};
 
@@ -30,9 +29,11 @@ Rgb Xyz::to_rgb() const {
 
 Lab Xyz::to_lab() const {
 
-  const float xR = m_values[0] / reference_white_d60.get_values()[0];
-  const float yR = m_values[1] / reference_white_d60.get_values()[1];
-  const float zR = m_values[2] / reference_white_d60.get_values()[2];
+	auto [x,y,z] = reference_white_d60.get_values();
+
+  const float xR = m_values[0] / x;
+  const float yR = m_values[1] / y;
+  const float zR = m_values[2] / z;
 
   const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0;
   const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0;
@@ -97,5 +98,3 @@ void Xyz::print() const {
             << "\nZ: " << m_values[2] << "\n\n";
 }
 
-
-} // namespace Color_Space

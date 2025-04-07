@@ -5,29 +5,30 @@
 #include <cmath>
 #include <iostream>
 
-namespace Color_Space {
-
+using namespace Color_Space;
 
 Lab::Lab(float l, float a, float b) : m_values({l, a, b}) {};
 
 
 Xyz Lab::to_xyz() const {
-  const float fY = (m_values[0] + 16.0f) / 116.0f;
-  const float fX = fY + (m_values[1] / 500.0f);
-  const float fZ = fY - (m_values[2] / 200.0f);
+  const float fX = (m_values[0] + 16.0f) / 116.0f;
+  const float fY = fX + (m_values[1] / 500.0f);
+  const float fZ = fX - (m_values[2] / 200.0f);
 
-  const float xR = (std::pow(fX, 3.0f) > epsilon)
-                       ? std::pow(fX, 3)
-                       : (116.0f * fX - 16.0f) / kappa;
-  const float yR =
-      (m_values[0] > (kappa * epsilon)) ? std::pow(fY, 3) : m_values[0] / kappa;
-  const float zR = (std::pow(fZ, 3.0f) > epsilon)
+  const float rX = (std::pow(fY, 3.0f) > epsilon)
+                       ? std::pow(fY, 3)
+                       : (116.0f * fY - 16.0f) / kappa;
+  const float rY =
+      (m_values[0] > (kappa * epsilon)) ? std::pow(fX, 3) : m_values[0] / kappa;
+  const float rZ = (std::pow(fZ, 3.0f) > epsilon)
                        ? std::pow(fZ, 3)
                        : (116.0f * fZ - 16.0f) / kappa;
 
-  const float x = xR * reference_white_d60.get_values()[0];
-  const float y = yR * reference_white_d60.get_values()[1];
-  const float z = zR * reference_white_d60.get_values()[2];
+  auto [wX, wY, wZ] = reference_white_d60.get_values();
+
+  const float x = rX * wX;
+  const float y = rY * wY;
+  const float z = rZ * wZ;
 
   return Xyz(x, y, z);
 }
@@ -189,6 +190,3 @@ void Lab::print() const {
   std::cout << "L: " << m_values[0] << "\na: " << m_values[1]
             << "\nb: " << m_values[2] << "\n\n";
 }
-
-
-} // namespace Color_Space

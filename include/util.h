@@ -8,7 +8,7 @@
 #include "Color.h"
 #include "Matrix.h"
 
-namespace Color_Space {
+using namespace Color_Space;
 
 const Xyz reference_white_d60(0.950470, 1.0, 1.088830);
 constexpr std::array<float, 2> chromaticity_d60 = {0.312727, 0.329023};
@@ -74,7 +74,5 @@ Matrix create_rgb_to_xyz_transformation_matrix();
 
 Matrix create_xyz_to_rgb_transformation_matrix();
 
-
-} // namespace Color_Space
 
 #endif

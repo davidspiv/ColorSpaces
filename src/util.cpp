@@ -5,8 +5,7 @@
 #include <cmath>
 #include <iostream>
 
-namespace Color_Space {
-
+using namespace Color_Space;
 
 double to_degrees(const double radians) { return radians * (180.0 / M_PI); }
 
@@ -79,6 +78,3 @@ Matrix create_rgb_to_xyz_transformation_matrix() {
 Matrix create_xyz_to_rgb_transformation_matrix() {
   return create_rgb_to_xyz_transformation_matrix().invert();
 }
-
-
-} // namespace Color_Space

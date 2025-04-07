@@ -6,8 +6,7 @@
 #include <array>
 #include <iostream>
 
-namespace Color_Space {
-
+using namespace Color_Space;
 
 Rgb::Rgb(float r, float g, float b) : m_values({r, g, b}) {
   auto validate = [](float c) {
@@ -58,5 +57,3 @@ void Rgb::print() const {
             << "\nB: " << m_values[2] << std::endl;
 }
 
-
-} // namespace Color_Space

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace Color_Space {
+using namespace Color_Space;
 
 
 S_Rgb::S_Rgb(int r, int g, int b) : m_values({r, g, b}) {
@@ -45,6 +45,3 @@ void S_Rgb::print() const {
   std::cout << "r: " << m_values[0] << "\ng: " << m_values[1]
             << "\nb: " << m_values[2] << std::endl;
 }
-
-
-} // namespace Color_Space

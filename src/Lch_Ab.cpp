@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 
-namespace Color_Space {
+using namespace Color_Space;
 
 
 Lch_Ab::Lch_Ab(float l, float c, float h) : m_values({l, c, h}) {}
@@ -15,5 +15,3 @@ void Lch_Ab::print() const {
             << "\nh: " << m_values[2] << "\n\n";
 }
 
-
-} // namespace Color_Space

@@ -1,6 +1,6 @@
 #include "../include/Color.h"
 
-namespace Color_Space {
+using namespace Color_Space;
 
 
 Lch_Uv::Lch_Uv(float l, float c, float h) : m_values({l, c, h}) {}
@@ -12,4 +12,3 @@ void Lch_Uv::print() const {
 }
 
 
-} // namespace Color_Space

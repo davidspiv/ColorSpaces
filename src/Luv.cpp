@@ -4,7 +4,7 @@
 #include <array>
 #include <iostream>
 
-namespace Color_Space {
+using namespace Color_Space;
 
 
 Luv::Luv(float l, float u, float v) : m_values({l, u, v}) {}
@@ -22,5 +22,3 @@ void Luv::print() const {
             << "\nv: " << m_values[2] << "\n\n";
 }
 
-
-} // namespace Color_Space
