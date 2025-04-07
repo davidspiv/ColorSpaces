@@ -69,10 +69,8 @@ template <typename Color_T> Matrix color_to_column(Color_T color) {
   return Matrix({{x}, {y}, {z}});
 }
 
-Matrix create_rgb_to_xyz_transformation_matrix();
-
-
-Matrix create_xyz_to_rgb_transformation_matrix();
-
+Matrix create_to_xyz_transformation_matrix(const Xyy &primary_r,
+                                           const Xyy &primary_g,
+                                           const Xyy &primary_b);
 
 #endif

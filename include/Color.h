@@ -19,11 +19,12 @@ class S_Rgb;
 class Xyy;
 class Xyz;
 
-class Color_Base {
+class Color {
 protected:
   std::array<float, 3> m_values;
 
 public:
+
   std::array<float, 3> get_values() const { return m_values; }
 
   Matrix to_column() const {
@@ -32,7 +33,7 @@ public:
 };
 
 
-class Lab : public Color_Base {
+class Lab : public Color {
 public:
   Lab(float l, float a, float b);
 
@@ -49,7 +50,7 @@ public:
 };
 
 
-class Lch_Ab : public Color_Base {
+class Lch_Ab : public Color {
 public:
   Lch_Ab(float l, float c, float h);
 
@@ -57,7 +58,7 @@ public:
 };
 
 
-class Lch_Uv : public Color_Base {
+class Lch_Uv : public Color {
 public:
   Lch_Uv(float l, float c, float h);
 
@@ -65,7 +66,7 @@ public:
 };
 
 
-class Luv : public Color_Base {
+class Luv : public Color {
 public:
   Luv(float l, float u, float v);
 
@@ -76,7 +77,7 @@ public:
 };
 
 
-class Rgb : public Color_Base {
+class Rgb : public Color {
 public:
   Rgb(float r, float g, float b);
 
@@ -91,7 +92,7 @@ private:
 };
 
 
-class S_Rgb : public Color_Base {
+class S_Rgb : public Color {
 public:
   S_Rgb(float r, float g, float b);
 
@@ -105,15 +106,15 @@ private:
 };
 
 
-class Xyy : public Color_Base {
+class Xyy : public Color {
 public:
-  Xyy(float l, float u, float v);
+  Xyy(float x, float y, float Y);
 
   void print() const;
 };
 
 
-class Xyz : public Color_Base {
+class Xyz : public Color {
 public:
   Xyz(float x, float y, float z);
 

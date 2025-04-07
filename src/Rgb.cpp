@@ -42,7 +42,11 @@ S_Rgb Rgb::to_s_rgb() const {
 
 
 Xyz Rgb::to_xyz() const {
-  Matrix M_matrix = create_rgb_to_xyz_transformation_matrix();
+  Xyy r(0.6400, 0.3300, 0.212656);
+  Xyy g(0.3000, 0.6000, 0.715158);
+  Xyy b(0.1500, 0.0600, 0.072186);
+
+  Matrix M_matrix = create_to_xyz_transformation_matrix(r, g, b);
 
   Matrix xyz_as_matrix = M_matrix.multiply(this->to_column());
 

@@ -11,7 +11,13 @@ Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
 Rgb Xyz::to_rgb() const {
-  Matrix M_matrix = create_xyz_to_rgb_transformation_matrix();
+  Xyy primary_r(0.6400, 0.3300, 0.212656);
+  Xyy primary_g(0.3000, 0.6000, 0.715158);
+  Xyy primary_b(0.1500, 0.0600, 0.072186);
+
+  Matrix M_matrix =
+      create_to_xyz_transformation_matrix(primary_r, primary_g, primary_b)
+          .invert();
 
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 
