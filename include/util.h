@@ -12,6 +12,7 @@
 
 using namespace Color_Space;
 
+
 static const std::unordered_map<std::string, Xyz> illuminants = {
     {"a", Xyz(1.09850f, 1.00000f, 0.35585f)},
     {"b", Xyz(0.99072f, 1.00000f, 0.85223f)},
@@ -25,7 +26,15 @@ static const std::unordered_map<std::string, Xyz> illuminants = {
     {"f7", Xyz(0.95041f, 1.00000f, 1.08747f)},
     {"f11", Xyz(1.00962f, 1.00000f, 0.64350f)}};
 
+
+static const std::unordered_map<std::string, std::array<Xyz, 3>> primaries = {
+    {"srgb",
+     {Xyz(0.6400, 0.3300, 0.212656), Xyz(0.3000, 0.6000, 0.715158),
+      Xyz(0.1500, 0.0600, 0.072186)}}};
+
+
 double to_degrees(const double radians);
+
 
 double to_radians(const double degrees);
 
@@ -34,20 +43,24 @@ std::array<float, 3>
 to_polar_color_space(const std::array<float, 3> &cartesianColor_Space);
 
 
+template <typename T> auto euclidean_norm(const T xMag, const T yMag) {
+  return std::sqrt(xMag * xMag + yMag * yMag);
+}
+
+
+Matrix compute_rgb_to_xyz_matrix(const Xyz &reference_white,
+                                 const Xyz &r_primary, const Xyz &g_primary,
+                                 const Xyz &b_primary);
+
+
 template <typename T>
 auto euclidean_norm(const T xMag, const T yMag, const T zMag) {
   return std::sqrt(xMag * xMag + yMag * yMag + zMag * zMag);
 }
 
 
-template <typename T> auto euclidean_norm(const T xMag, const T yMag) {
-  return std::sqrt(xMag * xMag + yMag * yMag);
-}
-
-
 template <typename Color_T>
 float diff_euclidean(const Color_T &a_color, const Color_T &b_color) {
-
   // type check: constraints, ifconstexpr (implemented), or SFINAE?
   if constexpr (!std::is_same_v<Color_T, Rgb> &&
                 !std::is_same_v<Color_T, Xyz> &&
@@ -68,19 +81,10 @@ float diff_euclidean(const Color_T &a_color, const Color_T &b_color) {
 }
 
 
-std::array<float, 3>
-multiply_matrix(const std::array<std::array<float, 3>, 3> &matrix,
-                const std::array<float, 3> &vector);
-
-
 template <typename Color_T> Matrix color_to_column(Color_T color) {
   auto [x, y, z] = color.get_values();
 
   return Matrix({{x}, {y}, {z}});
 }
-
-Matrix create_to_xyz_transformation_matrix(const Xyz &r_xyz, const Xyz &g_xyz,
-                                           const Xyz &b_xyz,
-                                           const Xyz &reference_illuminant);
 
 #endif

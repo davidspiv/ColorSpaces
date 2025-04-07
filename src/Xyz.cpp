@@ -2,6 +2,7 @@
 #include "../include/util.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 using namespace Color_Space;
@@ -15,19 +16,45 @@ Rgb Xyz::to_rgb() const { // add rendering intent arg
   Xyz primary_g(0.3000, 0.6000, 0.715158);
   Xyz primary_b(0.1500, 0.0600, 0.072186);
 
-  Matrix M_matrix = create_to_xyz_transformation_matrix(
-                        primary_r, primary_g, primary_b, illuminants.at("d65"))
+  Matrix M_matrix = compute_rgb_to_xyz_matrix(primary_r, primary_g, primary_b,
+                                              illuminants.at("d65"))
                         .invert();
 
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 
   //// Absolute colorimetric
-  const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0, 1.0);
-  const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0, 1.0);
-  const float b = std::clamp<float>(rbg_as_matrix(2, 0), 0.0, 1.0);
+  const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0f, 1.0f);
+  const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0f, 1.0f);
+  const float b = std::clamp<float>(rbg_as_matrix(2, 0), 0.0f, 1.0f);
 
   return Rgb(r, g, b);
 }
+
+
+// Rgb Xyz::to_rgb(const Xyz &reference_white, const std::array<Xyz, 3>
+// &primaries)
+//     const { // add rendering intent arg
+
+//   auto [primary_r, primary_g, primary_b] = primaries;
+
+//   //   Xyz primary_r(0.6400, 0.3300, 0.212656);
+//   //   Xyz primary_g(0.3000, 0.6000, 0.715158);
+//   //   Xyz primary_b(0.1500, 0.0600, 0.072186);
+
+//   Matrix M_matrix = compute_rgb_to_xyz_matrix(primary_r, primary_g,
+//   primary_b,
+//                                               reference_white)
+//                         .invert();
+
+//   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
+
+//   //// Absolute colorimetric
+//   const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0f, 1.0f);
+//   const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0f, 1.0f);
+//   const float b = std::clamp<float>(rbg_as_matrix(2, 0), 0.0f, 1.0f);
+
+//   return Rgb(r, g, b);
+// }
 
 
 Lab Xyz::to_lab() const {
@@ -38,13 +65,13 @@ Lab Xyz::to_lab() const {
   const float yR = m_values[1] / y;
   const float zR = m_values[2] / z;
 
-  const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0;
-  const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0;
-  const float fZ = (zR > epsilon) ? std::cbrt(zR) : (kappa * zR + 16) / 116.0;
+  const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0f;
+  const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0f;
+  const float fZ = (zR > epsilon) ? std::cbrt(zR) : (kappa * zR + 16) / 116.0f;
 
-  const float l = 116 * fY - 16;
-  const float a = 500 * (fX - fY);
-  const float b = 200 * (fY - fZ);
+  const float l = 116.0f * fY - 16;
+  const float a = 500.0f * (fX - fY);
+  const float b = 200.0f * (fY - fZ);
 
   return Lab(l, a, b);
 }

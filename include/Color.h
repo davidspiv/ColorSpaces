@@ -122,10 +122,15 @@ public:
   Xyz(float x, float y, float z);
 
   // Conversions
+  //   Rgb to_rgb(const Xyz &reference_white,
+  //              const std::array<Xyz, 3> &primaries) const;
   Rgb to_rgb() const;
   Lab to_lab() const;
   Luv to_luv() const;
   Xyy to_xyy() const;
+
+  Xyz adapt_to_white_point(const Xyz &src_illuminant,
+                           const Xyz &dest_illuminant) const;
 
   void print() const;
 };

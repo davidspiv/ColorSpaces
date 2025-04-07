@@ -46,8 +46,7 @@ Xyz Rgb::to_xyz() const {
   Xyz g(0.3000, 0.6000, 0.715158);
   Xyz b(0.1500, 0.0600, 0.072186);
 
-  Matrix M_matrix =
-      create_to_xyz_transformation_matrix(r, g, b, illuminants.at("d65"));
+  Matrix M_matrix = compute_rgb_to_xyz_matrix(r, g, b, illuminants.at("d65"));
 
   Matrix xyz_as_matrix = M_matrix.multiply(this->to_column());
 
