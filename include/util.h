@@ -11,6 +11,9 @@
 
 using namespace Color_Space;
 
+static constexpr float epsilon = 216.0f / 24389.0f;
+static constexpr float kappa = 24389.0f / 27.0f;
+
 
 double to_degrees(const double radians);
 

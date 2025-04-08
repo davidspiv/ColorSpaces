@@ -47,6 +47,6 @@ Xyz Rgb::to_xyz(const Rgb_Working_space working_space) const {
 
 
 void Rgb::print() const {
-  std::cout << "r: " << m_values[0] << "\ng: " << m_values[1]
+  std::cout << "[Rgb]"<< "\nr: " << m_values[0] << "\ng: " << m_values[1]
             << "\nb: " << m_values[2] << std::endl;
 }

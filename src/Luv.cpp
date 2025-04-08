@@ -18,7 +18,6 @@ Lch_Uv Luv::to_lch_uv() const {
 
 
 void Luv::print() const {
-  std::cout << "L: " << m_values[0] << "\nu: " << m_values[1]
+  std::cout << "[Luv]" << "\nL: " << m_values[0] << "\nu: " << m_values[1]
             << "\nv: " << m_values[2] << "\n\n";
 }
-

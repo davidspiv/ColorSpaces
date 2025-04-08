@@ -43,6 +43,6 @@ Xyz Lab::to_xyz() const {
 
 
 void Lab::print() const {
-  std::cout << "L: " << m_values[0] << "\na: " << m_values[1]
+  std::cout << "[Lab]"<< "\nL: " << m_values[0] << "\na: " << m_values[1]
             << "\nb: " << m_values[2] << "\n\n";
 }

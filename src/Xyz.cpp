@@ -104,6 +104,6 @@ Xyy Xyz::to_xyy() const {
 
 
 void Xyz::print() const {
-  std::cout << "X: " << m_values[0] << "\nY: " << m_values[1]
+  std::cout << "[XYZ]" << "\nX: " << m_values[0] << "\nY: " << m_values[1]
             << "\nZ: " << m_values[2] << "\n\n";
 }
