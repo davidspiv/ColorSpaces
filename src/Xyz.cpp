@@ -16,7 +16,7 @@ Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 Rgb Xyz::to_rgb(const Rgb_Working_space working_space) const {
 
   const Profile profile =
-      working_space == none ? profiles.at(0) : get_profile(working_space);
+      working_space == NONE ? profiles.at(0) : get_profile(working_space);
 
   const Matrix M_matrix = create_to_xyz_transformation_matrix(profile).invert();
 
