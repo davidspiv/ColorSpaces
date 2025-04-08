@@ -32,7 +32,11 @@ Rgb Xyz::to_rgb(const Profile &profile) const {
 
 Lab Xyz::to_lab() const {
 
-  auto [x, y, z] = illuminants.at("d65").get_values();
+  const Matrix illuminant_matrix = illuminants.at("d65");
+
+  const float x = illuminant_matrix(0, 0);
+  const float y = illuminant_matrix(1, 0);
+  const float z = illuminant_matrix(2, 0);
 
   const float xR = m_values[0] / x;
   const float yR = m_values[1] / y;
@@ -51,10 +55,15 @@ Lab Xyz::to_lab() const {
 
 
 Luv Xyz::to_luv() const {
-  auto [xRef, yRef, zRef] = illuminants.at("d65").get_values();
+  const Matrix illuminant_matrix = illuminants.at("d65");
+
+  const float xRef = illuminant_matrix(0, 0);
+  const float yRef = illuminant_matrix(1, 0);
+  const float zRef = illuminant_matrix(2, 0);
+
   auto [x, y, z] = m_values;
 
-  const float yR = y / illuminants.at("d65").get_values()[1];
+  const float yR = y / yRef;
 
   const float denominator = x + 15.0 * y + 3 * z;
   if (denominator == 0.0) {
@@ -82,22 +91,26 @@ Luv Xyz::to_luv() const {
 
 
 Xyy Xyz::to_xyy() const {
-  auto [x, y, z] = m_values;
-  const float sum = x + y + z;
+  auto [X, Y, Z] = m_values;
+  const float sum = X + Y + Z;
 
-  if (sum == 0.0) {
+  if (sum == 0.0f) {
 
-    const Xyy chromaticity_d65 = illuminants.at("d65").to_xyy();
+    const Matrix illuminant_matrix = illuminants.at("d65");
 
-    auto [w_x, w_y, w_Y] = chromaticity_d65.get_values();
+    const Xyy white_chromaticity =
+        Xyz(illuminant_matrix(0, 0), illuminant_matrix(1, 0),
+            illuminant_matrix(2, 0))
+            .to_xyy();
+    auto [x_white, y_white, _] = white_chromaticity.get_values();
 
-    return Xyy(w_x, w_y, y);
+    return Xyy(x_white, y_white, Y);
   }
 
-  const float xNew = x / sum;
-  const float yNew = y / sum;
+  const float x_chromaticity = X / sum;
+  const float y_chromaticity = Y / sum;
 
-  return Xyy(xNew, yNew, y);
+  return Xyy(x_chromaticity, y_chromaticity, Y);
 }
 
 

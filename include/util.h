@@ -4,25 +4,11 @@
 #include <array>
 #include <cmath>
 #include <stdexcept>
-#include <unordered_map>
 
 #include "Color.h"
 #include "Matrix.h"
 
 using namespace Color_Space;
-
-const static std::unordered_map<std::string, Xyz> illuminants = {
-    {"a", Xyz(1.09850f, 1.00000f, 0.35585f)},
-    {"b", Xyz(0.99072f, 1.00000f, 0.85223f)},
-    {"c", Xyz(0.98074f, 1.00000f, 1.18232f)},
-    {"d50", Xyz(0.96422f, 1.00000f, 0.82521f)},
-    {"d55", Xyz(0.95682f, 1.00000f, 0.92149f)},
-    {"d65", Xyz(0.95047f, 1.00000f, 1.08883f)},
-    {"d75", Xyz(0.94972f, 1.00000f, 1.22638f)},
-    {"e", Xyz(1.00000f, 1.00000f, 1.00000f)},
-    {"f2", Xyz(0.99186f, 1.00000f, 0.67393f)},
-    {"f7", Xyz(0.95041f, 1.00000f, 1.08747f)},
-    {"f11", Xyz(1.00962f, 1.00000f, 0.64350f)}};
 
 
 double to_degrees(const double radians);
