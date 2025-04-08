@@ -6,6 +6,6 @@
 using namespace Color_Space;
 
 void test_cie2000();
-void test_xyz_to_rgb_to_xyz(const S_Rgb &in_s_rgb);
+void test_xyz_to_rgb_to_xyz(const Rgb &in_rgb);
 
 #endif

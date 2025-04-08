@@ -112,7 +112,7 @@ class Lch_Ab;
 class Lch_Uv;
 class Luv;
 class Rgb;
-class S_Rgb;
+class Rgb;
 class Xyy;
 class Xyz;
 
@@ -178,17 +178,9 @@ public:
 };
 
 
-class Lin_Rgb : public Color {
+class Rgb : public Color {
 public:
-  Lin_Rgb(float r, float g, float b);
-
-  void print() const;
-};
-
-
-class S_Rgb : public Color {
-public:
-  S_Rgb(float r, float g, float b);
+  Rgb(float r, float g, float b);
 
   // Conversions
   Xyz to_xyz(const Profile &profile = profiles[0]) const;
@@ -210,7 +202,7 @@ public:
   Xyz(float x, float y, float z);
 
   // Conversions
-  S_Rgb to_s_rgb(const Profile &profile = profiles[0]) const;
+  Rgb to_rgb(const Profile &profile = profiles[0]) const;
   Lab to_lab() const;
   Luv to_luv() const;
   Xyy to_xyy() const;

@@ -10,7 +10,7 @@
 using namespace Color_Space;
 
 
-S_Rgb::S_Rgb(float r, float g, float b) {
+Rgb::Rgb(float r, float g, float b) {
   auto validate = [](float c) {
     if (std::min(255.0f, std::max(0.0f, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
@@ -25,7 +25,7 @@ S_Rgb::S_Rgb(float r, float g, float b) {
 };
 
 
-Xyz S_Rgb::to_xyz(const Profile &profile) const {
+Xyz Rgb::to_xyz(const Profile &profile) const {
 
   auto [r, g, b] = m_values;
 
@@ -43,7 +43,7 @@ Xyz S_Rgb::to_xyz(const Profile &profile) const {
 }
 
 
-void S_Rgb::print() const {
+void Rgb::print() const {
   std::cout << "r: " << m_values[0] << "\ng: " << m_values[1]
             << "\nb: " << m_values[2] << std::endl;
 }

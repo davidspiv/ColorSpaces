@@ -11,7 +11,7 @@ using namespace Color_Space;
 Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
-S_Rgb Xyz::to_s_rgb(const Profile &profile) const {
+Rgb Xyz::to_rgb(const Profile &profile) const {
 
   const Matrix M_matrix = create_to_xyz_transformation_matrix(profile).invert();
 
@@ -26,7 +26,7 @@ S_Rgb Xyz::to_s_rgb(const Profile &profile) const {
   const float g_norm = std::clamp(g_corr, 0.0f, 1.0f) * 255.0f;
   const float b_norm = std::clamp(b_corr, 0.0f, 1.0f) * 255.0f;
 
-  return S_Rgb(r_norm, g_norm, b_norm);
+  return Rgb(r_norm, g_norm, b_norm);
 }
 
 

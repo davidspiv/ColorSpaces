@@ -10,12 +10,12 @@
 using namespace Color_Space;
 
 
-void test_xyz_to_rgb_to_xyz(const S_Rgb &in_s_Rgb) {
-  auto [in_r, in_g, in_b] = in_s_Rgb.get_values();
+void test_xyz_to_rgb_to_xyz(const Rgb &in_rgb) {
+  auto [in_r, in_g, in_b] = in_rgb.get_values();
 
-  const S_Rgb out_s_rgb = in_s_Rgb.to_xyz().to_s_rgb();
+  const Rgb out_rgb = in_rgb.to_xyz().to_rgb();
 
-  auto [out_r, out_g, out_b] = out_s_rgb.get_values();
+  auto [out_r, out_g, out_b] = out_rgb.get_values();
 
   if (abs(out_r - in_r) <= 1 && abs(out_g - in_g) <= 1 &&
       abs(out_b - in_b) <= 1) {
