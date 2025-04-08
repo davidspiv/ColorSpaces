@@ -45,10 +45,16 @@ Xyz Rgb::to_xyz(const std::string &reference_white_label,
                 const std::string &primaries_label) const {
 
 
-  auto [primary_r, primary_g, primary_b] = primaries.at(primaries_label);
+  auto [primary_r, primary_g, primary_b] = primaries_label.size()
+                                               ? primaries.at(primaries_label)
+                                               : primaries.at("srgb");
+
+  const Xyz reference_white = primaries_label.size()
+                                  ? illuminants.at(reference_white_label)
+                                  : illuminants.at("d65");
 
   Matrix M_matrix = create_to_xyz_transformation_matrix(
-      illuminants.at(reference_white_label), primary_r, primary_g, primary_b);
+      reference_white, primary_r, primary_g, primary_b);
 
   Matrix xyz_as_matrix = M_matrix.multiply(this->to_column());
 

@@ -91,8 +91,8 @@ public:
 
   // Conversions
   S_Rgb to_s_rgb() const;
-  Xyz to_xyz(const std::string &reference_white_label,
-             const std::string &primaries_label) const;
+  Xyz to_xyz(const std::string &reference_white_label = "",
+             const std::string &primaries_label = "") const;
 
   void print() const;
 
@@ -130,8 +130,8 @@ public:
   // Conversions
   //   Rgb to_rgb(const Xyz &reference_white,
   //              const std::array<Xyz, 3> &primaries) const;
-  Rgb to_rgb(const std::string &reference_white_label,
-             const std::string &primaries_label) const;
+  Rgb to_rgb(const std::string &reference_white_label = "",
+             const std::string &primaries_label = "") const;
   Lab to_lab() const;
   Luv to_luv() const;
   Xyy to_xyy() const;

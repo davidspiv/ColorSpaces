@@ -14,12 +14,17 @@ Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 Rgb Xyz::to_rgb(const std::string &reference_white_label,
                 const std::string &primaries_label) const {
 
-  auto [primary_r, primary_g, primary_b] = primaries.at(primaries_label);
+  auto [primary_r, primary_g, primary_b] = primaries_label.size()
+                                               ? primaries.at(primaries_label)
+                                               : primaries.at("srgb");
 
-  Matrix M_matrix =
-      create_to_xyz_transformation_matrix(illuminants.at(reference_white_label),
-                                          primary_r, primary_g, primary_b)
-          .invert();
+  const Xyz reference_white = primaries_label.size()
+                                  ? illuminants.at(reference_white_label)
+                                  : illuminants.at("d65");
+
+  Matrix M_matrix = create_to_xyz_transformation_matrix(
+                        reference_white, primary_r, primary_g, primary_b)
+                        .invert();
 
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 
