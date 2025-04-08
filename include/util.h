@@ -13,7 +13,7 @@
 using namespace Color_Space;
 
 
-static const std::unordered_map<std::string, Xyz> illuminants = {
+const static std::unordered_map<std::string, Xyz> illuminants = {
     {"a", Xyz(1.09850f, 1.00000f, 0.35585f)},
     {"b", Xyz(0.99072f, 1.00000f, 0.85223f)},
     {"c", Xyz(0.98074f, 1.00000f, 1.18232f)},
@@ -27,7 +27,7 @@ static const std::unordered_map<std::string, Xyz> illuminants = {
     {"f11", Xyz(1.00962f, 1.00000f, 0.64350f)}};
 
 
-static const std::unordered_map<std::string, std::array<Xyz, 3>> primaries = {
+const static std::unordered_map<std::string, std::array<Xyz, 3>> primaries = {
     {"srgb",
      {Xyz(0.6400, 0.3300, 0.212656), Xyz(0.3000, 0.6000, 0.715158),
       Xyz(0.1500, 0.0600, 0.072186)}}};

@@ -11,14 +11,15 @@ using namespace Color_Space;
 Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
-Rgb Xyz::to_rgb(const Xyz &reference_white,
-                const std::array<Xyz, 3> &primaries) const {
+Rgb Xyz::to_rgb(const std::string &reference_white_label,
+                const std::string &primaries_label) const {
 
-  auto [primary_r, primary_g, primary_b] = primaries;
+  auto [primary_r, primary_g, primary_b] = primaries.at(primaries_label);
 
-  Matrix M_matrix = create_to_xyz_transformation_matrix(
-                        reference_white, primary_r, primary_g, primary_b)
-                        .invert();
+  Matrix M_matrix =
+      create_to_xyz_transformation_matrix(illuminants.at(reference_white_label),
+                                          primary_r, primary_g, primary_b)
+          .invert();
 
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 

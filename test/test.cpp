@@ -14,10 +14,7 @@ void test_xyz_to_rgb_to_xyz(const S_Rgb &in_s_Rgb) {
   auto [in_r, in_g, in_b] = in_s_Rgb.get_values();
 
   const S_Rgb out_s_rgb =
-      in_s_Rgb.to_rgb()
-          .to_xyz()
-          .to_rgb(illuminants.at("d65"), primaries.at("srgb"))
-          .to_s_rgb();
+      in_s_Rgb.to_rgb().to_xyz("d65", "srgb").to_rgb("d65", "srgb").to_s_rgb();
 
   auto [out_r, out_g, out_b] = out_s_rgb.get_values();
 
