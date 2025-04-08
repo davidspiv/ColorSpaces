@@ -2,6 +2,7 @@
 #include "../include/Color.h"
 #include "../include/Matrix.h"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <iostream>
@@ -25,6 +26,14 @@ to_polar_color_space(const std::array<float, 3> &cartesianColor_Space) {
 
   return {l, c, h};
 }
+
+
+// tone-response curve
+float apply_gamma(const float c) {
+  float corrected =
+      (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
+  return std::clamp(corrected * 255.0, 0.0, 255.0);
+};
 
 
 Matrix create_to_xyz_transformation_matrix(const Xyz &reference_illuminant,

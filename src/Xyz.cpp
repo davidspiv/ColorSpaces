@@ -11,8 +11,8 @@ using namespace Color_Space;
 Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
-Rgb Xyz::to_rgb(const std::string &reference_white_label,
-                const std::string &primaries_label) const {
+S_Rgb Xyz::to_s_rgb(const std::string &reference_white_label,
+                    const std::string &primaries_label) const {
 
   auto [primary_r, primary_g, primary_b] = primaries_label.size()
                                                ? primaries.at(primaries_label)
@@ -29,11 +29,14 @@ Rgb Xyz::to_rgb(const std::string &reference_white_label,
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 
   //// Absolute colorimetric
-  const float r = std::clamp<float>(rbg_as_matrix(0, 0), 0.0f, 1.0f);
-  const float g = std::clamp<float>(rbg_as_matrix(1, 0), 0.0f, 1.0f);
-  const float b = std::clamp<float>(rbg_as_matrix(2, 0), 0.0f, 1.0f);
+  const float r =
+      apply_gamma(std::clamp<float>(rbg_as_matrix(0, 0), 0.0f, 1.0f));
+  const float g =
+      apply_gamma(std::clamp<float>(rbg_as_matrix(1, 0), 0.0f, 1.0f));
+  const float b =
+      apply_gamma(std::clamp<float>(rbg_as_matrix(2, 0), 0.0f, 1.0f));
 
-  return Rgb(r, g, b);
+  return S_Rgb(r, g, b);
 }
 
 

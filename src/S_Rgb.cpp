@@ -1,5 +1,7 @@
 #include "../include/Color.h"
+#include "../include/util.h"
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <iostream>
@@ -34,13 +36,33 @@ float S_Rgb::remove_gamma(int c) {
 };
 
 
-Rgb S_Rgb::to_rgb() const {
-  const float r = this->remove_gamma(m_values[0]);
-  const float g = this->remove_gamma(m_values[1]);
-  const float b = this->remove_gamma(m_values[2]);
+Xyz S_Rgb::to_xyz(const std::string &reference_white_label,
+                  const std::string &primaries_label) const {
 
-  return Rgb(r, g, b);
-};
+
+  auto [primary_r, primary_g, primary_b] = primaries_label.size()
+                                               ? primaries.at(primaries_label)
+                                               : primaries.at("srgb");
+
+  const Xyz reference_white = primaries_label.size()
+                                  ? illuminants.at(reference_white_label)
+                                  : illuminants.at("d65");
+
+  const Matrix M_matrix = create_to_xyz_transformation_matrix(
+      reference_white, primary_r, primary_g, primary_b);
+
+  auto [r, g, b] = m_values;
+
+  const Rgb rgb(remove_gamma(r), remove_gamma(g), remove_gamma(b));
+
+  const Matrix xyz_as_matrix = M_matrix.multiply(rgb.to_column());
+
+  const float x = std::clamp<float>(xyz_as_matrix(0, 0), 0.0, 1.0);
+  const float y = std::clamp<float>(xyz_as_matrix(1, 0), 0.0, 1.0);
+  const float z = std::clamp<float>(xyz_as_matrix(2, 0), 0.0, 1.0);
+
+  return Xyz(x, y, z);
+}
 
 
 void S_Rgb::print() const {

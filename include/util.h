@@ -43,6 +43,9 @@ std::array<float, 3>
 to_polar_color_space(const std::array<float, 3> &cartesianColor_Space);
 
 
+float apply_gamma(const float c);
+
+
 template <typename T> auto euclidean_norm(const T xMag, const T yMag) {
   return std::sqrt(xMag * xMag + yMag * yMag);
 }

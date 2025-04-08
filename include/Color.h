@@ -82,22 +82,10 @@ public:
 
 
 class Rgb : public Color {
-private:
-  const std::string reference_white_label = "d65";
-  const std::string primaries_label = "srgb";
-
 public:
   Rgb(float r, float g, float b);
 
-  // Conversions
-  S_Rgb to_s_rgb() const;
-  Xyz to_xyz(const std::string &reference_white_label = "",
-             const std::string &primaries_label = "") const;
-
   void print() const;
-
-private:
-  static float apply_gamma(float c);
 };
 
 
@@ -106,7 +94,8 @@ public:
   S_Rgb(float r, float g, float b);
 
   // Conversions
-  Rgb to_rgb() const;
+  Xyz to_xyz(const std::string &reference_white_label = "d65",
+             const std::string &primaries_label = "srgb") const;
 
   void print() const;
 
@@ -130,8 +119,8 @@ public:
   // Conversions
   //   Rgb to_rgb(const Xyz &reference_white,
   //              const std::array<Xyz, 3> &primaries) const;
-  Rgb to_rgb(const std::string &reference_white_label = "",
-             const std::string &primaries_label = "") const;
+  S_Rgb to_s_rgb(const std::string &reference_white_label = "d65",
+                 const std::string &primaries_label = "srgb") const;
   Lab to_lab() const;
   Luv to_luv() const;
   Xyy to_xyy() const;
