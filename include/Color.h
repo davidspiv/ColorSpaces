@@ -9,7 +9,15 @@
 
 namespace Color_Space {
 
+
+struct Profile {
+  std::string primaries_label;
+  std::string illuminant_label;
+};
+
+
 enum Mode { GRAPHICS, TEXTILES };
+
 
 class Lab;
 class Lch_Ab;
@@ -19,6 +27,7 @@ class Rgb;
 class S_Rgb;
 class Xyy;
 class Xyz;
+
 
 class Color {
 protected:
@@ -83,7 +92,7 @@ public:
 
 class Lin_Rgb : public Color {
 public:
-Lin_Rgb(float r, float g, float b);
+  Lin_Rgb(float r, float g, float b);
 
   void print() const;
 };
@@ -94,8 +103,7 @@ public:
   S_Rgb(float r, float g, float b);
 
   // Conversions
-  Xyz to_xyz(const std::string &reference_white_label = "d65",
-             const std::string &primaries_label = "srgb") const;
+  Xyz to_xyz(const Profile &profile = {}) const;
 
   void print() const;
 
@@ -119,8 +127,7 @@ public:
   // Conversions
   //   Rgb to_rgb(const Xyz &reference_white,
   //              const std::array<Xyz, 3> &primaries) const;
-  S_Rgb to_s_rgb(const std::string &reference_white_label = "d65",
-                 const std::string &primaries_label = "srgb") const;
+  S_Rgb to_s_rgb(const Profile &profile = {}) const;
   Lab to_lab() const;
   Luv to_luv() const;
   Xyy to_xyy() const;

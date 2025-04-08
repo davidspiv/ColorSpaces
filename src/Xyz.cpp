@@ -11,15 +11,14 @@ using namespace Color_Space;
 Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
-S_Rgb Xyz::to_s_rgb(const std::string &reference_white_label,
-                    const std::string &primaries_label) const {
+S_Rgb Xyz::to_s_rgb(const Profile &profile) const {
 
-  auto [primary_r, primary_g, primary_b] = primaries_label.size()
-                                               ? primaries.at(primaries_label)
-                                               : primaries.at("srgb");
+  auto [primary_r, primary_g, primary_b] =
+      profile.primaries_label.size() ? primaries.at(profile.primaries_label)
+                                     : primaries.at("srgb");
 
-  const Xyz reference_white = primaries_label.size()
-                                  ? illuminants.at(reference_white_label)
+  const Xyz reference_white = profile.primaries_label.size()
+                                  ? illuminants.at(profile.illuminant_label)
                                   : illuminants.at("d65");
 
   Matrix M_matrix = create_to_xyz_transformation_matrix(

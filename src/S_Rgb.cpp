@@ -36,14 +36,13 @@ float S_Rgb::remove_gamma(int c) {
 };
 
 
-Xyz S_Rgb::to_xyz(const std::string &reference_white_label,
-                  const std::string &primaries_label) const {
-  auto [primary_r, primary_g, primary_b] = primaries_label.size()
-                                               ? primaries.at(primaries_label)
-                                               : primaries.at("srgb");
+Xyz S_Rgb::to_xyz(const Profile &profile) const {
+  auto [primary_r, primary_g, primary_b] =
+      profile.primaries_label.size() ? primaries.at(profile.primaries_label)
+                                     : primaries.at("srgb");
 
-  const Xyz reference_white = primaries_label.size()
-                                  ? illuminants.at(reference_white_label)
+  const Xyz reference_white = profile.primaries_label.size()
+                                  ? illuminants.at(profile.illuminant_label)
                                   : illuminants.at("d65");
 
   const Matrix M_matrix = create_to_xyz_transformation_matrix(
