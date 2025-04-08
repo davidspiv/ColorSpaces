@@ -1,6 +1,7 @@
 #include "../include/util.h"
 #include "../include/Color.h"
 #include "../include/Matrix.h"
+#include "../include/Profile.h"
 
 #include <algorithm>
 #include <array>
@@ -66,16 +67,9 @@ float remove_gamma(float c, Gamma gamma) {
 
 
 Matrix create_to_xyz_transformation_matrix(const Profile &profile) {
-
-  const float r_x = profile.primary_r(0, 0);
-  const float r_y = profile.primary_r(1, 0);
-
-  const float g_x = profile.primary_g(0, 0);
-  const float g_y = profile.primary_g(1, 0);
-
-  const float b_x = profile.primary_b(0, 0);
-  const float b_y = profile.primary_b(1, 0);
-
+  auto [r_x, r_y, r_z] = profile.primary_r.get_values();
+  auto [g_x, g_y, g_z] = profile.primary_g.get_values();
+  auto [b_x, b_y, b_z] = profile.primary_b.get_values();
 
   const float r_X = r_x / r_y;
   const float r_Y = 1;
@@ -89,13 +83,13 @@ Matrix create_to_xyz_transformation_matrix(const Profile &profile) {
   const float b_Y = 1;
   const float b_Z = (1 - b_x - b_y) / b_y;
 
-
   const std::vector<std::vector<float>> XYZ = {
       {r_X, g_X, b_X}, {r_Y, g_Y, b_Y}, {r_Z, g_Z, b_Z}};
 
   const Matrix XYZ_matrix(XYZ);
   const Matrix XYZ_matrix_inverted = XYZ_matrix.invert();
-  const Matrix S_matrix = XYZ_matrix_inverted.multiply(profile.illuminant);
+  const Matrix S_matrix =
+      XYZ_matrix_inverted.multiply(profile.illuminant.to_column());
 
   return XYZ_matrix.column_wise_scaling(S_matrix);
 }
@@ -140,14 +134,6 @@ Xyz Xyz::adapt_to_white_point(const Xyz &src_illuminant,
   return Xyz(new_primary_matrix(0, 0), new_primary_matrix(1, 0),
              new_primary_matrix(2, 0));
 };
-
-
-Xyz get_illuminant(const std::string &label) {
-  const Matrix illuminant_matrix = illuminants.at(label);
-
-  return Xyz(illuminant_matrix(0, 0), illuminant_matrix(1, 0),
-             illuminant_matrix(2, 0));
-}
 
 
 Profile get_profile(const std::string &target_name) {

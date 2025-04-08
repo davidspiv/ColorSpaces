@@ -2,7 +2,6 @@
 #define COLOR_H
 
 #include "Matrix.h"
-#include "Profile.h"
 
 #include <array>
 #include <iostream>
@@ -88,7 +87,6 @@ public:
   Rgb(float r, float g, float b);
 
   // Conversions
-  Xyz to_xyz(const Profile &profile) const;
   Xyz to_xyz() const;
 
   void print() const;
@@ -108,7 +106,6 @@ public:
   Xyz(float x, float y, float z);
 
   // Conversions
-  Rgb to_rgb(const Profile &profile) const;
   Rgb to_rgb() const;
   Lab to_lab() const;
   Luv to_luv() const;

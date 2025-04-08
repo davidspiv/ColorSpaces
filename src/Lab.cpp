@@ -1,4 +1,5 @@
 #include "../include/Color.h"
+#include "../include/Profile.h"
 #include "../include/util.h"
 
 #include <cmath>
@@ -31,7 +32,7 @@ Xyz Lab::to_xyz() const {
                        ? std::pow(fZ, 3)
                        : (116.0f * fZ - 16.0f) / kappa;
 
-  auto [ref_x, ref_y, ref_z] = get_illuminant("d65").get_values();
+  auto [ref_x, ref_y, ref_z] = illuminants.at("d65").get_values();
 
   const float x = rX * ref_x;
   const float y = rY * ref_y;

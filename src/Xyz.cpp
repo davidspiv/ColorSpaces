@@ -12,16 +12,17 @@ using namespace Color_Space;
 Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
-Rgb Xyz::to_rgb(const Profile &profile) const {
+Rgb Xyz::to_rgb() const {
 
-  const Matrix M_matrix = create_to_xyz_transformation_matrix(profile).invert();
+  const Matrix M_matrix =
+      create_to_xyz_transformation_matrix(profiles.at(0)).invert();
 
   Matrix xyz_as_matrix = M_matrix.multiply(this->to_column());
 
   // Absolute colorimetric
-  const float r_corr = apply_gamma(xyz_as_matrix(0, 0), profile.gamma);
-  const float g_corr = apply_gamma(xyz_as_matrix(1, 0), profile.gamma);
-  const float b_corr = apply_gamma(xyz_as_matrix(2, 0), profile.gamma);
+  const float r_corr = apply_gamma(xyz_as_matrix(0, 0), profiles.at(0).gamma);
+  const float g_corr = apply_gamma(xyz_as_matrix(1, 0), profiles.at(0).gamma);
+  const float b_corr = apply_gamma(xyz_as_matrix(2, 0), profiles.at(0).gamma);
 
   const float r_norm = std::clamp(r_corr, 0.0f, 1.0f) * 255.0f;
   const float g_norm = std::clamp(g_corr, 0.0f, 1.0f) * 255.0f;
@@ -31,11 +32,8 @@ Rgb Xyz::to_rgb(const Profile &profile) const {
 }
 
 
-Rgb Xyz::to_rgb() const { return to_rgb(profiles.at(0)); }
-
-
 Lab Xyz::to_lab() const {
-  auto [ref_x, ref_y, ref_z] = get_illuminant("d65").get_values();
+  auto [ref_x, ref_y, ref_z] = illuminants.at("d65").get_values();
 
   const float xR = m_values[0] / ref_x;
   const float yR = m_values[1] / ref_y;
@@ -54,7 +52,7 @@ Lab Xyz::to_lab() const {
 
 
 Luv Xyz::to_luv() const {
-  auto [ref_x, ref_y, ref_z] = get_illuminant("d65").get_values();
+  auto [ref_x, ref_y, ref_z] = illuminants.at("d65").get_values();
   auto [x, y, z] = m_values;
 
   const float yR = y / ref_y;
@@ -89,7 +87,7 @@ Xyy Xyz::to_xyy() const {
   const float sum = X + Y + Z;
 
   if (sum == 0.0f) {
-    const Xyy white_chromaticity = get_illuminant("d65").to_xyy();
+    const Xyy white_chromaticity = illuminants.at("d65").to_xyy();
     auto [x_white, y_white, _] = white_chromaticity.get_values();
 
     return Xyy(x_white, y_white, Y);

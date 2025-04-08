@@ -15,10 +15,6 @@ int main() {
   Rgb rgb(100, 45, 200);
   Xyz xyz(0.166163, 0.087556, 0.554469);
 
-  const std::string target_name = "srgb";
-
-  Profile curr_profile = get_profile(target_name);
-
   //   xyz.adapt_to_white_point(get_illuminant("d65"), get_illuminant("d65"))
   //       .to_rgb(curr_profile)
   //       .print();

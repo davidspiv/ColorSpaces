@@ -1,6 +1,6 @@
 #include "../include/Color.h"
-#include "../include/util.h"
 #include "../include/Profile.h"
+#include "../include/util.h"
 
 #include <algorithm>
 #include <array>
@@ -26,24 +26,21 @@ Rgb::Rgb(float r, float g, float b) {
 };
 
 
-Xyz Rgb::to_xyz(const Profile &profile) const {
+Xyz Rgb::to_xyz() const {
   auto [r, g, b] = m_values;
 
   // Step 1: Normalize input RGB [0–255] -> [0.0–1.0]
-  const float r_lin = remove_gamma(r / 255.0f, profile.gamma);
-  const float g_lin = remove_gamma(g / 255.0f, profile.gamma);
-  const float b_lin = remove_gamma(b / 255.0f, profile.gamma);
+  const float r_lin = remove_gamma(r / 255.0f, profiles.at(0).gamma);
+  const float g_lin = remove_gamma(g / 255.0f, profiles.at(0).gamma);
+  const float b_lin = remove_gamma(b / 255.0f, profiles.at(0).gamma);
 
   // Step 2: Convert to XYZ using matrix
-  const Matrix M_matrix = create_to_xyz_transformation_matrix(profile);
+  const Matrix M_matrix = create_to_xyz_transformation_matrix(profiles.at(0));
   const Matrix rgb_lin({{r_lin}, {g_lin}, {b_lin}});
   const Matrix xyz_matrix = M_matrix.multiply(rgb_lin);
 
   return Xyz(xyz_matrix(0, 0), xyz_matrix(1, 0), xyz_matrix(2, 0));
 }
-
-
-Xyz Rgb::to_xyz() const { return to_xyz(profiles.at(0)); }
 
 
 void Rgb::print() const {
