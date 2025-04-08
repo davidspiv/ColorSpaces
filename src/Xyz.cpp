@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <string>
 
 using namespace Color_Space;
 
@@ -12,17 +13,19 @@ using namespace Color_Space;
 Xyz::Xyz(float x, float y, float z) { m_values = {x, y, z}; }
 
 
-Rgb Xyz::to_rgb() const {
+Rgb Xyz::to_rgb(const std::string &profile_label) const {
 
-  const Matrix M_matrix =
-      create_to_xyz_transformation_matrix(profiles.at(0)).invert();
+  const Profile profile =
+      profile_label.size() ? get_profile(profile_label) : profiles.at(0);
+
+  const Matrix M_matrix = create_to_xyz_transformation_matrix(profile).invert();
 
   Matrix xyz_as_matrix = M_matrix.multiply(this->to_column());
 
   // Absolute colorimetric
-  const float r_corr = apply_gamma(xyz_as_matrix(0, 0), profiles.at(0).gamma);
-  const float g_corr = apply_gamma(xyz_as_matrix(1, 0), profiles.at(0).gamma);
-  const float b_corr = apply_gamma(xyz_as_matrix(2, 0), profiles.at(0).gamma);
+  const float r_corr = apply_gamma(xyz_as_matrix(0, 0), profile.gamma);
+  const float g_corr = apply_gamma(xyz_as_matrix(1, 0), profile.gamma);
+  const float b_corr = apply_gamma(xyz_as_matrix(2, 0), profile.gamma);
 
   const float r_norm = std::clamp(r_corr, 0.0f, 1.0f) * 255.0f;
   const float g_norm = std::clamp(g_corr, 0.0f, 1.0f) * 255.0f;

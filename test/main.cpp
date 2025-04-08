@@ -19,7 +19,7 @@ int main() {
   //       .to_rgb(curr_profile)
   //       .print();
 
-  xyz.to_lab().print();
+  xyz.to_rgb("beta_rgb").print();
 
   test_xyz_to_rgb_to_xyz(rgb);
   test_cie2000();

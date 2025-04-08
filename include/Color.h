@@ -87,7 +87,7 @@ public:
   Rgb(float r, float g, float b);
 
   // Conversions
-  Xyz to_xyz() const;
+  Xyz to_xyz(const std::string &profile_label = "") const;
 
   void print() const;
 };
@@ -106,7 +106,7 @@ public:
   Xyz(float x, float y, float z);
 
   // Conversions
-  Rgb to_rgb() const;
+  Rgb to_rgb(const std::string &profile_label = "") const;
   Lab to_lab() const;
   Luv to_luv() const;
   Xyy to_xyy() const;
