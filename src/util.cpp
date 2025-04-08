@@ -41,6 +41,8 @@ float apply_gamma(const float c, Gamma gamma) {
     return std::pow(c, 1.0f / 2.2f);
 
   case Gamma::SIMPLE_18:
+    return std::pow(c, 1.0f / 1.8f);
+
   case Gamma::L_STAR:
     throw std::runtime_error("Option not built.");
   }
