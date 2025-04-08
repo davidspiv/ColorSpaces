@@ -37,16 +37,9 @@ float S_Rgb::remove_gamma(int c) {
 
 
 Xyz S_Rgb::to_xyz(const Profile &profile) const {
-  auto [primary_r, primary_g, primary_b] =
-      profile.primaries_label.size() ? primaries.at(profile.primaries_label)
-                                     : primaries.at("srgb");
 
-  const Xyz reference_white = profile.primaries_label.size()
-                                  ? illuminants.at(profile.illuminant_label)
-                                  : illuminants.at("d65");
-
-  const Matrix M_matrix = create_to_xyz_transformation_matrix(
-      reference_white, primary_r, primary_g, primary_b);
+  const Matrix M_matrix =
+      create_to_xyz_transformation_matrix(profile);
 
   auto [r, g, b] = m_values;
 

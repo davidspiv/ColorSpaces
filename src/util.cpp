@@ -36,14 +36,17 @@ float apply_gamma(const float c) {
 };
 
 
-Matrix create_to_xyz_transformation_matrix(const Xyz &reference_illuminant,
-                                           const Xyz &r_xyz, const Xyz &g_xyz,
-                                           const Xyz &b_xyz) {
-  Matrix illuminant_matrix = color_to_column(reference_illuminant);
+Matrix create_to_xyz_transformation_matrix(const Profile &profile) {
 
-  auto [r_x, r_y, r_z] = r_xyz.get_values();
-  auto [g_x, g_y, g_z] = g_xyz.get_values();
-  auto [b_x, b_y, b_z] = b_xyz.get_values();
+  const float r_x = profile.primary_r(0, 0);
+  const float r_y = profile.primary_r(1, 0);
+
+  const float g_x = profile.primary_g(0, 0);
+  const float g_y = profile.primary_g(1, 0);
+
+  const float b_x = profile.primary_b(0, 0);
+  const float b_y = profile.primary_b(1, 0);
+
 
   const float r_X = r_x / r_y;
   const float r_Y = 1;
@@ -63,7 +66,7 @@ Matrix create_to_xyz_transformation_matrix(const Xyz &reference_illuminant,
 
   const Matrix XYZ_matrix(XYZ);
   const Matrix XYZ_matrix_inverted = XYZ_matrix.invert();
-  const Matrix S_matrix = XYZ_matrix_inverted.multiply(illuminant_matrix);
+  const Matrix S_matrix = XYZ_matrix_inverted.multiply(profile.illuminant);
 
   return XYZ_matrix.column_wise_scaling(S_matrix);
 }
