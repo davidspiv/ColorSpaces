@@ -81,9 +81,9 @@ public:
 };
 
 
-class Rgb : public Color {
+class Lin_Rgb : public Color {
 public:
-  Rgb(float r, float g, float b);
+Lin_Rgb(float r, float g, float b);
 
   void print() const;
 };

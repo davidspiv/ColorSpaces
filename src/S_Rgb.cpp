@@ -38,8 +38,6 @@ float S_Rgb::remove_gamma(int c) {
 
 Xyz S_Rgb::to_xyz(const std::string &reference_white_label,
                   const std::string &primaries_label) const {
-
-
   auto [primary_r, primary_g, primary_b] = primaries_label.size()
                                                ? primaries.at(primaries_label)
                                                : primaries.at("srgb");
@@ -53,13 +51,14 @@ Xyz S_Rgb::to_xyz(const std::string &reference_white_label,
 
   auto [r, g, b] = m_values;
 
-  const Rgb rgb(remove_gamma(r), remove_gamma(g), remove_gamma(b));
+  const Lin_Rgb lin_rgb(remove_gamma(r), remove_gamma(g), remove_gamma(b));
 
-  const Matrix xyz_as_matrix = M_matrix.multiply(rgb.to_column());
+  const Matrix xyz_as_matrix = M_matrix.multiply(lin_rgb.to_column());
 
-  const float x = std::clamp<float>(xyz_as_matrix(0, 0), 0.0, 1.0);
-  const float y = std::clamp<float>(xyz_as_matrix(1, 0), 0.0, 1.0);
-  const float z = std::clamp<float>(xyz_as_matrix(2, 0), 0.0, 1.0);
+  // Absolute colorimetric - probably don't need to clamp here?
+  const float x = xyz_as_matrix(0, 0);
+  const float y = xyz_as_matrix(1, 0);
+  const float z = xyz_as_matrix(2, 0);
 
   return Xyz(x, y, z);
 }

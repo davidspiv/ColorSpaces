@@ -28,13 +28,14 @@ S_Rgb Xyz::to_s_rgb(const std::string &reference_white_label,
 
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 
-  //// Absolute colorimetric
-  const float r =
-      apply_gamma(std::clamp<float>(rbg_as_matrix(0, 0), 0.0f, 1.0f));
-  const float g =
-      apply_gamma(std::clamp<float>(rbg_as_matrix(1, 0), 0.0f, 1.0f));
-  const float b =
-      apply_gamma(std::clamp<float>(rbg_as_matrix(2, 0), 0.0f, 1.0f));
+  // Absolute colorimetric
+  auto get_gamma_corrected = [&](int row) {
+    return apply_gamma(std::clamp<float>(rbg_as_matrix(row, 0), 0.0f, 1.0f));
+  };
+
+  const float r = get_gamma_corrected(0);
+  const float g = get_gamma_corrected(1);
+  const float b = get_gamma_corrected(2);
 
   return S_Rgb(r, g, b);
 }
