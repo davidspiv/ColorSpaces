@@ -3,16 +3,27 @@
 #include "../include/timer.h"
 #include "../include/util.h"
 
+#include <algorithm>
+#include <string>
+
 using namespace Color_Space;
+
 
 int main() {
   Timer timer;
 
   Rgb rgb(100, 45, 200);
-  //   Xyz xyz(0.148317, 0.082178, 0.416816);
+  Xyz xyz(0.166163, 0.087556, 0.554469);
 
-  Xyz(0.166163, 0.087556, 0.554469).to_rgb(profiles[1]).print();
-  //   .adapt_to_white_point(illuminants.at("d65"), illuminants.at("d50"))
+  const std::string target_name = "srgb";
+
+  Profile curr_profile = get_profile(target_name);
+
+  //   xyz.adapt_to_white_point(get_illuminant("d65"), get_illuminant("d65"))
+  //       .to_rgb(curr_profile)
+  //       .print();
+
+  xyz.to_lab().print();
 
   test_xyz_to_rgb_to_xyz(rgb);
   test_cie2000();

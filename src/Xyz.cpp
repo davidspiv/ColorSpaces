@@ -31,16 +31,11 @@ Rgb Xyz::to_rgb(const Profile &profile) const {
 
 
 Lab Xyz::to_lab() const {
+  auto [ref_x, ref_y, ref_z] = get_illuminant("d65").get_values();
 
-  const Matrix illuminant_matrix = illuminants.at("d65");
-
-  const float x = illuminant_matrix(0, 0);
-  const float y = illuminant_matrix(1, 0);
-  const float z = illuminant_matrix(2, 0);
-
-  const float xR = m_values[0] / x;
-  const float yR = m_values[1] / y;
-  const float zR = m_values[2] / z;
+  const float xR = m_values[0] / ref_x;
+  const float yR = m_values[1] / ref_y;
+  const float zR = m_values[2] / ref_z;
 
   const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0f;
   const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0f;
@@ -55,15 +50,10 @@ Lab Xyz::to_lab() const {
 
 
 Luv Xyz::to_luv() const {
-  const Matrix illuminant_matrix = illuminants.at("d65");
-
-  const float xRef = illuminant_matrix(0, 0);
-  const float yRef = illuminant_matrix(1, 0);
-  const float zRef = illuminant_matrix(2, 0);
-
+  auto [ref_x, ref_y, ref_z] = get_illuminant("d65").get_values();
   auto [x, y, z] = m_values;
 
-  const float yR = y / yRef;
+  const float yR = y / ref_y;
 
   const float denominator = x + 15.0 * y + 3 * z;
   if (denominator == 0.0) {
@@ -73,9 +63,9 @@ Luv Xyz::to_luv() const {
   const float uPrime = (4.0 * x) / denominator;
   const float vPrime = (9.0 * y) / denominator;
 
-  const float refDenominator = xRef + 15.0 * yRef + 3.0 * zRef;
-  const float refUPrime = (4.0 * xRef) / refDenominator;
-  const float refVPrime = (9.0 * yRef) / refDenominator;
+  const float refDenominator = ref_x + 15.0 * ref_y + 3.0 * ref_z;
+  const float refUPrime = (4.0 * ref_x) / refDenominator;
+  const float refVPrime = (9.0 * ref_y) / refDenominator;
 
   constexpr double accError = 1e-7;
   const float uDiff = uPrime - refUPrime;
@@ -83,8 +73,8 @@ Luv Xyz::to_luv() const {
 
   const float l =
       (yR > epsilon) ? (116.0 * std::cbrt(yR) - 16.0) : (kappa * yR);
-  const float u = (uDiff > accError) ? 13.0 * l * uDiff : 0;
-  const float v = (vDiff > accError) ? 13.0 * l * vDiff : 0;
+  const float u = (std::abs(uDiff) > accError) ? 13.0 * l * uDiff : 0;
+  const float v = (std::abs(vDiff) > accError) ? 13.0 * l * vDiff : 0;
 
   return Luv(l, u, v);
 }
@@ -95,13 +85,7 @@ Xyy Xyz::to_xyy() const {
   const float sum = X + Y + Z;
 
   if (sum == 0.0f) {
-
-    const Matrix illuminant_matrix = illuminants.at("d65");
-
-    const Xyy white_chromaticity =
-        Xyz(illuminant_matrix(0, 0), illuminant_matrix(1, 0),
-            illuminant_matrix(2, 0))
-            .to_xyy();
+    const Xyy white_chromaticity = get_illuminant("d65").to_xyy();
     auto [x_white, y_white, _] = white_chromaticity.get_values();
 
     return Xyy(x_white, y_white, Y);

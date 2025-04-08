@@ -69,4 +69,11 @@ template <typename Color_T> Matrix color_to_column(Color_T color) {
   return Matrix({{x}, {y}, {z}});
 }
 
+
+Xyz get_illuminant(const std::string &label);
+
+
+Profile get_profile(const std::string &target_name);
+
+
 #endif

@@ -31,15 +31,11 @@ Xyz Lab::to_xyz() const {
                        ? std::pow(fZ, 3)
                        : (116.0f * fZ - 16.0f) / kappa;
 
-  const Matrix illuminant_matrix = illuminants.at("d65");
+  auto [ref_x, ref_y, ref_z] = get_illuminant("d65").get_values();
 
-  const float wX = illuminant_matrix(0, 0);
-  const float wY = illuminant_matrix(1, 0);
-  const float wZ = illuminant_matrix(2, 0);
-
-  const float x = rX * wX;
-  const float y = rY * wY;
-  const float z = rZ * wZ;
+  const float x = rX * ref_x;
+  const float y = rY * ref_y;
+  const float z = rZ * ref_z;
 
   return Xyz(x, y, z);
 }
