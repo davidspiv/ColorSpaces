@@ -29,11 +29,30 @@ to_polar_color_space(const std::array<float, 3> &cartesianColor_Space) {
 
 
 // tone-response curve
-float apply_gamma(const float c) {
-  float corrected =
-      (c <= 0.0031308) ? (c * 12.92) : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
-  return std::clamp(corrected * 255.0, 0.0, 255.0);
-};
+float apply_gamma(const float c, Gamma_Mode mode) {
+  float linear = std::clamp(c, 0.0f, 1.0f);
+
+  switch (mode) {
+  case Gamma_Mode::SRGB:
+    return std::clamp((linear <= 0.0031308f)
+                          ? (linear * 12.92f)
+                          : 1.055f * std::pow(linear, 1.0f / 2.4f) - 0.055f,
+                      0.0f, 1.0f) *
+           255.0f;
+
+  case Gamma_Mode::Simple22:
+    return std::pow(linear, 1.0f / 2.2f) * 255.0f;
+  }
+
+  // fallback
+  return 0.0f;
+}
+
+
+float apply_simple_gamma(const float c) {
+  float corrected = std::pow(std::clamp(c, 0.0f, 1.0f), 1.0f / 2.2f);
+  return corrected * 255.0f;
+}
 
 
 Matrix create_to_xyz_transformation_matrix(const Profile &profile) {

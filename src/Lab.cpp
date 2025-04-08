@@ -1,6 +1,7 @@
 #include "../include/Color.h"
 #include "../include/util.h"
 
+#include <cmath>
 #include <iostream>
 
 using namespace Color_Space;

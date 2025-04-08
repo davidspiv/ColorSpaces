@@ -4,9 +4,7 @@
 #include <array>
 #include <cmath>
 #include <stdexcept>
-#include <string>
 #include <unordered_map>
-#include <vector>
 
 #include "Color.h"
 #include "Matrix.h"
@@ -27,6 +25,9 @@ const static std::unordered_map<std::string, Xyz> illuminants = {
     {"f11", Xyz(1.00962f, 1.00000f, 0.64350f)}};
 
 
+enum Gamma_Mode { SRGB, Simple22 };
+
+
 double to_degrees(const double radians);
 
 
@@ -37,7 +38,7 @@ std::array<float, 3>
 to_polar_color_space(const std::array<float, 3> &cartesianColor_Space);
 
 
-float apply_gamma(const float c);
+float apply_gamma(const float c, Gamma_Mode mode);
 
 
 template <typename T> auto euclidean_norm(const T xMag, const T yMag) {

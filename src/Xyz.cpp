@@ -17,16 +17,16 @@ S_Rgb Xyz::to_s_rgb(const Profile &profile) const {
 
   Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
 
+  Gamma_Mode mode =
+      (profile.name == "srgb") ? Gamma_Mode::SRGB : Gamma_Mode::Simple22;
+
   // Absolute colorimetric
   auto get_gamma_corrected = [&](int row) {
-    return apply_gamma(std::clamp<float>(rbg_as_matrix(row, 0), 0.0f, 1.0f));
+    return apply_gamma(rbg_as_matrix(row, 0), mode);
   };
 
-  const float r = get_gamma_corrected(0);
-  const float g = get_gamma_corrected(1);
-  const float b = get_gamma_corrected(2);
-
-  return S_Rgb(r, g, b);
+  return S_Rgb(get_gamma_corrected(0), get_gamma_corrected(1),
+               get_gamma_corrected(2));
 }
 
 
