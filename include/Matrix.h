@@ -21,6 +21,7 @@ public:
   Matrix multiply(const Matrix &other) const;
   Matrix column_wise_scaling(const Matrix &other) const;
   Matrix invert() const;
+  std::vector<float> flatten() const;
 
 private:
   std::vector<std::vector<float>> m_values;

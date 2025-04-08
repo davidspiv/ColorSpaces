@@ -109,6 +109,19 @@ Matrix Matrix::invert() const {
   return result;
 }
 
+
+std::vector<float> Matrix::flatten() const {
+  std::vector<float> values(m_cols * m_rows, 0.0f);
+
+  for (size_t i = 0; i < m_cols; i++) {
+    for (size_t j = 0; j < m_rows; j++) {
+      values[i + j] = m_values[i][j];
+    }
+  }
+  return values;
+};
+
+
 std::ostream &operator<<(std::ostream &os, const Matrix &a) {
   for (size_t row = 0; row < a.rows(); row++) {
     for (size_t col = 0; col < a.cols(); col++) {
