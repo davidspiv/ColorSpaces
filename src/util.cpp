@@ -6,6 +6,7 @@
 #include <array>
 #include <cmath>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 using namespace Color_Space;
@@ -29,30 +30,39 @@ to_polar_color_space(const std::array<float, 3> &cartesianColor_Space) {
 
 
 // tone-response curve
-float apply_gamma(const float c, Gamma_Mode mode) {
-  float linear = std::clamp(c, 0.0f, 1.0f);
+float apply_gamma(const float c, Gamma gamma) {
+  switch (gamma) {
+  case Gamma::SRGB:
+    return (c <= 0.0031308f) ? (c * 12.92f)
+                             : 1.055f * std::pow(c, 1.0f / 2.4f) - 0.055f;
 
-  switch (mode) {
-  case Gamma_Mode::SRGB:
-    return std::clamp((linear <= 0.0031308f)
-                          ? (linear * 12.92f)
-                          : 1.055f * std::pow(linear, 1.0f / 2.4f) - 0.055f,
-                      0.0f, 1.0f) *
-           255.0f;
+  case Gamma::SIMPLE_22:
+    return std::pow(c, 2.2f);
 
-  case Gamma_Mode::Simple22:
-    return std::pow(linear, 1.0f / 2.2f) * 255.0f;
+  case Gamma::SIMPLE_18:
+  case Gamma::L_STAR:
+    throw std::runtime_error("Option not built.");
   }
 
-  // fallback
-  return 0.0f;
+  throw std::domain_error("Option not recognized.");
 }
 
 
-float apply_simple_gamma(const float c) {
-  float corrected = std::pow(std::clamp(c, 0.0f, 1.0f), 1.0f / 2.2f);
-  return corrected * 255.0f;
-}
+float remove_gamma(float c, Gamma gamma) {
+  switch (gamma) {
+  case Gamma::SRGB:
+    return (c <= 0.04045) ? (c / 12.92) : pow((c + 0.055) / 1.055, 2.4);
+
+  case Gamma::SIMPLE_22:
+    return std::pow(c, 0.45455f);
+
+  case Gamma::SIMPLE_18:
+  case Gamma::L_STAR:
+    throw std::runtime_error("Option not built.");
+  }
+
+  throw std::domain_error("Option not recognized.");
+};
 
 
 Matrix create_to_xyz_transformation_matrix(const Profile &profile) {

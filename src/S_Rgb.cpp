@@ -25,34 +25,21 @@ S_Rgb::S_Rgb(float r, float g, float b) {
 };
 
 
-float S_Rgb::remove_gamma(int c) {
-  float normalized_channel = static_cast<double>(c) / 255.0;
-
-  const float breakpoint = 0.04045f;
-
-  return (normalized_channel <= breakpoint)
-             ? (normalized_channel / 12.92f)
-             : std::pow((normalized_channel + 0.055f) / 1.055f, 2.4f);
-};
-
-
 Xyz S_Rgb::to_xyz(const Profile &profile) const {
-
-  const Matrix M_matrix =
-      create_to_xyz_transformation_matrix(profile);
 
   auto [r, g, b] = m_values;
 
-  const Lin_Rgb lin_rgb(remove_gamma(r), remove_gamma(g), remove_gamma(b));
+  // Step 1: Normalize input RGB [0–255] -> [0.0–1.0]
+  const float r_lin = remove_gamma(r / 255.0f, profile.gamma);
+  const float g_lin = remove_gamma(g / 255.0f, profile.gamma);
+  const float b_lin = remove_gamma(b / 255.0f, profile.gamma);
 
-  const Matrix xyz_as_matrix = M_matrix.multiply(lin_rgb.to_column());
+  // Step 2: Convert to XYZ using matrix
+  const Matrix M_matrix = create_to_xyz_transformation_matrix(profile);
+  const Matrix rgb_lin({{r_lin}, {g_lin}, {b_lin}});
+  const Matrix xyz_matrix = M_matrix.multiply(rgb_lin);
 
-  // Absolute colorimetric - probably don't need to clamp here?
-  const float x = xyz_as_matrix(0, 0);
-  const float y = xyz_as_matrix(1, 0);
-  const float z = xyz_as_matrix(2, 0);
-
-  return Xyz(x, y, z);
+  return Xyz(xyz_matrix(0, 0), xyz_matrix(1, 0), xyz_matrix(2, 0));
 }
 
 

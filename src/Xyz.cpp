@@ -15,18 +15,18 @@ S_Rgb Xyz::to_s_rgb(const Profile &profile) const {
 
   const Matrix M_matrix = create_to_xyz_transformation_matrix(profile).invert();
 
-  Matrix rbg_as_matrix = M_matrix.multiply(this->to_column());
-
-  Gamma_Mode mode =
-      (profile.name == "srgb") ? Gamma_Mode::SRGB : Gamma_Mode::Simple22;
+  Matrix xyz_as_matrix = M_matrix.multiply(this->to_column());
 
   // Absolute colorimetric
-  auto get_gamma_corrected = [&](int row) {
-    return apply_gamma(rbg_as_matrix(row, 0), mode);
-  };
+  const float r_corr = apply_gamma(xyz_as_matrix(0, 0), profile.gamma);
+  const float g_corr = apply_gamma(xyz_as_matrix(1, 0), profile.gamma);
+  const float b_corr = apply_gamma(xyz_as_matrix(2, 0), profile.gamma);
 
-  return S_Rgb(get_gamma_corrected(0), get_gamma_corrected(1),
-               get_gamma_corrected(2));
+  const float r_norm = std::clamp(r_corr, 0.0f, 1.0f) * 255.0f;
+  const float g_norm = std::clamp(g_corr, 0.0f, 1.0f) * 255.0f;
+  const float b_norm = std::clamp(b_corr, 0.0f, 1.0f) * 255.0f;
+
+  return S_Rgb(r_norm, g_norm, b_norm);
 }
 
 
