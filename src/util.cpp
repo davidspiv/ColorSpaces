@@ -138,14 +138,15 @@ Xyz Xyz::adapt_to_white_point(const Xyz &src_illuminant,
 };
 
 
-Profile get_profile(const std::string &target_name) {
+Profile get_profile(const Rgb_Working_space working_space) {
   auto it =
-      std::find_if(profiles.begin(), profiles.end(),
-                   [&](const Profile &p) { return p.name == target_name; });
+      std::find_if(profiles.begin(), profiles.end(), [&](const Profile &p) {
+        return p.working_space == working_space;
+      });
 
   if (it != profiles.end()) {
     return *it;
   }
 
-  throw std::runtime_error("Profile not found: " + target_name);
+  throw std::runtime_error("Profile not found");
 };

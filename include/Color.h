@@ -12,6 +12,26 @@ namespace Color_Space {
 
 enum Mode { GRAPHICS, TEXTILES };
 
+enum Rgb_Working_space {
+  s_rgb,
+  adobe_rgb_1998,
+  apple_rgb,
+  best_rgb,
+  beta_rgb,
+  bruce_rgb,
+  cie_rgb,
+  colormatch_rgb,
+  don_rgb_4,
+  eci_rgb_v2,
+  ekta_space_ps5,
+  ntsc_rgb,
+  pal_secam_rgb,
+  prophoto_rgb,
+  smpte_c_rgb,
+  wide_gamut_rgb,
+  none
+};
+
 class Lab;
 class Lch_Ab;
 class Lch_Uv;
@@ -87,7 +107,7 @@ public:
   Rgb(float r, float g, float b);
 
   // Conversions
-  Xyz to_xyz(const std::string &profile_label = "") const;
+  Xyz to_xyz(const Rgb_Working_space working_space = none) const;
 
   void print() const;
 };
@@ -106,7 +126,7 @@ public:
   Xyz(float x, float y, float z);
 
   // Conversions
-  Rgb to_rgb(const std::string &profile_label = "") const;
+  Rgb to_rgb(const Rgb_Working_space working_space = none) const;
   Lab to_lab() const;
   Luv to_luv() const;
   Xyy to_xyy() const;

@@ -15,8 +15,7 @@ int main() {
   Rgb rgb(100, 45, 200);
   Xyz xyz(0.166163, 0.087556, 0.554469);
 
-
-  xyz.to_rgb("apple_rgb").print();
+  xyz.to_rgb().print();
 
   test_xyz_to_rgb_to_xyz(rgb);
   test_cie2000();
