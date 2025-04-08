@@ -37,7 +37,7 @@ float apply_gamma(const float c, Gamma gamma) {
                              : 1.055f * std::pow(c, 1.0f / 2.4f) - 0.055f;
 
   case Gamma::SIMPLE_22:
-    return std::pow(c, 2.2f);
+    return std::pow(c, 1.0f / 2.2f);
 
   case Gamma::SIMPLE_18:
   case Gamma::L_STAR:
