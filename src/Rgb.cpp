@@ -1,5 +1,6 @@
 #include "../include/Color.h"
 #include "../include/util.h"
+#include "../include/Profile.h"
 
 #include <algorithm>
 #include <array>
@@ -26,7 +27,6 @@ Rgb::Rgb(float r, float g, float b) {
 
 
 Xyz Rgb::to_xyz(const Profile &profile) const {
-
   auto [r, g, b] = m_values;
 
   // Step 1: Normalize input RGB [0–255] -> [0.0–1.0]
@@ -41,6 +41,9 @@ Xyz Rgb::to_xyz(const Profile &profile) const {
 
   return Xyz(xyz_matrix(0, 0), xyz_matrix(1, 0), xyz_matrix(2, 0));
 }
+
+
+Xyz Rgb::to_xyz() const { return to_xyz(profiles.at(0)); }
 
 
 void Rgb::print() const {

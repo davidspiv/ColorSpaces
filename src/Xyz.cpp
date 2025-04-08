@@ -1,4 +1,5 @@
 #include "../include/Color.h"
+#include "../include/Profile.h"
 #include "../include/util.h"
 
 #include <algorithm>
@@ -28,6 +29,9 @@ Rgb Xyz::to_rgb(const Profile &profile) const {
 
   return Rgb(r_norm, g_norm, b_norm);
 }
+
+
+Rgb Xyz::to_rgb() const { return to_rgb(profiles.at(0)); }
 
 
 Lab Xyz::to_lab() const {

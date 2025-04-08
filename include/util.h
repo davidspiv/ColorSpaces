@@ -7,6 +7,7 @@
 
 #include "Color.h"
 #include "Matrix.h"
+#include "Profile.h"
 
 using namespace Color_Space;
 
