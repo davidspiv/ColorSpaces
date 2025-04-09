@@ -11,19 +11,20 @@ using namespace Color_Space;
 
 Xyz::Xyz(float x, float y, float z, Illuminant_Label ref_white) {
   m_values = {x, y, z};
-  this->m_ref_white = ref_white;
+  m_ref_white = ref_white;
 }
 
 
 Rgb Xyz::to_rgb(const Rgb_Working_Space working_space) const {
 
-  const Profile profile =
-      working_space == NONE ? profiles.at(0) : get_profile(working_space);
+  const Profile profile = (working_space == UNSPECIFIED)
+                              ? profiles.at(0)
+                              : get_profile(working_space);
 
   const Matrix color_as_column =
-      (profile.illuminant == illuminants.at(this->m_ref_white))
-          ? this->to_column()
-          : this->adapt_to_white_point(D65).to_column();
+      (profile.illuminant == illuminants.at(m_ref_white))
+          ? to_column()
+          : adapt_to_white_point(D65).to_column();
 
   const Matrix M_matrix = create_to_xyz_transformation_matrix(profile).invert();
 
@@ -111,16 +112,16 @@ Xyy Xyz::to_xyy() const {
 
 
 Xyz Xyz::adapt_to_white_point(const Illuminant_Label illuminant_label) const {
-  //   if (src_illuminant == dest_illuminant) {
-  //     return *this;
-  //   }
+  if (m_ref_white == illuminant_label) {
+    return *this;
+  }
 
   const Xyz white_point = illuminants.at(illuminant_label);
 
   const Matrix new_primary_matrix =
-      compute_chromatic_adaptation_matrix(illuminants.at(this->m_ref_white),
+      compute_chromatic_adaptation_matrix(illuminants.at(m_ref_white),
                                           white_point)
-          .multiply(this->to_column());
+          .multiply(to_column());
 
   return Xyz(new_primary_matrix(0, 0), new_primary_matrix(1, 0),
              new_primary_matrix(2, 0), illuminant_label);

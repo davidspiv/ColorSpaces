@@ -4,9 +4,6 @@
 #include "../include/timer.h"
 #include "../include/util.h"
 
-#include <algorithm>
-#include <string>
-
 using namespace Color_Space;
 
 
