@@ -76,12 +76,12 @@ public:
    * @brief Converts the color to a 3x1 column matrix representation.
    * @return Matrix with column form of color values.
    */
-  Matrix to_column() const {
+  [[nodiscard]] Matrix to_column() const {
     return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
   };
 
-  bool operator==(const Color &other) const;
-  bool operator!=(const Color &other) const;
+  [[nodiscard]] bool operator==(const Color &other) const;
+  [[nodiscard]] bool operator!=(const Color &other) const;
 };
 
 
@@ -114,7 +114,7 @@ public:
    * @param other Lab color to compare with.
    * @return CIE76 color difference.
    */
-  float diff_cie_76(const Lab &other) const;
+  [[nodiscard]] float diff_cie_76(const Lab &other) const;
 
   /**
    * @brief Computes CIE94 color difference metric.
@@ -122,14 +122,14 @@ public:
    * @param mode Application mode (GRAPHICS or TEXTILES)
    * @return CIE94 color difference.
    */
-  float diff_cie_94(const Lab &other, Mode mode = GRAPHICS) const;
+  [[nodiscard]] float diff_cie_94(const Lab &other, Mode mode = GRAPHICS) const;
 
   /**
    * @brief Computes CIEDE2000 perceptual difference.
    * @param other Lab color to compare with.
    * @return Delta E 2000 value.
    */
-  float diff_cie_2000(const Lab &other) const;
+  [[nodiscard]] float diff_cie_2000(const Lab &other) const;
 
   /**
    * @brief Prints Lab components to the console.
@@ -189,7 +189,7 @@ public:
    * @brief Converts Luv to cylindrical Lch(uv) representation.
    * @return Lch_Uv object.
    */
-  Lch_Uv to_lch_uv() const;
+  [[nodiscard]] Lch_Uv to_lch_uv() const;
 
   /**
    * @brief Prints Luv components to the console.
@@ -214,7 +214,8 @@ public:
    * @param working_space The RGB color space (sRGB, Adobe RGB, etc.)
    * @return Xyz object representing this RGB color.
    */
-  Xyz to_xyz(const Rgb_Working_Space working_space = UNSPECIFIED) const;
+  [[nodiscard]] Xyz
+  to_xyz(const Rgb_Working_Space working_space = UNSPECIFIED) const;
 
   /**
    * @brief Prints RGB components to the console.
@@ -257,32 +258,34 @@ public:
    * @param working_space RGB color space to use for conversion.
    * @return RGB color.
    */
-  Rgb to_rgb(const Rgb_Working_Space working_space = UNSPECIFIED) const;
+  [[nodiscard]] Rgb
+  to_rgb(const Rgb_Working_Space working_space = UNSPECIFIED) const;
 
   /**
    * @brief Converts XYZ to Lab.
    * @return Lab representation of this color.
    */
-  Lab to_lab() const;
+  [[nodiscard]] Lab to_lab() const;
 
   /**
    * @brief Converts XYZ to Luv.
    * @return Luv representation.
    */
-  Luv to_luv() const;
+  [[nodiscard]] Luv to_luv() const;
 
   /**
    * @brief Converts XYZ to xyY chromaticity space.
    * @return Xyy object.
    */
-  Xyy to_xyy() const;
+  [[nodiscard]] Xyy to_xyy() const;
 
   /**
    * @brief Performs chromatic adaptation to a different illuminant.
    * @param illuminant_label New reference white point.
    * @return Adapted XYZ color.
    */
-  Xyz adapt_to_white_point(const Illuminant_Label illuminant_label) const;
+  [[nodiscard]] Xyz
+  adapt_to_white_point(const Illuminant_Label illuminant_label) const;
 
   /**
    * @brief Prints XYZ components to the console.
