@@ -87,7 +87,7 @@ const static std::vector<Profile> profiles = {
      Xyz(0.2900f, 0.6000f, 0.706645f), Xyz(0.1500f, 0.0600f, 0.071334f),
      illuminants.at(D65), Gamma::SIMPLE_22},
 
-    {PROPHOTO_RGB, Xyz(0.7347f, 0.2653f, 0.288040f),
+    {PRO_PHOTO_RGB, Xyz(0.7347f, 0.2653f, 0.288040f),
      Xyz(0.1596f, 0.8404f, 0.711874f), Xyz(0.0366f, 0.0001f, 0.000086f),
      illuminants.at(D50), Gamma::SIMPLE_18},
 

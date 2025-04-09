@@ -1,64 +1,61 @@
 # ColorSpaces
-A C++ library for working with color. Includes functions for converting between color models and calculating color difference. Focused on providing an intuitive interface that reflects the underlying color science behind the transformations.
+**ColorSpaces** is a lightweight C++ color science library for converting between color spaces, computing perceptual differences, and performing chromatic adaptation.
 
-### Dependencies
-
+## Dependencies
 - **Make**
 - **C++17** or higher
 
-### Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/ColorSpaces.git
-   cd ColorSpaces
-	```
+## Installation
+* Use `make` command to build library, all binaries will be in be in newly created build directory.
+* Use `make run` to run tests.
 
-2. Integrate the library into your project by including the necessary files:
-	* colorDefinitions.h
-	* util.h
-	* Relevant color space files in /src
+## Features
+- Conversion between color spaces:
+  - sRGB
+  - Adobe RGB 1998
+  - Apple RGB
+  - Best RGB
+  - Beta RGB
+  - Bruce RGB
+  - Cie RGB
+  - Colormatch RGB
+  - Don RGB 4
+  - eciRGB v2
+  - Ekta Space PS 5
+  - NTSC RGB
+  - Pal Secam RGB
+  - ProPhoto RGB
+  - Smpte-C RGB
+  - Wide Gamut RGB
+  - CIE Lab
+  - CIE LCh(ab)
+  - CIE LUV
+  - CIE LCh(uv)
+  - CIE XYZ (1931)
+  - CIE xyY
 
-3. To run tests:
-	```bash
-	make run
-	```
+- Perceptual color difference formulas:
+  - CIE76
+  - CIE94 (Graphics and Textiles)
+  - CIEDE2000
 
-### Usage
+- Chromatic adaptation between white points:
+  - A, B, C, D50, D55, D65, D75, E, F2, F7, F11
 
-These functions are all callable from main if you want to experiment before integrating!
 
+## Example Usage
 ```cpp
-#include "colorDefinitions.h"
+// specify a named RGB color space when converting both to and from RGB
+Rgb rgb(30, 99, 15);
+Xyz xyz = rgb.to_xyz(PRO_PHOTO_RGB).adapt_to_white_point(D75);
+Lab lab = xyz.to_lab();
 
-// Convert between color spaces (sRGB to LinearRGB shown)
-ColorSpace::Srgb color(255, 100, 50);
-ColorSpace::LinearRgb linearColor = color.toLinearRgb();
+// alternatively, when declaring a color you can specify the referenced illuminant as the fourth  argument
+Lab other_lab(53.2, 15.0, -40.0, D75);
 
-// Get channel values. Most color spaces will return a 3-element float array
-std::array<float, 3> = linearColor().getValues();
-
-// Calculate Euclidean distance between two colors
-float distance = ColorSpace::distEuclideanSquared(colorA, colorB);
+float delta_E = lab.diff_cie_2000(other_lab);
 ```
 
-### Supported Color Spaces
-* sRGB
-* RGB
-* Lab
-* XYZ
-* xyY
-* Luv
-* LCH(ab)
-* LCH(uv)
-
-### Supported Conversions
-![conversion-diagram](/documentationMedia/colorDiagram.png)
-
-### Supported Distance Metrics
-* Euclidean Distance
-
-### References
+## References
 * [Bruce Lindbloom's Color Science](<http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html>)
-* [yy_color_converter (GitHub)](<https://github.com/ibireme/yy_color_convertor>)
-* [ColorSpace Project (GitHub)](<https://github.com/berendeanicolae/ColorSpace?tab=readme-ov-file>)

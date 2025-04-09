@@ -10,15 +10,22 @@ using namespace Color_Space;
 int main() {
   Timer timer;
 
-  Rgb rgb(100, 45, 200);
-  Xyz xyz = Xyz(0.166163, 0.087556, 0.554469, D50);
+  //   Rgb rgb(100, 45, 200);
+  //   Xyz xyz = Xyz(0.166163, 0.087556, 0.554469, D50);
 
-  xyz.to_xyy().print();
-  xyz.to_lab().print();
-  xyz.to_lab().to_lch_ab().print();
-  xyz.to_luv().print();
-  xyz.to_luv().to_lch_uv().print();
-  xyz.to_rgb().print();
+  //   xyz.to_xyy().print();
+  //   xyz.to_lab().print();
+  //   xyz.to_lab().to_lch_ab().print();
+  //   xyz.to_luv().print();
+  //   xyz.to_luv().to_lch_uv().print();
+  //   xyz.to_rgb().print();
+
+  Rgb rgb(30, 99, 15);
+  Xyz xyz = rgb.to_xyz(PRO_PHOTO_RGB).adapt_to_white_point(D75);
+  Lab lab = xyz.to_lab();
+
+  Lab other_lab(53.2f, 15.0f, -40.0f, D75);
+  float deltaE = lab.diff_cie_2000(other_lab);
 
   test_xyz_to_rgb_to_xyz(rgb);
   test_cie2000();
