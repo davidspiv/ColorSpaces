@@ -47,8 +47,7 @@
 ```cpp
 // specify a named RGB color space when converting both to and from RGB
 Color_Space::Rgb rgb(30, 99, 15);
-Color_Space::Xyz xyz = rgb.to_xyz(Color_Space::SMPTE_C_RGB)
-							.adapt_to_white_point(Color_Space::D75);
+Color_Space::Xyz xyz = rgb.to_xyz(Color_Space::SMPTE_C_RGB).adapt_to_white_point(Color_Space::D75);
 Color_Space::Lab lab = xyz.to_lab();
 
 // alternatively, when declaring a color you can specify the referenced illuminant as the fourth  argument
