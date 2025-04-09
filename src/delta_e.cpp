@@ -12,7 +12,14 @@ float Lab::diff_cie_76(const Lab &other) const {
 }
 
 
-float Lab::diff_cie_94(const Lab &other, Mode mode) const {
+float Lab::diff_cie_94(const Lab &other, bool mode_graphics) const {
+  enum Mode {
+    GRAPHICS, ///< For standard graphics/visual design CIE94 formula
+    TEXTILES  ///< For textile-specific color comparisons
+  };
+
+  Mode mode = mode_graphics ? GRAPHICS : TEXTILES;
+
   auto [L1, a1, b1] = m_values;
   auto [L2, a2, b2] = other.get_values();
 

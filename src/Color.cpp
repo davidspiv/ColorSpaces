@@ -1,6 +1,16 @@
 #include "../include/Color.h"
 
+#include <array>
+
 using namespace Color_Space;
+
+
+std::array<float, 3> Color::get_values() const { return m_values; }
+
+
+Matrix Color::to_column() const {
+  return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
+};
 
 
 bool Color::operator==(const Color &other) const {
@@ -9,5 +19,5 @@ bool Color::operator==(const Color &other) const {
   return (x == other_x) && (y == other_y) && (z == other_z);
 }
 
-// Inequality comparison
+
 bool Color::operator!=(const Color &other) const { return !(*this == other); }

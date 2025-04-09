@@ -31,7 +31,7 @@ enum Illuminant_Label {
   F2,
   F7,
   F11
-  /// Standard illuminants used as reference white points in color conversions
+  /// CIE standard illuminants
 };
 
 enum Rgb_Working_Space {
@@ -52,12 +52,7 @@ enum Rgb_Working_Space {
   SMPTE_C_RGB,
   WIDE_GAMUT_RGB,
   UNSPECIFIED
-  /// Colorimetrically defined RGB spaces
-};
-
-enum Mode {
-  GRAPHICS, ///< For standard graphics/visual design workflows
-  TEXTILES  ///< For textile-specific color comparison modes
+  /// RGB color spaces
 };
 
 class Color {
@@ -68,17 +63,15 @@ protected:
 public:
   /**
    * @brief Returns the color's internal channel values.
-   * @return An array containing the 3 float components (e.g., RGB or Lab).
+   * @return Array containing 3 float components
    */
-  std::array<float, 3> get_values() const { return m_values; }
+  [[nodiscard]] std::array<float, 3> get_values() const;
 
   /**
-   * @brief Converts the color to a 3x1 column matrix representation.
+   * @brief Returns the color as a 3x1 column matrix representation.
    * @return Matrix with column form of color values.
    */
-  [[nodiscard]] Matrix to_column() const {
-    return Matrix({{m_values[0]}, {m_values[1]}, {m_values[2]}});
-  };
+  [[nodiscard]] Matrix to_column() const;
 
   [[nodiscard]] bool operator==(const Color &other) const;
   [[nodiscard]] bool operator!=(const Color &other) const;
@@ -92,9 +85,9 @@ public:
    * @param l Lightness (0–100)
    * @param a Green–Red component
    * @param b Blue–Yellow component
-   * @param illuminant Cie illuminant (default D65)
+   * @param illuminant Cie illuminant (default D50)
    */
-  Lab(float l, float a, float b, Illuminant_Label illuminant = D65);
+  Lab(float l, float a, float b, Illuminant_Label illuminant = D50);
 
   /**
    * @brief Converts Lab to XYZ color space.
@@ -104,7 +97,7 @@ public:
 
   /**
    * @brief Converts Lab to cylindrical Lch(ab) format.
-   * @return Lch_Ab representation.
+   * @return Lch_Ab representation
    */
   Lch_Ab to_lch_ab() const;
 
@@ -112,7 +105,7 @@ public:
    * @brief Approximates color difference between the two colors, using the
    * CIE76 formula (basic Euclidean distance).
    * @param other Lab color to compute with.
-   * @return perceptual distance (ΔE*).
+   * @return perceptual distance (ΔE*)
    */
   [[nodiscard]] float diff_cie_76(const Lab &other) const;
 
@@ -123,7 +116,8 @@ public:
    * @param mode Application mode (GRAPHICS or TEXTILES)
    * @return perceptual distance (ΔE*).
    */
-  [[nodiscard]] float diff_cie_94(const Lab &other, Mode mode = GRAPHICS) const;
+  [[nodiscard]] float diff_cie_94(const Lab &other,
+                                  bool mode_graphics = true) const;
 
   /**
    * @brief Approximates color difference between the two colors, using the
@@ -147,9 +141,9 @@ public:
    * @param l Lightness
    * @param c Chroma
    * @param h Hue angle [degrees]
-   * @param illuminant Cie illuminant
+   * @param illuminant Cie illuminant (default D50)
    */
-  Lch_Ab(float l, float c, float h, Illuminant_Label illuminant = D65);
+  Lch_Ab(float l, float c, float h, Illuminant_Label illuminant = D50);
 
   /**
    * @brief Prints Lch(ab) components to the console.
@@ -165,9 +159,9 @@ public:
    * @param l Lightness
    * @param c Chroma
    * @param h Hue angle (in degrees)
-   * @param illuminant Cie illuminant
+   * @param illuminant Cie illuminant (default D50).
    */
-  Lch_Uv(float l, float c, float h, Illuminant_Label illuminant = D65);
+  Lch_Uv(float l, float c, float h, Illuminant_Label illuminant = D50);
 
   /**
    * @brief Prints Lch(uv) components to the console.
@@ -183,9 +177,9 @@ public:
    * @param l Lightness
    * @param u Chromaticity U
    * @param v Chromaticity V
-   * @param illuminant Cie illuminant
+   * @param illuminant Cie illuminant (default D50)
    */
-  Luv(float l, float u, float v, Illuminant_Label illuminant = D65);
+  Luv(float l, float u, float v, Illuminant_Label illuminant = D50);
 
   /**
    * @brief Converts Luv to cylindrical Lch(uv) representation.
@@ -207,9 +201,9 @@ public:
    * @param r Red channel
    * @param g Green channel
    * @param b Blue channel
-   * @param illuminant Reference white (default D65)
+   * @param illuminant Cie illuminant (default D50)
    */
-  Rgb(float r, float g, float b, Illuminant_Label illuminant = D65);
+  Rgb(float r, float g, float b, Illuminant_Label illuminant = D50);
 
   /**
    * @brief Converts RGB to XYZ color space.
@@ -233,7 +227,7 @@ public:
    * @param x Chromaticity x
    * @param y Chromaticity y
    * @param Y Luminance
-   * @param illuminant Reference white
+   * @param illuminant Cie illuminant (default D50)
    */
   Xyy(float x, float y, float Y, Illuminant_Label illuminant = D50);
 
@@ -251,7 +245,7 @@ public:
    * @param x X component
    * @param y Y component (luminance)
    * @param z Z component
-   * @param illuminant Reference white
+   * @param illuminant Cie illuminant (default D50)
    */
   Xyz(float x, float y, float z, Illuminant_Label illuminant = D50);
 

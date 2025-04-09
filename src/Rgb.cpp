@@ -23,7 +23,7 @@ Rgb::Rgb(float r, float g, float b, Illuminant_Label illuminant) {
   validate(b);
 
   m_values = {r, g, b};
-  this->m_illuminant = illuminant;
+  m_illuminant = illuminant;
 };
 
 
@@ -44,7 +44,8 @@ Xyz Rgb::to_xyz(const Rgb_Working_Space working_space) const {
   const Matrix rgb_lin({{r_lin}, {g_lin}, {b_lin}});
   const Matrix xyz_matrix = M_matrix.multiply(rgb_lin);
 
-  return Xyz(xyz_matrix(0, 0), xyz_matrix(1, 0), xyz_matrix(2, 0), m_illuminant);
+  return Xyz(xyz_matrix(0, 0), xyz_matrix(1, 0), xyz_matrix(2, 0),
+             m_illuminant);
 }
 
 

@@ -9,7 +9,7 @@ using namespace Color_Space;
 
 Luv::Luv(float l, float u, float v, Illuminant_Label illuminant) {
   m_values = {l, u, v};
-  this->m_illuminant = illuminant;
+  m_illuminant = illuminant;
 }
 
 

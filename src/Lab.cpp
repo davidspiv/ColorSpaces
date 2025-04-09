@@ -10,7 +10,7 @@ using namespace Color_Space;
 
 Lab::Lab(float l, float a, float b, Illuminant_Label illuminant) {
   m_values = {l, a, b};
-  this->m_illuminant = illuminant;
+  m_illuminant = illuminant;
 }
 
 

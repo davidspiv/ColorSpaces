@@ -9,7 +9,7 @@ using namespace Color_Space;
 
 Lch_Ab::Lch_Ab(float l, float c, float h, Illuminant_Label illuminant) {
   m_values = {l, c, h};
-  this->m_illuminant = illuminant;
+  m_illuminant = illuminant;
 }
 
 
