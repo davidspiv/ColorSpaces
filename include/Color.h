@@ -34,6 +34,7 @@ enum Illuminant_Label {
   /// CIE standard illuminants
 };
 
+
 enum Rgb_Working_Space {
   S_RGB,
   ADOBE_RGB_1998,
@@ -54,6 +55,16 @@ enum Rgb_Working_Space {
   UNSPECIFIED
   /// RGB color spaces
 };
+
+
+enum Gamma {
+  SRGB,
+  SIMPLE_22,
+  SIMPLE_18,
+  L_STAR
+  // determines which function to use when gamma encoding/decoding
+};
+
 
 enum CIE94_Mode {
   GRAPHICS,
@@ -92,7 +103,7 @@ class Lab : public Color {
 public:
   /**
    * @brief Constructs a Lab color.
-   * @param l Lightness (0–100)
+   * @param l Lightness 
    * @param a Green–Red component
    * @param b Blue–Yellow component
    * @param illuminant Cie illuminant (default D65)
@@ -142,7 +153,6 @@ public:
    */
   void print() const;
 };
-
 
 
 class Lch_Ab : public Color {

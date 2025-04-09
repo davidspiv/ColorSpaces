@@ -11,9 +11,6 @@
 namespace Color_Space {
 
 
-enum Gamma { SRGB, SIMPLE_22, SIMPLE_18, L_STAR };
-
-
 struct Profile {
   Rgb_Working_Space working_space;
   Xyz primary_r;
