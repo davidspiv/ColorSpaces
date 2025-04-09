@@ -8,7 +8,10 @@
 using namespace Color_Space;
 
 
-Lab::Lab(float l, float a, float b) { m_values = {l, a, b}; }
+Lab::Lab(float l, float a, float b, Illuminant_Label ref_white) {
+  m_values = {l, a, b};
+  this->m_ref_white = ref_white;
+}
 
 
 Lch_Ab Lab::to_lch_ab() const {
@@ -32,17 +35,17 @@ Xyz Lab::to_xyz() const {
                        ? std::pow(fZ, 3)
                        : (116.0f * fZ - 16.0f) / kappa;
 
-  auto [ref_x, ref_y, ref_z] = illuminants.at("d65").get_values();
+  auto [ref_x, ref_y, ref_z] = illuminants.at(m_ref_white).get_values();
 
   const float x = rX * ref_x;
   const float y = rY * ref_y;
   const float z = rZ * ref_z;
 
-  return Xyz(x, y, z);
+  return Xyz(x, y, z, m_ref_white);
 }
 
 
 void Lab::print() const {
-  std::cout << "[Lab]"<< "\nL: " << m_values[0] << "\na: " << m_values[1]
+  std::cout << "[Lab]" << "\nL: " << m_values[0] << "\na: " << m_values[1]
             << "\nb: " << m_values[2] << "\n\n";
 }

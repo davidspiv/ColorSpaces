@@ -14,9 +14,7 @@ int main() {
   Timer timer;
 
   Rgb rgb(100, 45, 200);
-  Xyz xyz =
-      Xyz(0.166163, 0.087556, 0.554469)
-          .adapt_to_white_point(illuminants.at("d50"), illuminants.at("d65"));
+  Xyz xyz = Xyz(0.166163, 0.087556, 0.554469, D50);
 
   xyz.to_xyy().print();
   xyz.to_lab().print();

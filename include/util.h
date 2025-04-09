@@ -74,7 +74,11 @@ template <typename Color_T> Matrix color_to_column(Color_T color) {
 }
 
 
-Profile get_profile(const Rgb_Working_space working_space);
+Profile get_profile(const Rgb_Working_Space working_space);
+
+
+Matrix compute_chromatic_adaptation_matrix(const Xyz &src_illuminant,
+                                           const Xyz &dest_illuminant);
 
 
 #endif

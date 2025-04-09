@@ -5,7 +5,10 @@
 using namespace Color_Space;
 
 
-Xyy::Xyy(float x, float y, float Y) { m_values = {x, y, Y}; }
+Xyy::Xyy(float x, float y, float Y, Illuminant_Label ref_white) {
+  m_values = {x, y, Y};
+  this->m_ref_white = ref_white;
+}
 
 
 void Xyy::print() const {

@@ -123,22 +123,7 @@ Matrix compute_chromatic_adaptation_matrix(const Xyz &src_illuminant,
 }
 
 
-Xyz Xyz::adapt_to_white_point(const Xyz &src_illuminant,
-                              const Xyz &dest_illuminant) const {
-  //   if (src_illuminant == dest_illuminant) {
-  //     return *this;
-  //   }
-
-  const Matrix new_primary_matrix =
-      compute_chromatic_adaptation_matrix(src_illuminant, dest_illuminant)
-          .multiply(this->to_column());
-
-  return Xyz(new_primary_matrix(0, 0), new_primary_matrix(1, 0),
-             new_primary_matrix(2, 0));
-};
-
-
-Profile get_profile(const Rgb_Working_space working_space) {
+Profile get_profile(const Rgb_Working_Space working_space) {
   auto it =
       std::find_if(profiles.begin(), profiles.end(), [&](const Profile &p) {
         return p.working_space == working_space;

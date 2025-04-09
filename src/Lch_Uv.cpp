@@ -3,7 +3,10 @@
 using namespace Color_Space;
 
 
-Lch_Uv::Lch_Uv(float l, float c, float h) { m_values = {l, c, h}; }
+Lch_Uv::Lch_Uv(float l, float c, float h, Illuminant_Label ref_white) {
+  m_values = {l, c, h};
+  this->m_ref_white = ref_white;
+}
 
 
 void Lch_Uv::print() const {

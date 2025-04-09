@@ -7,7 +7,10 @@
 using namespace Color_Space;
 
 
-Lch_Ab::Lch_Ab(float l, float c, float h) { m_values = {l, c, h}; }
+Lch_Ab::Lch_Ab(float l, float c, float h, Illuminant_Label ref_white) {
+  m_values = {l, c, h};
+  this->m_ref_white = ref_white;
+}
 
 
 void Lch_Ab::print() const {
