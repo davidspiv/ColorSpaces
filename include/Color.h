@@ -55,6 +55,12 @@ enum Rgb_Working_Space {
   /// RGB color spaces
 };
 
+enum CIE94_Mode {
+  GRAPHICS,
+  TEXTILE
+  // determines weighted parameters in CIE94 color difference calculation
+};
+
 class Color {
 protected:
   std::array<float, 3> m_values;
@@ -117,7 +123,7 @@ public:
    * @return perceptual distance (ΔE*).
    */
   [[nodiscard]] float diff_cie_94(const Lab &other,
-                                  bool mode_graphics = true) const;
+                                  CIE94_Mode mode = GRAPHICS) const;
 
   /**
    * @brief Approximates color difference between the two colors, using the

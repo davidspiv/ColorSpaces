@@ -105,5 +105,4 @@ const static std::vector<Profile> profiles = {
 
 
 } // namespace Color_Space
-
 #endif
