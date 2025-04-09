@@ -5,9 +5,9 @@
 using namespace Color_Space;
 
 
-Xyy::Xyy(float x, float y, float Y, Illuminant_Label ref_white) {
+Xyy::Xyy(float x, float y, float Y, Illuminant_Label illuminant) {
   m_values = {x, y, Y};
-  this->m_ref_white = ref_white;
+  this->m_illuminant = illuminant;
 }
 
 

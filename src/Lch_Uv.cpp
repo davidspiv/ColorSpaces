@@ -3,9 +3,9 @@
 using namespace Color_Space;
 
 
-Lch_Uv::Lch_Uv(float l, float c, float h, Illuminant_Label ref_white) {
+Lch_Uv::Lch_Uv(float l, float c, float h, Illuminant_Label illuminant) {
   m_values = {l, c, h};
-  this->m_ref_white = ref_white;
+  this->m_illuminant = illuminant;
 }
 
 

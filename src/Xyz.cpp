@@ -9,9 +9,9 @@
 using namespace Color_Space;
 
 
-Xyz::Xyz(float x, float y, float z, Illuminant_Label ref_white) {
+Xyz::Xyz(float x, float y, float z, Illuminant_Label illuminant) {
   m_values = {x, y, z};
-  m_ref_white = ref_white;
+  m_illuminant = illuminant;
 }
 
 
@@ -22,7 +22,7 @@ Rgb Xyz::to_rgb(const Rgb_Working_Space working_space) const {
                               : get_profile(working_space);
 
   const Matrix color_as_column =
-      (profile.illuminant == illuminants.at(m_ref_white))
+      (profile.illuminant == illuminants.at(m_illuminant))
           ? to_column()
           : adapt_to_white_point(D65).to_column();
 
@@ -39,12 +39,12 @@ Rgb Xyz::to_rgb(const Rgb_Working_Space working_space) const {
   const float g_norm = std::clamp(g_corr, 0.0f, 1.0f) * 255.0f;
   const float b_norm = std::clamp(b_corr, 0.0f, 1.0f) * 255.0f;
 
-  return Rgb(r_norm, g_norm, b_norm, m_ref_white);
+  return Rgb(r_norm, g_norm, b_norm, m_illuminant);
 }
 
 
 Lab Xyz::to_lab() const {
-  auto [ref_x, ref_y, ref_z] = illuminants.at(m_ref_white).get_values();
+  auto [ref_x, ref_y, ref_z] = illuminants.at(m_illuminant).get_values();
 
   const float xR = m_values[0] / ref_x;
   const float yR = m_values[1] / ref_y;
@@ -58,12 +58,12 @@ Lab Xyz::to_lab() const {
   const float a = 500.0f * (fX - fY);
   const float b = 200.0f * (fY - fZ);
 
-  return Lab(l, a, b, m_ref_white);
+  return Lab(l, a, b, m_illuminant);
 }
 
 
 Luv Xyz::to_luv() const {
-  auto [ref_x, ref_y, ref_z] = illuminants.at(m_ref_white).get_values();
+  auto [ref_x, ref_y, ref_z] = illuminants.at(m_illuminant).get_values();
   auto [x, y, z] = m_values;
 
   const float yR = y / ref_y;
@@ -89,7 +89,7 @@ Luv Xyz::to_luv() const {
   const float u = (std::abs(uDiff) > accError) ? 13.0 * l * uDiff : 0;
   const float v = (std::abs(vDiff) > accError) ? 13.0 * l * vDiff : 0;
 
-  return Luv(l, u, v, m_ref_white);
+  return Luv(l, u, v, m_illuminant);
 }
 
 
@@ -98,7 +98,7 @@ Xyy Xyz::to_xyy() const {
   const float sum = X + Y + Z;
 
   if (sum == 0.0f) {
-    const Xyy white_chromaticity = illuminants.at(m_ref_white).to_xyy();
+    const Xyy white_chromaticity = illuminants.at(m_illuminant).to_xyy();
     auto [x_white, y_white, _] = white_chromaticity.get_values();
 
     return Xyy(x_white, y_white, Y);
@@ -107,19 +107,19 @@ Xyy Xyz::to_xyy() const {
   const float x_chromaticity = X / sum;
   const float y_chromaticity = Y / sum;
 
-  return Xyy(x_chromaticity, y_chromaticity, Y, m_ref_white);
+  return Xyy(x_chromaticity, y_chromaticity, Y, m_illuminant);
 }
 
 
 Xyz Xyz::adapt_to_white_point(const Illuminant_Label illuminant_label) const {
-  if (m_ref_white == illuminant_label) {
+  if (m_illuminant == illuminant_label) {
     return *this;
   }
 
   const Xyz white_point = illuminants.at(illuminant_label);
 
   const Matrix new_primary_matrix =
-      compute_chromatic_adaptation_matrix(illuminants.at(m_ref_white),
+      compute_chromatic_adaptation_matrix(illuminants.at(m_illuminant),
                                           white_point)
           .multiply(to_column());
 

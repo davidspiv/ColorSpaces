@@ -63,7 +63,7 @@ enum Mode {
 class Color {
 protected:
   std::array<float, 3> m_values;
-  Illuminant_Label m_ref_white;
+  Illuminant_Label m_illuminant;
 
 public:
   /**
@@ -92,9 +92,9 @@ public:
    * @param l Lightness (0–100)
    * @param a Green–Red component
    * @param b Blue–Yellow component
-   * @param ref_white Illuminant reference white (default D65)
+   * @param illuminant Cie illuminant (default D65)
    */
-  Lab(float l, float a, float b, Illuminant_Label ref_white = D65);
+  Lab(float l, float a, float b, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts Lab to XYZ color space.
@@ -109,25 +109,27 @@ public:
   Lch_Ab to_lch_ab() const;
 
   /**
-   * @brief Computes CIE76 Euclidean distance between this and another Lab
-   * color.
-   * @param other Lab color to compare with.
-   * @return CIE76 color difference.
+   * @brief Approximates color difference between the two colors, using the
+   * CIE76 formula (basic Euclidean distance).
+   * @param other Lab color to compute with.
+   * @return perceptual distance (ΔE*).
    */
   [[nodiscard]] float diff_cie_76(const Lab &other) const;
 
   /**
-   * @brief Computes CIE94 color difference metric.
-   * @param other Lab color to compare with.
+   * @brief Approximates color difference between the two colors, using the
+   * CIE94 formula.
+   * @param other Lab color to compute with.
    * @param mode Application mode (GRAPHICS or TEXTILES)
-   * @return CIE94 color difference.
+   * @return perceptual distance (ΔE*).
    */
   [[nodiscard]] float diff_cie_94(const Lab &other, Mode mode = GRAPHICS) const;
 
   /**
-   * @brief Computes CIEDE2000 perceptual difference.
-   * @param other Lab color to compare with.
-   * @return Delta E 2000 value.
+   * @brief Approximates color difference between the two colors, using the
+   * CIEDE2000 formula.
+   * @param other Lab color to compute with.
+   * @return perceptual distance (ΔE*).
    */
   [[nodiscard]] float diff_cie_2000(const Lab &other) const;
 
@@ -144,10 +146,10 @@ public:
    * @brief Constructs an Lch(ab) color (cylindrical Lab).
    * @param l Lightness
    * @param c Chroma
-   * @param h Hue angle (in degrees)
-   * @param ref_white Illuminant reference white
+   * @param h Hue angle [degrees]
+   * @param illuminant Cie illuminant
    */
-  Lch_Ab(float l, float c, float h, Illuminant_Label ref_white = D65);
+  Lch_Ab(float l, float c, float h, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Prints Lch(ab) components to the console.
@@ -163,9 +165,9 @@ public:
    * @param l Lightness
    * @param c Chroma
    * @param h Hue angle (in degrees)
-   * @param ref_white Illuminant reference white
+   * @param illuminant Cie illuminant
    */
-  Lch_Uv(float l, float c, float h, Illuminant_Label ref_white = D65);
+  Lch_Uv(float l, float c, float h, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Prints Lch(uv) components to the console.
@@ -181,9 +183,9 @@ public:
    * @param l Lightness
    * @param u Chromaticity U
    * @param v Chromaticity V
-   * @param ref_white Illuminant reference white
+   * @param illuminant Cie illuminant
    */
-  Luv(float l, float u, float v, Illuminant_Label ref_white = D65);
+  Luv(float l, float u, float v, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts Luv to cylindrical Lch(uv) representation.
@@ -205,9 +207,9 @@ public:
    * @param r Red channel
    * @param g Green channel
    * @param b Blue channel
-   * @param ref_white Reference white (default D65)
+   * @param illuminant Reference white (default D65)
    */
-  Rgb(float r, float g, float b, Illuminant_Label ref_white = D65);
+  Rgb(float r, float g, float b, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts RGB to XYZ color space.
@@ -231,9 +233,9 @@ public:
    * @param x Chromaticity x
    * @param y Chromaticity y
    * @param Y Luminance
-   * @param ref_white Reference white
+   * @param illuminant Reference white
    */
-  Xyy(float x, float y, float Y, Illuminant_Label ref_white = D50);
+  Xyy(float x, float y, float Y, Illuminant_Label illuminant = D50);
 
   /**
    * @brief Prints xyY components to the console.
@@ -249,9 +251,9 @@ public:
    * @param x X component
    * @param y Y component (luminance)
    * @param z Z component
-   * @param ref_white Reference white
+   * @param illuminant Reference white
    */
-  Xyz(float x, float y, float z, Illuminant_Label ref_white = D50);
+  Xyz(float x, float y, float z, Illuminant_Label illuminant = D50);
 
   /**
    * @brief Converts XYZ to RGB.

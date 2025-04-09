@@ -11,7 +11,7 @@
 using namespace Color_Space;
 
 
-Rgb::Rgb(float r, float g, float b, Illuminant_Label ref_white) {
+Rgb::Rgb(float r, float g, float b, Illuminant_Label illuminant) {
   auto validate = [](float c) {
     if (std::min(255.0f, std::max(0.0f, c)) != c) {
       throw std::domain_error("Channel initalized outside of range [0, 255].");
@@ -23,7 +23,7 @@ Rgb::Rgb(float r, float g, float b, Illuminant_Label ref_white) {
   validate(b);
 
   m_values = {r, g, b};
-  this->m_ref_white = ref_white;
+  this->m_illuminant = illuminant;
 };
 
 
@@ -44,7 +44,7 @@ Xyz Rgb::to_xyz(const Rgb_Working_Space working_space) const {
   const Matrix rgb_lin({{r_lin}, {g_lin}, {b_lin}});
   const Matrix xyz_matrix = M_matrix.multiply(rgb_lin);
 
-  return Xyz(xyz_matrix(0, 0), xyz_matrix(1, 0), xyz_matrix(2, 0), m_ref_white);
+  return Xyz(xyz_matrix(0, 0), xyz_matrix(1, 0), xyz_matrix(2, 0), m_illuminant);
 }
 
 
