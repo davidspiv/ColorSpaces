@@ -61,6 +61,10 @@ enum CIE94_Mode {
   // determines weighted parameters in CIE94 color difference calculation
 };
 
+
+// A color model is an abstract mathematical model describing the way colors can
+// be represented as tuples of numbers, typically as three or four values or
+// color components.
 class Color {
 protected:
   std::array<float, 3> m_values;
@@ -103,7 +107,7 @@ public:
 
   /**
    * @brief Converts Lab to cylindrical Lch(ab) format.
-   * @return Lch_Ab representation
+   * @return the converted color as a Lch_Ab object
    */
   Lch_Ab to_lch_ab() const;
 
@@ -138,6 +142,7 @@ public:
    */
   void print() const;
 };
+
 
 
 class Lch_Ab : public Color {
@@ -189,7 +194,7 @@ public:
 
   /**
    * @brief Converts Luv to cylindrical Lch(uv) representation.
-   * @return Lch_Uv object.
+   * @return The converted color as a Lch_Uv object
    */
   [[nodiscard]] Lch_Uv to_lch_uv() const;
 
@@ -200,6 +205,9 @@ public:
 };
 
 
+// Additive color mixing with primary colors of red, green, and blue, each of
+// which stimulates one of the three types of the eye's color receptors with as
+// little stimulation as possible of the other two.
 class Rgb : public Color {
 public:
   /**
@@ -214,7 +222,7 @@ public:
   /**
    * @brief Converts RGB to XYZ color space.
    * @param working_space The RGB color space (sRGB, Adobe RGB, etc.)
-   * @return Xyz object representing this RGB color.
+   * @return the converted color as a Xyz object
    */
   [[nodiscard]] Xyz
   to_xyz(const Rgb_Working_Space working_space = UNSPECIFIED) const;
@@ -244,6 +252,10 @@ public:
 };
 
 
+// One of the first mathematically defined color spaces is the CIE XYZ color
+// space (also known as CIE 1931 color space), created by the International
+// Commission on Illumination in 1931. Its goal was to match human visual
+// metamerism.
 class Xyz : public Color {
 public:
   /**
@@ -265,26 +277,26 @@ public:
 
   /**
    * @brief Converts XYZ to Lab.
-   * @return Lab representation of this color.
+   * @return the converted color as a Lab object
    */
   [[nodiscard]] Lab to_lab() const;
 
   /**
    * @brief Converts XYZ to Luv.
-   * @return Luv representation.
+   * @return the converted color as a Luv object
    */
   [[nodiscard]] Luv to_luv() const;
 
   /**
    * @brief Converts XYZ to xyY chromaticity space.
-   * @return Xyy object.
+   * @return the converted color as a Xyy object
    */
   [[nodiscard]] Xyy to_xyy() const;
 
   /**
    * @brief Performs chromatic adaptation to a different illuminant.
-   * @param illuminant_label New reference white point.
-   * @return Adapted XYZ color.
+   * @param illuminant_label New reference white point
+   * @return Adapted color as a Xyz object
    */
   [[nodiscard]] Xyz
   adapt_to_white_point(const Illuminant_Label illuminant_label) const;

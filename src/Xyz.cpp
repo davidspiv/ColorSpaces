@@ -111,6 +111,32 @@ Xyy Xyz::to_xyy() const {
 }
 
 
+Matrix compute_chromatic_adaptation_matrix(const Xyz &src_illuminant,
+                                           const Xyz &dest_illuminant) {
+  const Matrix bradford_matrix({{0.8951000, 0.2664000, -0.1614000},
+                                {-0.7502000, 1.7135000, 0.0367000},
+                                {0.0389000, -0.0685000, 1.0296000}});
+
+  // Transform from XYZ into a cone response domain
+  Matrix src_cone_response =
+      bradford_matrix.multiply(src_illuminant.to_column());
+  Matrix dest_cone_response =
+      bradford_matrix.multiply(dest_illuminant.to_column());
+
+  // Create diagonal scaling matrix
+  Matrix S_matrix(3, 3);
+  for (int i = 0; i < 3; ++i) {
+    const float scale = dest_cone_response(i, 0) / src_cone_response(i, 0);
+    S_matrix(i, i) = scale;
+  }
+
+  Matrix M_matrix =
+      bradford_matrix.invert().multiply(S_matrix).multiply(bradford_matrix);
+
+  return M_matrix;
+}
+
+
 Xyz Xyz::adapt_to_white_point(const Illuminant_Label illuminant_label) const {
   if (m_illuminant == illuminant_label) {
     return *this;
@@ -134,4 +160,4 @@ void Xyz::print() const {
 }
 
 
-}
+} // namespace Color_Space

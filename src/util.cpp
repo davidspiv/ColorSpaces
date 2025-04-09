@@ -13,10 +13,10 @@
 namespace Color_Space {
 
 
-double to_degrees(const double radians) { return radians * (180.0 / M_PI); }
+float to_degrees(const float radians) { return radians * (180.0 / M_PI); }
 
 
-double to_radians(const double degrees) { return degrees * (M_PI / 180.0); }
+float to_radians(const float degrees) { return degrees * (M_PI / 180.0); }
 
 
 std::array<float, 3>
@@ -97,32 +97,6 @@ Matrix create_to_xyz_transformation_matrix(const Profile &profile) {
 }
 
 
-Matrix compute_chromatic_adaptation_matrix(const Xyz &src_illuminant,
-                                           const Xyz &dest_illuminant) {
-  const Matrix bradford_matrix({{0.8951000, 0.2664000, -0.1614000},
-                                {-0.7502000, 1.7135000, 0.0367000},
-                                {0.0389000, -0.0685000, 1.0296000}});
-
-  // Transform from XYZ into a cone response domain
-  Matrix src_cone_response =
-      bradford_matrix.multiply(src_illuminant.to_column());
-  Matrix dest_cone_response =
-      bradford_matrix.multiply(dest_illuminant.to_column());
-
-  // Create diagonal scaling matrix
-  Matrix S_matrix(3, 3);
-  for (int i = 0; i < 3; ++i) {
-    const float scale = dest_cone_response(i, 0) / src_cone_response(i, 0);
-    S_matrix(i, i) = scale;
-  }
-
-  Matrix M_matrix =
-      bradford_matrix.invert().multiply(S_matrix).multiply(bradford_matrix);
-
-  return M_matrix;
-}
-
-
 Profile get_profile(const Rgb_Working_Space working_space) {
   auto it =
       std::find_if(profiles.begin(), profiles.end(), [&](const Profile &p) {
@@ -137,4 +111,4 @@ Profile get_profile(const Rgb_Working_Space working_space) {
 };
 
 
-}
+} // namespace Color_Space

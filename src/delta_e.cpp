@@ -1,3 +1,4 @@
+#include "../include/delta_e.h"
 #include "../include/Color.h"
 #include "../include/util.h"
 
@@ -29,9 +30,9 @@ float Lab::diff_cie_94(const Lab &other, CIE94_Mode mode) const {
   // always greater than or equal to zero. However in an actual implementation,
   // it may become a very slightly negative value, due to limited arithmetic
   // precision.
-  const float deltaH_sq =
+  const float delta_H_sq =
       std::max(0.0f, deltaA * deltaA + deltaB * deltaB - deltaC * deltaC);
-  const float deltaH = std::sqrt(deltaH_sq);
+  const float deltaH = std::sqrt(delta_H_sq);
 
   // Parametric factors
   const float kL = (mode == GRAPHICS) ? 1.0f : 2.0f;
