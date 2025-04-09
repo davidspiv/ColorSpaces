@@ -7,7 +7,7 @@
 #include "../include/Color.h"
 #include "../include/util.h"
 
-using namespace Color_Space;
+namespace Color_Space {
 
 
 void test_xyz_to_rgb_to_xyz(const Rgb &in_rgb) {
@@ -94,3 +94,6 @@ void test_cie2000() {
     std::cout << "CEI2000 test passed!" << std::endl;
   }
 }
+
+
+} // namespace Color_Space

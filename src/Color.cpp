@@ -2,7 +2,7 @@
 
 #include <array>
 
-using namespace Color_Space;
+namespace Color_Space {
 
 
 std::array<float, 3> Color::get_values() const { return m_values; }
@@ -21,3 +21,5 @@ bool Color::operator==(const Color &other) const {
 
 
 bool Color::operator!=(const Color &other) const { return !(*this == other); }
+
+}; // namespace Color_Space

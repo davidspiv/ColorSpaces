@@ -8,9 +8,11 @@
 #include <iostream>
 #include <unordered_map>
 
-using namespace Color_Space;
+namespace Color_Space {
+
 
 enum Gamma { SRGB, SIMPLE_22, SIMPLE_18, L_STAR };
+
 
 struct Profile {
   Rgb_Working_Space working_space;
@@ -20,6 +22,7 @@ struct Profile {
   Xyz illuminant;
   Gamma gamma;
 };
+
 
 const static std::unordered_map<Illuminant_Label, Xyz> illuminants = {
     {A, Xyz(1.09850f, 1.00000f, 0.35585f)},
@@ -99,5 +102,8 @@ const static std::vector<Profile> profiles = {
      Xyz(0.1150f, 0.8260f, 0.724938f), Xyz(0.1570f, 0.0180f, 0.016875f),
      illuminants.at(D50), Gamma::SIMPLE_22},
 };
+
+
+} // namespace Color_Space
 
 #endif

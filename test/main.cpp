@@ -4,9 +4,6 @@
 #include "../include/timer.h"
 #include "../include/util.h"
 
-using namespace Color_Space;
-
-
 int main() {
   Timer timer;
 
@@ -20,13 +17,14 @@ int main() {
   //   xyz.to_luv().to_lch_uv().print();
   //   xyz.to_rgb().print();
 
-  Rgb rgb(30, 99, 15);
-  Xyz xyz = rgb.to_xyz(PRO_PHOTO_RGB).adapt_to_white_point(D75);
-  Lab lab = xyz.to_lab();
+  Color_Space::Rgb rgb(30, 99, 15);
+  Color_Space::Xyz xyz = rgb.to_xyz(Color_Space::SMPTE_C_RGB)
+                             .adapt_to_white_point(Color_Space::D75);
+  Color_Space::Lab lab = xyz.to_lab();
 
-  Lab other_lab(53.2f, 15.0f, -40.0f, D75);
+  Color_Space::Lab other_lab(53.2f, 15.0f, -40.0f, Color_Space::D75);
   float deltaE = lab.diff_cie_2000(other_lab);
 
-  test_xyz_to_rgb_to_xyz(rgb);
-  test_cie2000();
+  Color_Space::test_xyz_to_rgb_to_xyz(rgb);
+  Color_Space::test_cie2000();
 }

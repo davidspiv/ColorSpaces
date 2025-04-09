@@ -43,18 +43,18 @@
 - Chromatic adaptation between white points:
   - A, B, C, D50, D55, D65, D75, E, F2, F7, F11
 
-
 ## Example Usage
 ```cpp
 // specify a named RGB color space when converting both to and from RGB
-Rgb rgb(30, 99, 15);
-Xyz xyz = rgb.to_xyz(PRO_PHOTO_RGB).adapt_to_white_point(D75);
-Lab lab = xyz.to_lab();
+Color_Space::Rgb rgb(30, 99, 15);
+Color_Space::Xyz xyz = rgb.to_xyz(Color_Space::SMPTE_C_RGB)
+							.adapt_to_white_point(Color_Space::D75);
+Color_Space::Lab lab = xyz.to_lab();
 
 // alternatively, when declaring a color you can specify the referenced illuminant as the fourth  argument
-Lab other_lab(53.2, 15.0, -40.0, D75);
+Color_Space::Lab other_lab(53.2f, 15.0f, -40.0f, Color_Space::D75);
 
-float delta_E = lab.diff_cie_2000(other_lab);
+float deltaE = lab.diff_cie_2000(other_lab);
 ```
 
 ## References

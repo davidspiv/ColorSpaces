@@ -4,7 +4,7 @@
 #include <array>
 #include <cmath>
 
-using namespace Color_Space;
+namespace Color_Space {
 
 
 float Lab::diff_cie_76(const Lab &other) const {
@@ -158,3 +158,6 @@ float Lab::diff_cie_2000(const Lab &other) const {
 
   return delta_E;
 }
+
+
+} // namespace Color_Space

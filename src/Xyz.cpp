@@ -6,7 +6,7 @@
 #include <array>
 #include <cmath>
 
-using namespace Color_Space;
+namespace Color_Space {
 
 
 Xyz::Xyz(float x, float y, float z, Illuminant_Label illuminant) {
@@ -131,4 +131,7 @@ Xyz Xyz::adapt_to_white_point(const Illuminant_Label illuminant_label) const {
 void Xyz::print() const {
   std::cout << "[XYZ]" << "\nX: " << m_values[0] << "\nY: " << m_values[1]
             << "\nZ: " << m_values[2] << "\n\n";
+}
+
+
 }

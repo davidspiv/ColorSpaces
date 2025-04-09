@@ -5,7 +5,7 @@
 #include <cmath>
 #include <iostream>
 
-using namespace Color_Space;
+namespace Color_Space {
 
 
 Lab::Lab(float l, float a, float b, Illuminant_Label illuminant) {
@@ -49,3 +49,6 @@ void Lab::print() const {
   std::cout << "[Lab]" << "\nL: " << m_values[0] << "\na: " << m_values[1]
             << "\nb: " << m_values[2] << "\n\n";
 }
+
+
+} // namespace Color_Space

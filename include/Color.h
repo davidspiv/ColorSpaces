@@ -85,9 +85,9 @@ public:
    * @param l Lightness (0–100)
    * @param a Green–Red component
    * @param b Blue–Yellow component
-   * @param illuminant Cie illuminant (default D50)
+   * @param illuminant Cie illuminant (default D65)
    */
-  Lab(float l, float a, float b, Illuminant_Label illuminant = D50);
+  Lab(float l, float a, float b, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts Lab to XYZ color space.
@@ -141,9 +141,9 @@ public:
    * @param l Lightness
    * @param c Chroma
    * @param h Hue angle [degrees]
-   * @param illuminant Cie illuminant (default D50)
+   * @param illuminant Cie illuminant (default D65)
    */
-  Lch_Ab(float l, float c, float h, Illuminant_Label illuminant = D50);
+  Lch_Ab(float l, float c, float h, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Prints Lch(ab) components to the console.
@@ -159,9 +159,9 @@ public:
    * @param l Lightness
    * @param c Chroma
    * @param h Hue angle (in degrees)
-   * @param illuminant Cie illuminant (default D50).
+   * @param illuminant Cie illuminant (default D65).
    */
-  Lch_Uv(float l, float c, float h, Illuminant_Label illuminant = D50);
+  Lch_Uv(float l, float c, float h, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Prints Lch(uv) components to the console.
@@ -177,9 +177,9 @@ public:
    * @param l Lightness
    * @param u Chromaticity U
    * @param v Chromaticity V
-   * @param illuminant Cie illuminant (default D50)
+   * @param illuminant Cie illuminant (default D65)
    */
-  Luv(float l, float u, float v, Illuminant_Label illuminant = D50);
+  Luv(float l, float u, float v, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts Luv to cylindrical Lch(uv) representation.
@@ -201,9 +201,9 @@ public:
    * @param r Red channel
    * @param g Green channel
    * @param b Blue channel
-   * @param illuminant Cie illuminant (default D50)
+   * @param illuminant Cie illuminant (default D65)
    */
-  Rgb(float r, float g, float b, Illuminant_Label illuminant = D50);
+  Rgb(float r, float g, float b, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts RGB to XYZ color space.
@@ -227,9 +227,9 @@ public:
    * @param x Chromaticity x
    * @param y Chromaticity y
    * @param Y Luminance
-   * @param illuminant Cie illuminant (default D50)
+   * @param illuminant Cie illuminant (default D65)
    */
-  Xyy(float x, float y, float Y, Illuminant_Label illuminant = D50);
+  Xyy(float x, float y, float Y, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Prints xyY components to the console.
@@ -245,9 +245,9 @@ public:
    * @param x X component
    * @param y Y component (luminance)
    * @param z Z component
-   * @param illuminant Cie illuminant (default D50)
+   * @param illuminant Cie illuminant (default D65)
    */
-  Xyz(float x, float y, float z, Illuminant_Label illuminant = D50);
+  Xyz(float x, float y, float z, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts XYZ to RGB.

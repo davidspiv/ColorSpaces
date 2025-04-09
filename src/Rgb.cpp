@@ -8,7 +8,7 @@
 #include <iostream>
 #include <stdexcept>
 
-using namespace Color_Space;
+namespace Color_Space {
 
 
 Rgb::Rgb(float r, float g, float b, Illuminant_Label illuminant) {
@@ -53,3 +53,6 @@ void Rgb::print() const {
   std::cout << "[Rgb]" << "\nr: " << m_values[0] << "\ng: " << m_values[1]
             << "\nb: " << m_values[2] << std::endl;
 }
+
+
+} // namespace Color_Space

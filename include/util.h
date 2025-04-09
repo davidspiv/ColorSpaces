@@ -9,7 +9,8 @@
 #include "Matrix.h"
 #include "Profile.h"
 
-using namespace Color_Space;
+namespace Color_Space {
+
 
 static constexpr float epsilon = 216.0f / 24389.0f;
 static constexpr float kappa = 24389.0f / 27.0f;
@@ -81,4 +82,5 @@ Matrix compute_chromatic_adaptation_matrix(const Xyz &src_illuminant,
                                            const Xyz &dest_illuminant);
 
 
+} // namespace Color_Space
 #endif

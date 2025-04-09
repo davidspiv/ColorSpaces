@@ -10,7 +10,7 @@
 #include <stdexcept>
 #include <string>
 
-using namespace Color_Space;
+namespace Color_Space {
 
 
 double to_degrees(const double radians) { return radians * (180.0 / M_PI); }
@@ -135,3 +135,6 @@ Profile get_profile(const Rgb_Working_Space working_space) {
 
   throw std::runtime_error("Profile not found");
 };
+
+
+}
