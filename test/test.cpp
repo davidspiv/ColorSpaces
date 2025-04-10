@@ -140,7 +140,7 @@ void test_conversion() {
     const Rgb best_rgb = source_lab.to_xyz().to_rgb(BEST_RGB);
     const Rgb beta_rgb = source_lab.to_xyz().to_rgb(BETA_RGB);
     const Rgb bruce_rgb = source_lab.to_xyz().to_rgb(BRUCE_RGB);
-    // const Rgb cie_rgb = source_lab.to_xyz().to_rgb(CIE_RGB);
+    const Rgb cie_rgb = source_lab.to_xyz().to_rgb(CIE_RGB);
     const Rgb colormatch_rgb = source_lab.to_xyz().to_rgb(COLORMATCH_RGB);
     const Rgb don_rgb_4 = source_lab.to_xyz().to_rgb(DON_RGB_4);
     // const Rgb eci_rgb_v2 = source_lab.to_xyz().to_rgb(ECI_RGB_V2);
@@ -202,9 +202,15 @@ void test_conversion() {
       return;
     };
 
-    // if (cie_rgb != colors.at(6)) {
-    //   std::cout << "failed" << std::endl;continue;
-    // };
+    if (cie_rgb != colors.at(6)) {
+      std::cout << std::endl;
+      std::cout << "failed: cie_rgb" << std::endl;
+      auto [t_r, t_g, t_b] = colors.at(6).get_values();
+      Rgb(t_r, t_g, t_b).print();
+      cie_rgb.print();
+      std::cout << std::endl;
+      return;
+    };
 
     if (colormatch_rgb != colors.at(7)) {
       std::cout << std::endl;
@@ -227,7 +233,13 @@ void test_conversion() {
     };
 
     // if (eci_rgb_v2 != colors.at(9)) {
-    //   std::cout << "failed" << std::endl;continue;
+    //   std::cout << std::endl;
+    //   std::cout << "failed: eci_rgb_v2" << std::endl;
+    //   auto [t_r, t_g, t_b] = colors.at(9).get_values();
+    //   Rgb(t_r, t_g, t_b).print();
+    //   eci_rgb_v2.print();
+    //   std::cout << std::endl;
+    //   continue;
     // };
 
     if (ekta_space_ps5 != colors.at(10)) {
@@ -241,11 +253,23 @@ void test_conversion() {
     };
 
     // if (ntsc_rgb != colors.at(12)) {
-    //   std::cout << "failed" << std::endl;continue;
+    //   std::cout << std::endl;
+    //   std::cout << "failed: ntsc_rgb" << std::endl;
+    //   auto [t_r, t_g, t_b] = colors.at(12).get_values();
+    //   Rgb(t_r, t_g, t_b).print();
+    //   ntsc_rgb.print();
+    //   std::cout << std::endl;
+    //   continue;
     // };
 
     // if (pal_secam_rgb != colors.at(13)) {
-    //   std::cout << "failed" << std::endl;continue;
+    //   std::cout << std::endl;
+    //   std::cout << "failed: pal_secam_rgb" << std::endl;
+    //   auto [t_r, t_g, t_b] = colors.at(13).get_values();
+    //   Rgb(t_r, t_g, t_b).print();
+    //   pal_secam_rgb.print();
+    //   std::cout << std::endl;
+    //   continue;
     // };
 
     if (pro_photo_rgb != colors.at(14)) {
@@ -259,7 +283,13 @@ void test_conversion() {
     };
 
     // if (smpte_c_rgb != colors.at(17)) {
-    //   std::cout << "failed" << std::endl;continue;
+    //   std::cout << std::endl;
+    //   std::cout << "failed: smpte_c_rgb" << std::endl;
+    //   auto [t_r, t_g, t_b] = colors.at(17).get_values();
+    //   Rgb(t_r, t_g, t_b).print();
+    //   smpte_c_rgb.print();
+    //   std::cout << std::endl;
+    //   continue;
     // };
 
     if (wide_gamut_rgb != colors.at(19)) {
@@ -274,8 +304,8 @@ void test_conversion() {
   }
 
 
-  in.close();
   std::cout << "conversion test passed!" << std::endl;
+  in.close();
 }
 
 
