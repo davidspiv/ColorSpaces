@@ -17,9 +17,7 @@ Xyz::Xyz(float x, float y, float z, Illuminant_Label illuminant) {
 
 Rgb Xyz::to_rgb(const Rgb_Working_Space working_space) const {
 
-  const Profile profile = (working_space == UNSPECIFIED)
-                              ? profiles.at(0)
-                              : get_profile(working_space);
+  const Profile profile = get_profile(working_space);
 
   const Matrix color_as_column =
       (profile.illuminant == illuminants.at(m_illuminant))

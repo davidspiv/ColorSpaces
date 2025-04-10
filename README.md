@@ -37,7 +37,7 @@
 
 - Perceptual color difference formulas:
   - CIE76
-  - CIE94 (Graphics and Textiles)
+  - CIE94 (Graphics/Textiles)
   - CIEDE2000
 
 - Chromatic adaptation between white points:

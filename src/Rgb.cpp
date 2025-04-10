@@ -28,9 +28,7 @@ Rgb::Rgb(float r, float g, float b, Illuminant_Label illuminant) {
 
 
 Xyz Rgb::to_xyz(const Rgb_Working_Space working_space) const {
-  const Profile profile = (working_space == UNSPECIFIED)
-                              ? profiles.at(0)
-                              : get_profile(working_space);
+  const Profile profile = get_profile(working_space);
 
   auto [r, g, b] = m_values;
 

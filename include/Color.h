@@ -10,14 +10,6 @@
 
 namespace Color_Space {
 
-class Lab;
-class Lch_Ab;
-class Lch_Uv;
-class Luv;
-class Rgb;
-class Rgb;
-class Xyy;
-class Xyz;
 
 enum Illuminant_Label {
   A,
@@ -52,7 +44,6 @@ enum Rgb_Working_Space {
   PRO_PHOTO_RGB,
   SMPTE_C_RGB,
   WIDE_GAMUT_RGB,
-  UNSPECIFIED
   /// RGB color spaces
 };
 
@@ -99,20 +90,37 @@ public:
 };
 
 
+// forward declarations to avoid unknown-type errors between color children
+class Lab;
+class Lch_Ab;
+class Lch_Uv;
+class Luv;
+class Rgb;
+class Rgb;
+class Xyy;
+class Xyz;
+
+
+// CIELAB was designed to approximate human vision. The CIELAB coordinate space
+// represents the entire gamut of human photopic (daylight) vision and far
+// exceeds the gamut of sRGB or CMYK. This large, asymmetrical gamut
+// makes representing colors relatively data-inefficient. Using CIELAB in an
+// 8-bit per channel integer format typically results in significant
+// quantization errors.
 class Lab : public Color {
 public:
   /**
    * @brief Constructs a Lab color.
-   * @param l Lightness 
-   * @param a Green–Red component
-   * @param b Blue–Yellow component
+   * @param l Lightness (L*)
+   * @param a Green–Red component (a*)
+   * @param b Blue–Yellow component (b*)
    * @param illuminant Cie illuminant (default D65)
    */
   Lab(float l, float a, float b, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts Lab to XYZ color space.
-   * @return Xyz object representing this Lab color.
+   * @return the converted color as a Xyz object
    */
   Xyz to_xyz() const;
 
@@ -126,7 +134,7 @@ public:
    * @brief Approximates color difference between the two colors, using the
    * CIE76 formula (basic Euclidean distance).
    * @param other Lab color to compute with.
-   * @return perceptual distance (ΔE*)
+   * @return perceptual distance as defined by the CIE (ΔE*)
    */
   [[nodiscard]] float diff_cie_76(const Lab &other) const;
 
@@ -135,7 +143,7 @@ public:
    * CIE94 formula.
    * @param other Lab color to compute with.
    * @param mode Application mode (GRAPHICS or TEXTILES)
-   * @return perceptual distance (ΔE*).
+   * @return perceptual distance as defined by the CIE (ΔE*)
    */
   [[nodiscard]] float diff_cie_94(const Lab &other,
                                   CIE94_Mode mode = GRAPHICS) const;
@@ -144,7 +152,7 @@ public:
    * @brief Approximates color difference between the two colors, using the
    * CIEDE2000 formula.
    * @param other Lab color to compute with.
-   * @return perceptual distance (ΔE*).
+   * @return perceptual distance as defined by the CIE (ΔE*)
    */
   [[nodiscard]] float diff_cie_2000(const Lab &other) const;
 
@@ -155,6 +163,7 @@ public:
 };
 
 
+// LCh(ab) is a cylindrical model of the CIELAB color space.
 class Lch_Ab : public Color {
 public:
   /**
@@ -173,24 +182,8 @@ public:
 };
 
 
-class Lch_Uv : public Color {
-public:
-  /**
-   * @brief Constructs an Lch(uv) color (cylindrical Luv).
-   * @param l Lightness
-   * @param c Chroma
-   * @param h Hue angle (in degrees)
-   * @param illuminant Cie illuminant (default D65).
-   */
-  Lch_Uv(float l, float c, float h, Illuminant_Label illuminant = D65);
-
-  /**
-   * @brief Prints Lch(uv) components to the console.
-   */
-  void print() const;
-};
-
-
+// CIELUV was adopted by the CIE at the same time as CIELAB and attempted
+// perceptual uniformity using a different method.
 class Luv : public Color {
 public:
   /**
@@ -215,9 +208,31 @@ public:
 };
 
 
-// Additive color mixing with primary colors of red, green, and blue, each of
-// which stimulates one of the three types of the eye's color receptors with as
-// little stimulation as possible of the other two.
+// LCh(uv) is a cylindrical model of the LUV color space.
+class Lch_Uv : public Color {
+public:
+  /**
+   * @brief Constructs an Lch(uv) color (cylindrical Luv).
+   * @param l Lightness
+   * @param c Chroma
+   * @param h Hue angle (in degrees)
+   * @param illuminant Cie illuminant (default D65).
+   */
+  Lch_Uv(float l, float c, float h, Illuminant_Label illuminant = D65);
+
+  /**
+   * @brief Prints Lch(uv) components to the console.
+   */
+  void print() const;
+};
+
+
+// The RGB color model is an additive color model in which the red, green,
+// and blue primary colors of light are added together in various ways to
+// reproduce a broad array of colors. This color model is device dependent; the
+// gamut is defined by the 3 colors of light the device can reproduce. The class
+// methods enclosed target generalized "RGB working spaces" that are defined by
+// three chosen tristimulus colors and a white point.
 class Rgb : public Color {
 public:
   /**
@@ -234,8 +249,7 @@ public:
    * @param working_space The RGB color space (sRGB, Adobe RGB, etc.)
    * @return the converted color as a Xyz object
    */
-  [[nodiscard]] Xyz
-  to_xyz(const Rgb_Working_Space working_space = UNSPECIFIED) const;
+  [[nodiscard]] Xyz to_xyz(const Rgb_Working_Space working_space = S_RGB) const;
 
   /**
    * @brief Prints RGB components to the console.
@@ -262,28 +276,29 @@ public:
 };
 
 
-// One of the first mathematically defined color spaces is the CIE XYZ color
-// space (also known as CIE 1931 color space), created by the International
+// The CIE XYZ color space (also known as CIE 1931 color space) is one of the
+// first mathematically defined color spaces, created by the International
 // Commission on Illumination in 1931. Its goal was to match human visual
-// metamerism.
+// metamerism. Which, since humans only have 3 types of color-detecting cone
+// cells, is the reduction of colors to three sensory quantities. These
+// quantities are called tristimulus values.
 class Xyz : public Color {
 public:
   /**
    * @brief Constructs an XYZ color.
-   * @param x X component
-   * @param y Y component (luminance)
-   * @param z Z component
+   * @param X a mix of the three CIE RGB curves chosen to be nonnegative (X)
+   * @param Y luminance (Y)
+   * @param Z quasi-equal to the "blue" monochromatic primary (Z)
    * @param illuminant Cie illuminant (default D65)
    */
-  Xyz(float x, float y, float z, Illuminant_Label illuminant = D65);
+  Xyz(float X, float Y, float Z, Illuminant_Label illuminant = D65);
 
   /**
    * @brief Converts XYZ to RGB.
    * @param working_space RGB color space to use for conversion.
    * @return RGB color.
    */
-  [[nodiscard]] Rgb
-  to_rgb(const Rgb_Working_Space working_space = UNSPECIFIED) const;
+  [[nodiscard]] Rgb to_rgb(const Rgb_Working_Space working_space = S_RGB) const;
 
   /**
    * @brief Converts XYZ to Lab.
