@@ -73,6 +73,12 @@ protected:
   Illuminant_Label m_illuminant;
 
 public:
+  Color(float x, float y, float z, Illuminant_Label illuminant = D65) {
+    m_values = {x, y, z};
+    m_illuminant = illuminant;
+  }
+
+
   /**
    * @brief Returns the color's internal channel values.
    * @return Array containing 3 float components

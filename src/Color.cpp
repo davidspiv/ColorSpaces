@@ -15,8 +15,10 @@ Matrix Color::to_column() const {
 
 bool Color::operator==(const Color &other) const {
   auto [x, y, z] = m_values;
+  float error = 1;
   auto [other_x, other_y, other_z] = other.get_values();
-  return (x == other_x) && (y == other_y) && (z == other_z);
+  return (std::abs(x - other_x) < error) && (std::abs(y - other_y) < error) &&
+         (std::abs(z - other_z) < error);
 }
 
 

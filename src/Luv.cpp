@@ -7,10 +7,8 @@
 namespace Color_Space {
 
 
-Luv::Luv(float l, float u, float v, Illuminant_Label illuminant) {
-  m_values = {l, u, v};
-  m_illuminant = illuminant;
-}
+Luv::Luv(float l, float u, float v, Illuminant_Label illuminant)
+    : Color(l, u, v, illuminant) {}
 
 
 Lch_Uv Luv::to_lch_uv() const {
@@ -26,4 +24,4 @@ void Luv::print() const {
 }
 
 
-}
+} // namespace Color_Space

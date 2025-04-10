@@ -5,10 +5,8 @@
 namespace Color_Space {
 
 
-Xyy::Xyy(float x, float y, float Y, Illuminant_Label illuminant) {
-  m_values = {x, y, Y};
-  m_illuminant = illuminant;
-}
+Xyy::Xyy(float x, float y, float Y, Illuminant_Label illuminant)
+    : Color(x, y, Y, illuminant) {}
 
 
 void Xyy::print() const {
@@ -17,4 +15,4 @@ void Xyy::print() const {
 }
 
 
-}
+} // namespace Color_Space

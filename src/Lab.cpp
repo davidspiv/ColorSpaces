@@ -8,10 +8,8 @@
 namespace Color_Space {
 
 
-Lab::Lab(float l, float a, float b, Illuminant_Label illuminant) {
-  m_values = {l, a, b};
-  m_illuminant = illuminant;
-}
+Lab::Lab(float l, float a, float b, Illuminant_Label illuminant)
+    : Color(l, a, b, illuminant) {}
 
 
 Lch_Ab Lab::to_lch_ab() const {

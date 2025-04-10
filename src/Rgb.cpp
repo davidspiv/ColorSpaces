@@ -11,20 +11,19 @@
 namespace Color_Space {
 
 
-Rgb::Rgb(float r, float g, float b, Illuminant_Label illuminant) {
-  auto validate = [](float c) {
-    if (std::min(255.0f, std::max(0.0f, c)) != c) {
-      throw std::domain_error("Channel initalized outside of range [0, 255].");
-    }
-  };
+Rgb::Rgb(float r, float g, float b, Illuminant_Label illuminant)
+    : Color(r, g, b, illuminant) {
+        //   auto validate = [](float c) {
+        //     if (std::min(255.0f, std::max(0.0f, c)) != c) {
+        //       throw std::domain_error("Channel initalized outside of range
+        //       [0, 255].");
+        //     }
+        //   };
 
-  validate(r);
-  validate(g);
-  validate(b);
-
-  m_values = {r, g, b};
-  m_illuminant = illuminant;
-};
+        //   validate(r);
+        //   validate(g);
+        //   validate(b);
+      };
 
 
 Xyz Rgb::to_xyz(const Rgb_Working_Space working_space) const {

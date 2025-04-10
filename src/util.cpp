@@ -32,19 +32,23 @@ to_polar_color_space(const std::array<float, 3> &cartesianColor_Space) {
 
 // tone-response curve
 float apply_gamma(const float c, Gamma gamma) {
+  if (c <= 0) {
+    return c;
+  }
+
   switch (gamma) {
   case Gamma::SRGB:
     return (c <= 0.0031308f) ? (c * 12.92f)
                              : 1.055f * std::pow(c, 1.0f / 2.4f) - 0.055f;
 
   case Gamma::SIMPLE_22:
-    return std::pow(c, 1.0f / 2.2f);
+    return std::pow(c, 0.45455f);
 
   case Gamma::SIMPLE_18:
-    return std::pow(c, 1.0f / 1.8f);
+    return std::pow(c, 0.55555f);
 
   case Gamma::L_STAR:
-    throw std::runtime_error("Option not built.");
+    return std::pow(c, 0.57721f);
   }
 
   throw std::domain_error("Option not recognized.");
@@ -52,20 +56,27 @@ float apply_gamma(const float c, Gamma gamma) {
 
 
 float remove_gamma(float c, Gamma gamma) {
+  if (c <= 0) {
+    return c;
+  }
+
   switch (gamma) {
   case Gamma::SRGB:
-    return (c <= 0.04045) ? (c / 12.92) : pow((c + 0.055) / 1.055, 2.4);
+    return (c <= 0.04045f) ? (c / 12.92f)
+                           : std::pow((c + 0.055f) / 1.055f, 2.4f);
 
   case Gamma::SIMPLE_22:
-    return std::pow(c, 0.45455f);
+    return std::pow(c, 2.2f);
 
   case Gamma::SIMPLE_18:
+    return std::pow(c, 1.8f);
+
   case Gamma::L_STAR:
-    throw std::runtime_error("Option not built.");
+    return std::pow(c, 1.73205f);
   }
 
   throw std::domain_error("Option not recognized.");
-};
+}
 
 
 Matrix create_to_xyz_transformation_matrix(const Profile &profile) {
@@ -90,8 +101,8 @@ Matrix create_to_xyz_transformation_matrix(const Profile &profile) {
 
   const Matrix XYZ_matrix(XYZ);
   const Matrix XYZ_matrix_inverted = XYZ_matrix.invert();
-  const Matrix S_matrix =
-      XYZ_matrix_inverted.multiply(profile.illuminant.to_column());
+  const Matrix S_matrix = XYZ_matrix_inverted.multiply(
+      illuminants.at(profile.illuminant_label).to_column());
 
   return XYZ_matrix.column_wise_scaling(S_matrix);
 }

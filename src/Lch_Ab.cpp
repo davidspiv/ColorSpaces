@@ -7,11 +7,8 @@
 namespace Color_Space {
 
 
-Lch_Ab::Lch_Ab(float l, float c, float h, Illuminant_Label illuminant) {
-  m_values = {l, c, h};
-  m_illuminant = illuminant;
-}
-
+Lch_Ab::Lch_Ab(float l, float c, float h, Illuminant_Label illuminant)
+    : Color(l, c, h, illuminant) {}
 
 void Lch_Ab::print() const {
   std::cout << "[LCHab]" << "\nL: " << m_values[0] << "\nc: " << m_values[1]

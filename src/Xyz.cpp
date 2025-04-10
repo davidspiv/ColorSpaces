@@ -9,10 +9,8 @@
 namespace Color_Space {
 
 
-Xyz::Xyz(float x, float y, float z, Illuminant_Label illuminant) {
-  m_values = {x, y, z};
-  m_illuminant = illuminant;
-}
+Xyz::Xyz(float x, float y, float z, Illuminant_Label illuminant)
+    : Color(x, y, z, illuminant) {}
 
 
 Rgb Xyz::to_rgb(const Rgb_Working_Space working_space) const {
@@ -20,9 +18,9 @@ Rgb Xyz::to_rgb(const Rgb_Working_Space working_space) const {
   const Profile profile = get_profile(working_space);
 
   const Matrix color_as_column =
-      (profile.illuminant == illuminants.at(m_illuminant))
+      (profile.illuminant_label == m_illuminant)
           ? to_column()
-          : adapt_to_white_point(D65).to_column();
+          : adapt_to_white_point(profile.illuminant_label).to_column();
 
   const Matrix M_matrix = create_to_xyz_transformation_matrix(profile).invert();
 
