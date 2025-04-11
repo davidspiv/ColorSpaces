@@ -64,9 +64,17 @@ enum CIE94_Mode {
 };
 
 
-// A color model is an abstract mathematical model describing the way colors can
-// be represented as tuples of numbers, typically as three or four values or
-// color components.
+// forward declarations
+class Lab;
+class Lch_Ab;
+class Lch_Uv;
+class Luv;
+class Rgb;
+class Rgb;
+class Xyy;
+class Xyz;
+
+
 class Color {
 protected:
   std::array<float, 3> m_values;
@@ -90,29 +98,16 @@ public:
    * @return Matrix with column form of color values.
    */
   [[nodiscard]] Matrix to_column() const;
+  virtual void print() const {
+    std::cout << "[GEN]" << "\nC1: " << m_values[0] << "\nC2: " << m_values[1]
+              << "\nC3: " << m_values[2] << "\n\n";
+  }
 
   [[nodiscard]] bool operator==(const Color &other) const;
   [[nodiscard]] bool operator!=(const Color &other) const;
 };
 
 
-// forward declarations to avoid unknown-type errors between color children
-class Lab;
-class Lch_Ab;
-class Lch_Uv;
-class Luv;
-class Rgb;
-class Rgb;
-class Xyy;
-class Xyz;
-
-
-// CIELAB was designed to approximate human vision. The CIELAB coordinate space
-// represents the entire gamut of human photopic (daylight) vision and far
-// exceeds the gamut of sRGB or CMYK. This large, asymmetrical gamut
-// makes representing colors relatively data-inefficient. Using CIELAB in an
-// 8-bit per channel integer format typically results in significant
-// quantization errors.
 class Lab : public Color {
 public:
   /**
@@ -165,11 +160,10 @@ public:
   /**
    * @brief Prints Lab components to the console.
    */
-  void print() const;
+  void print() const override;
 };
 
 
-// LCh(ab) is a cylindrical model of the CIELAB color space.
 class Lch_Ab : public Color {
 public:
   /**
@@ -184,12 +178,10 @@ public:
   /**
    * @brief Prints Lch(ab) components to the console.
    */
-  void print() const;
+  void print() const override;
 };
 
 
-// CIELUV was adopted by the CIE at the same time as CIELAB and attempted
-// perceptual uniformity using a different method.
 class Luv : public Color {
 public:
   /**
@@ -210,11 +202,10 @@ public:
   /**
    * @brief Prints Luv components to the console.
    */
-  void print() const;
+  void print() const override;
 };
 
 
-// LCh(uv) is a cylindrical model of the LUV color space.
 class Lch_Uv : public Color {
 public:
   /**
@@ -229,16 +220,10 @@ public:
   /**
    * @brief Prints Lch(uv) components to the console.
    */
-  void print() const;
+  void print() const override;
 };
 
 
-// The RGB color model is an additive color model in which the red, green,
-// and blue primary colors of light are added together in various ways to
-// reproduce a broad array of colors. This color model is device dependent; the
-// gamut is defined by the 3 colors of light the device can reproduce. The class
-// methods enclosed target generalized "RGB working spaces" that are defined by
-// three chosen tristimulus colors and a white point.
 class Rgb : public Color {
 public:
   /**
@@ -260,7 +245,7 @@ public:
   /**
    * @brief Prints RGB components to the console.
    */
-  void print() const;
+  void print() const override;
 };
 
 
@@ -278,16 +263,10 @@ public:
   /**
    * @brief Prints xyY components to the console.
    */
-  void print() const;
+  void print() const override;
 };
 
 
-// The CIE XYZ color space (also known as CIE 1931 color space) is one of the
-// first mathematically defined color spaces, created by the International
-// Commission on Illumination in 1931. Its goal was to match human visual
-// metamerism. Which, since humans only have 3 types of color-detecting cone
-// cells, is the reduction of colors to three sensory quantities. These
-// quantities are called tristimulus values.
 class Xyz : public Color {
 public:
   /**
