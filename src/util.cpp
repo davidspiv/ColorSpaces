@@ -108,10 +108,10 @@ Matrix create_to_xyz_transformation_matrix(const Profile &profile) {
 }
 
 
-Profile get_profile(const Rgb_Working_Space working_space) {
+Profile get_profile(const Rgb_Profile_Label profile_label) {
   auto it =
       std::find_if(profiles.begin(), profiles.end(), [&](const Profile &p) {
-        return p.working_space == working_space;
+        return p.profile_label == profile_label;
       });
 
   if (it != profiles.end()) {

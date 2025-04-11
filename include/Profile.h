@@ -12,7 +12,7 @@ namespace Color_Space {
 
 
 struct Profile {
-  Rgb_Working_Space working_space;
+  Rgb_Profile_Label profile_label;
   Xyz primary_r;
   Xyz primary_g;
   Xyz primary_b;

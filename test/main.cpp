@@ -10,8 +10,7 @@ int main() {
 
   lch_uv.to_luv().to_xyz().to_rgb(Color_Space::ADOBE_RGB_1998).print();
 
-  //   const Color_Space::Rgb rgb(115, 80, 64);
-  //   Color_Space::test_xyz_to_rgb_to_xyz(rgb);
-  //   Color_Space::test_cie2000();
-  //   Color_Space::test_conversion();
+  const Color_Space::Rgb rgb(115, 80, 64);
+  Color_Space::test_cie2000();
+  Color_Space::test_conversion();
 }

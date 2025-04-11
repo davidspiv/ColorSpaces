@@ -27,7 +27,7 @@ enum Illuminant_Label {
 };
 
 
-enum Rgb_Working_Space {
+enum Rgb_Profile_Label {
   S_RGB,
   ADOBE_RGB_1998,
   APPLE_RGB,
@@ -241,12 +241,14 @@ public:
    */
   Rgb(float r, float g, float b, Illuminant_Label illuminant = D65);
 
+  Rgb(float r, float g, float b, const Rgb_Profile_Label &profile);
+
   /**
    * @brief Converts RGB to XYZ color space.
-   * @param working_space The RGB color space (sRGB, Adobe RGB, etc.)
+   * @param profile The RGB color space (sRGB, Adobe RGB, etc.)
    * @return the converted color as a Xyz object
    */
-  [[nodiscard]] Xyz to_xyz(const Rgb_Working_Space working_space = S_RGB) const;
+  [[nodiscard]] Xyz to_xyz(const Rgb_Profile_Label profile = S_RGB) const;
 
   /**
    * @brief Prints RGB components to the console.
@@ -290,10 +292,10 @@ public:
 
   /**
    * @brief Converts XYZ to RGB.
-   * @param working_space RGB color space to use for conversion.
+   * @param profile RGB color space to use for conversion.
    * @return RGB color.
    */
-  [[nodiscard]] Rgb to_rgb(const Rgb_Working_Space working_space = S_RGB) const;
+  [[nodiscard]] Rgb to_rgb(const Rgb_Profile_Label profile = S_RGB) const;
 
   /**
    * @brief Converts XYZ to Lab.

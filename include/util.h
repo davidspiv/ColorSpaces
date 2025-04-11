@@ -33,7 +33,7 @@ float remove_gamma(float c, Gamma gamma);
 Matrix create_to_xyz_transformation_matrix(const Profile &profile);
 
 
-Profile get_profile(const Rgb_Working_Space working_space);
+Profile get_profile(const Rgb_Profile_Label profile);
 
 
 } // namespace Color_Space

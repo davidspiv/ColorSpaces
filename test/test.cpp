@@ -10,22 +10,6 @@
 namespace Color_Space {
 
 
-void test_xyz_to_rgb_to_xyz(const Rgb &in_rgb) {
-  auto [in_r, in_g, in_b] = in_rgb.get_values();
-
-  const Rgb out_rgb = in_rgb.to_xyz().to_rgb();
-
-  auto [out_r, out_g, out_b] = out_rgb.get_values();
-
-  if (std::abs(out_r - in_r) <= 1 && std::abs(out_g - in_g) <= 1 &&
-      std::abs(out_b - in_b) <= 1) {
-    std::cout << "rgb->xyz->rgb test passed!" << std::endl;
-  } else {
-    std::cout << "FAILED: rgb->xyz->rgb test" << std::endl;
-  }
-};
-
-
 void test_cie2000() {
   std::ifstream in("./test/dist.dat");
   if (!in) {
@@ -47,7 +31,7 @@ void test_cie2000() {
       break;
     }
 
-    std::istringstream iss1(line);
+    std::stringstream iss1(line);
     float value;
     while (iss1 >> value) {
       tokens.push_back(value);
@@ -69,7 +53,7 @@ void test_cie2000() {
       break;
     }
 
-    std::istringstream iss2(line);
+    std::stringstream iss2(line);
     while (iss2 >> value) {
       tokens.push_back(value);
     }
@@ -112,7 +96,7 @@ void test_conversion() {
   while (getline(in, line)) {
 
 
-    std::istringstream ss(line);
+    std::stringstream ss(line);
     std::vector<double> tokens;
     std::vector<Color> colors;
     double value;
