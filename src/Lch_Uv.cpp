@@ -11,12 +11,13 @@ Lch_Uv::Lch_Uv(float l, float c, float h, Illuminant_Label illuminant)
 
 
 Luv Lch_Uv::to_luv() const {
-  auto [l, c, h] = m_values;
+  auto [l, c, h_deg] = m_values;
+  const float h_rad = to_radians(h_deg);
 
-  const float a = c * std::cos(to_radians(h));
-  const float b = c * std::sin(to_radians(h));
+  const float u = c * std::cos(h_rad);
+  const float v = c * std::sin(h_rad);
 
-  return Luv(l, a, b, m_illuminant);
+  return Luv(l, u, v, m_illuminant);
 }
 
 

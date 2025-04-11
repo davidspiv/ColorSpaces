@@ -26,29 +26,31 @@ Xyz Luv::to_xyz() const {
   if (l == 0.0f)
     return Xyz(0.0f, 0.0f, 0.0f);
 
-  const float u0 = 4 * w_X / (w_X + 15 * w_Y + 3 * w_Z);
-  const float v0 = 9 * w_Y / (w_X + 15 * w_Y + 3 * w_Z);
+  const float chromaticity_denom = w_X + 15 * w_Y + 3 * w_Z;
+  const float u0 = 4 * w_X / chromaticity_denom;
+  const float v0 = 9 * w_Y / chromaticity_denom;
 
-  const float y =
-      l > (kappa * epsilon) ? std::pow((l + 16.0f) / 116.0f, 3) : l / kappa;
+  const float Y =
+      (l > kappa * epsilon) ? std::pow((l + 16.0f) / 116.0f, 3.0f) : l / kappa;
 
-  const float denom_u = (u + 13.0f * l * u0);
-  const float denom_v = (v + 13.0f * l * v0);
+  const float ref_u_component = u + 13.0f * l * u0;
+  const float ref_v_component = v + 13.0f * l * v0;
 
-  if (denom_u == 0.0f || denom_v == 0.0f)
-    return Xyz(0.0f, y, 0.0f);
+  if (ref_u_component == 0.0f || ref_v_component == 0.0f)
+    return Xyz(0.0f, Y, 0.0f);
 
-  const float a = (1.0f / 3.0f) * (52.0f * l / denom_u - 1.0f);
-  const float b = -5.0f * y;
-  const float c = -1.0f / 3.0f;
-  const float d = y * (39.0f * l / denom_v - 5.0f);
+  constexpr float one_third = 1.0f / 3.0f;
 
-  const float x = (d - b) / (a - c);
-  const float z = x * a + b;
+  const float a = one_third * (52.0f * l / ref_u_component - 1.0f);
+  const float b = -5.0f * Y;
+  const float c = -one_third;
+  const float d = Y * (39.0f * l / ref_v_component - 5.0f);
 
-  return Xyz(x, y, z, m_illuminant);
+  const float X = (d - b) / (a - c);
+  const float Z = X * a + b;
+
+  return Xyz(X, Y, Z, m_illuminant);
 }
-
 
 void Luv::print() const {
   std::cout << "[Luv]" << "\nL: " << m_values[0] << "\nu: " << m_values[1]

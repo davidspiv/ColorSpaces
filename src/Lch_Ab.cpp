@@ -13,10 +13,11 @@ Lch_Ab::Lch_Ab(float l, float c, float h, Illuminant_Label illuminant)
 
 
 Lab Lch_Ab::to_lab() const {
-  auto [l, c, h] = m_values;
+  auto [l, c, h_deg] = m_values;
+  const float h_rad = to_radians(h_deg);
 
-  const float a = c * std::cos(to_radians(h));
-  const float b = c * std::sin(to_radians(h));
+  const float a = c * std::cos(h_rad);
+  const float b = c * std::sin(h_rad);
 
   return Lab(l, a, b, m_illuminant);
 }

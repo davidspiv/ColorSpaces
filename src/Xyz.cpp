@@ -40,11 +40,11 @@ Rgb Xyz::to_rgb(const Rgb_Profile_Label profile_label) const {
 
 
 Lab Xyz::to_lab() const {
-  auto [ref_x, ref_y, ref_z] = illuminants.at(m_illuminant).get_values();
+  auto [w_X, w_Y, w_Z] = illuminants.at(m_illuminant).get_values();
 
-  const float xR = m_values[0] / ref_x;
-  const float yR = m_values[1] / ref_y;
-  const float zR = m_values[2] / ref_z;
+  const float xR = m_values[0] / w_X;
+  const float yR = m_values[1] / w_Y;
+  const float zR = m_values[2] / w_Z;
 
   const float fX = (xR > epsilon) ? std::cbrt(xR) : (kappa * xR + 16) / 116.0f;
   const float fY = (yR > epsilon) ? std::cbrt(yR) : (kappa * yR + 16) / 116.0f;
@@ -59,51 +59,49 @@ Lab Xyz::to_lab() const {
 
 
 Luv Xyz::to_luv() const {
-  auto [ref_x, ref_y, ref_z] = illuminants.at(m_illuminant).get_values();
-  auto [x, y, z] = m_values;
+  const auto [w_X, w_Y, w_Z] = illuminants.at(m_illuminant).get_values();
+  const auto [X, Y, Z] = m_values;
 
-  const float yR = y / ref_y;
+  const float Y_r = Y / w_Y;
 
-  const float denominator = x + 15.0 * y + 3 * z;
-  if (denominator == 0.0) {
-    return Luv(0.0, 0.0, 0.0);
-  }
+  const float denom = X + 15.0f * Y + 3.0f * Z;
+  if (denom == 0.0f)
+    return Luv(0.0f, 0.0f, 0.0f);
 
-  const float uPrime = (4.0 * x) / denominator;
-  const float vPrime = (9.0 * y) / denominator;
+  const float u_prime = (4.0f * X) / denom;
+  const float v_prime = (9.0f * Y) / denom;
 
-  const float refDenominator = ref_x + 15.0 * ref_y + 3.0 * ref_z;
-  const float refUPrime = (4.0 * ref_x) / refDenominator;
-  const float refVPrime = (9.0 * ref_y) / refDenominator;
+  const float ref_denom = w_X + 15.0f * w_Y + 3.0f * w_Z;
+  const float u0 = (4.0f * w_X) / ref_denom;
+  const float v0 = (9.0f * w_Y) / ref_denom;
 
-  constexpr double accError = 1e-7;
-  const float uDiff = uPrime - refUPrime;
-  const float vDiff = vPrime - refVPrime;
+  constexpr float acc_error = 1e-7f;
+  const float delta_u = u_prime - u0;
+  const float delta_v = v_prime - v0;
 
   const float l =
-      (yR > epsilon) ? (116.0 * std::cbrt(yR) - 16.0) : (kappa * yR);
-  const float u = (std::abs(uDiff) > accError) ? 13.0 * l * uDiff : 0;
-  const float v = (std::abs(vDiff) > accError) ? 13.0 * l * vDiff : 0;
+      (Y_r > epsilon) ? (116.0f * std::cbrt(Y_r) - 16.0f) : (kappa * Y_r);
+  const float u = (std::abs(delta_u) > acc_error) ? 13.0f * l * delta_u : 0.0f;
+  const float v = (std::abs(delta_v) > acc_error) ? 13.0f * l * delta_v : 0.0f;
 
   return Luv(l, u, v, m_illuminant);
 }
 
 
 Xyy Xyz::to_xyy() const {
-  auto [X, Y, Z] = m_values;
+  const auto [X, Y, Z] = m_values;
   const float sum = X + Y + Z;
 
   if (sum == 0.0f) {
-    const Xyy white_chromaticity = illuminants.at(m_illuminant).to_xyy();
-    auto [x_white, y_white, _] = white_chromaticity.get_values();
-
+    const Xyy white_point = illuminants.at(m_illuminant).to_xyy();
+    const auto [x_white, y_white, _] = white_point.get_values();
     return Xyy(x_white, y_white, Y);
   }
 
-  const float x_chromaticity = X / sum;
-  const float y_chromaticity = Y / sum;
+  const float x = X / sum;
+  const float y = Y / sum;
 
-  return Xyy(x_chromaticity, y_chromaticity, Y, m_illuminant);
+  return Xyy(x, y, Y, m_illuminant);
 }
 
 

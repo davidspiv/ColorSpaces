@@ -10,13 +10,13 @@ Xyy::Xyy(float x, float y, float Y, Illuminant_Label illuminant)
 
 
 Xyz Xyy::to_xyz() const {
-  auto [x, y, Y] = m_values;
-  const double r_X = (x * Y) / y;
-  const double r_Y = Y;
-  const double r_Z = ((1 - x - y) * Y) / y;
+  const auto [x, y, Y] = m_values;
 
-  return Xyz(r_X, r_Y, r_Z);
-};
+  const float X = (x * Y) / y;
+  const float Z = ((1.0f - x - y) * Y) / y;
+
+  return Xyz(X, Y, Z, m_illuminant);
+}
 
 
 void Xyy::print() const {

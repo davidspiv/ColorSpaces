@@ -98,6 +98,7 @@ public:
    * @return Matrix with column form of color values.
    */
   [[nodiscard]] Matrix to_column() const;
+  
   virtual void print() const {
     std::cout << "[GEN]" << "\nC1: " << m_values[0] << "\nC2: " << m_values[1]
               << "\nC3: " << m_values[2] << "\n\n";
