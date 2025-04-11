@@ -71,8 +71,8 @@ class Lch_Uv;
 class Luv;
 class Rgb;
 class Rgb;
-class Xyy;
 class Xyz;
+class Xyy;
 
 
 class Color {
@@ -175,6 +175,8 @@ public:
    */
   Lch_Ab(float l, float c, float h, Illuminant_Label illuminant = D65);
 
+  [[nodiscard]] Lab to_lab() const;
+
   /**
    * @brief Prints Lch(ab) components to the console.
    */
@@ -199,6 +201,8 @@ public:
    */
   [[nodiscard]] Lch_Uv to_lch_uv() const;
 
+  [[nodiscard]] Xyz to_xyz() const;
+
   /**
    * @brief Prints Luv components to the console.
    */
@@ -216,6 +220,8 @@ public:
    * @param illuminant Cie illuminant (default D65).
    */
   Lch_Uv(float l, float c, float h, Illuminant_Label illuminant = D65);
+
+  [[nodiscard]] Luv to_luv() const;
 
   /**
    * @brief Prints Lch(uv) components to the console.
@@ -259,6 +265,10 @@ public:
    * @param illuminant Cie illuminant (default D65)
    */
   Xyy(float x, float y, float Y, Illuminant_Label illuminant = D65);
+
+
+  [[nodiscard]] Xyz to_xyz() const;
+
 
   /**
    * @brief Prints xyY components to the console.
