@@ -75,14 +75,18 @@ Luv Xyz::to_luv() const {
   const float u0 = (4.0f * w_X) / ref_denom;
   const float v0 = (9.0f * w_Y) / ref_denom;
 
-  constexpr float acc_error = 1e-7f;
   const float delta_u = u_prime - u0;
   const float delta_v = v_prime - v0;
 
   const float l =
       (Y_r > epsilon) ? (116.0f * std::cbrt(Y_r) - 16.0f) : (kappa * Y_r);
-  const float u = (std::abs(delta_u) > acc_error) ? 13.0f * l * delta_u : 0.0f;
-  const float v = (std::abs(delta_v) > acc_error) ? 13.0f * l * delta_v : 0.0f;
+  const float u = 13.0f * l * delta_u;
+  const float v = 13.0f * l * delta_v;
+
+  //   constexpr float acc_error = 1e-7f;
+  //   const float u = (std::abs(delta_u) > acc_error) ? 13.0f * l * delta_u :
+  //   0.0f; const float v = (std::abs(delta_v) > acc_error) ? 13.0f * l *
+  //   delta_v : 0.0f;
 
   return Luv(l, u, v, m_illuminant);
 }
