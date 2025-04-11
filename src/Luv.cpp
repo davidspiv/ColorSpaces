@@ -46,7 +46,7 @@ Xyz Luv::to_xyz() const {
   const float x = (d - b) / (a - c);
   const float z = x * a + b;
 
-  return Xyz(x, y, z);
+  return Xyz(x, y, z, m_illuminant);
 }
 
 

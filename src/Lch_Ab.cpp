@@ -18,7 +18,7 @@ Lab Lch_Ab::to_lab() const {
   const float a = c * std::cos(to_radians(h));
   const float b = c * std::sin(to_radians(h));
 
-  return Lab(l, a, b);
+  return Lab(l, a, b, m_illuminant);
 }
 
 

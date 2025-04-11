@@ -16,7 +16,7 @@ Luv Lch_Uv::to_luv() const {
   const float a = c * std::cos(to_radians(h));
   const float b = c * std::sin(to_radians(h));
 
-  return Luv(l, a, b);
+  return Luv(l, a, b, m_illuminant);
 }
 
 
